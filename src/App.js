@@ -2,10 +2,11 @@
 import "./App.css";
 import React from "react";
 import Home from "./pages/Home";
+import Login from "./containers/Login";
 
 const lst = ["item1", "item2", "item3"];
 const App = () => {
-  return <Home />;
+  return <Login />;
   // const title = "Total-Fitness";
   // return (
   //   <Container sx={{ bgcolor: "lightblue", height: "100vh" }}>
