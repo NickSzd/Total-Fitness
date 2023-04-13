@@ -14,9 +14,10 @@ export default function Login() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    // Create logic to actually login and not print username and password to console
     console.log({
       email: data.get("email"),
-      passowrd: data.get("password"),
+      password: data.get("password"),
     });
   };
   return (
