@@ -21,6 +21,14 @@ import {
   MenuItem,
 } from "@mui/material";
 import { useState } from "react";
+// import {
+//   BrowserRouter as Router,
+//   Switch,
+//   Route,
+//   Redirect,
+// } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
 // import { Menu } from "@mui/icons-material";
 // import Menu from "@mui/material";
 
@@ -35,7 +43,14 @@ function Home() {
   Eventually this will be for contact, info, and about
   */
   const [anchor, setAnchor] = useState(null);
-  const menuOptions = ["temp1", "temp2", "temp3"];
+  const menuOptions = [
+    "home",
+    "about",
+    "userHome",
+    "nutritionHome",
+    "fitnessHome",
+    "userProfile",
+  ];
   const [selected, setSelected] = useState(-1);
 
   //Lock the menu open when clicked
@@ -53,6 +68,13 @@ function Home() {
     setAnchor(null);
     setSelected(index);
   };
+
+  // Allows for page redirects
+  // let navigate = useNavigate();
+  // const routeChange = (index) => {
+  //   let path = `./About`;
+  //   navigate(path);
+  // };
 
   return (
     <div className="home">
@@ -78,7 +100,9 @@ function Home() {
               {menuOptions.map((option, index) => (
                 <MenuItem
                   key={index}
-                  onlcick={(event) => onMenuItemClick(event, index)}
+                  onClick={(event) => {
+                    console.log(index);
+                  }}
                   selected={index === selected}
                 >
                   {option}
@@ -95,7 +119,7 @@ function Home() {
         </AppBar>
       </Box>
       <div
-        classname="title"
+        className="title"
         style={{
           color: "blue",
           width: "fit-content",
@@ -107,8 +131,12 @@ function Home() {
           {" "}
           The Complete Fitness Application
         </strong>
+        <h1>
+          Right now this is super gheto just type /pagename after local host to
+          whatever page you are working on
+        </h1>
       </div>
-      <div classname="landingBody"></div>
+      <div className="landingBody"></div>
     </div>
   );
 }
