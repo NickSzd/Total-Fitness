@@ -1,5 +1,6 @@
 //import { Box, Container, Paper, Typography } from "@mui/material";
 import "./App.css";
+import "./index.js";
 import React from "react";
 import Home from "./pages/Home";
 import About from "./pages/About";
@@ -12,7 +13,6 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
-
   // Redirect,
   // useNavigate,
 } from "react-router-dom";
@@ -30,10 +30,74 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 
+//------------------------------------------------------------------
+//Firebase imports
+// import { initializeApp } from "firebase/app";
+// import {
+//   getAuth,
+//   onAuthStateChanged,
+//   connectAuthEmulator,
+//   signInWithEmailAndPassword,
+// } from "firebase/auth";
+// import { getFirestore } from "firebase/firestore";
+
+// export const txtEmail = document.querySelector("#txtEmail");
+// export const txtPassword = document.querySelector("#txtPassword");
+// export const btnLogin = document.querySelector("#btnLogin");
+
+// const firebaseApp = initializeApp({
+//   apiKey: "AIzaSyBnUdeuOgI138qZDqv3ZtZ6n0jzQe5uDok",
+//   authDomain: "total-fitness-c4eae.firebaseapp.com",
+//   projectId: "total-fitness-c4eae",
+//   storageBucket: "total-fitness-c4eae.appspot.com",
+//   messagingSenderId: "861678033534",
+//   appId: "1:861678033534:web:f99e0ef9b7dbf7d14e162f",
+//   measurementId: "G-V9HJVL60R3",
+// });
+
+// const auth = getAuth(firebaseApp);
+// //Local emulator for testing
+// connectAuthEmulator(auth, "http://localhost:9899");
+
+// const loginEmailPassword = async () => {
+//   const loginEmail = txtEmail.value;
+//   const loginPassword = txtPassword.value;
+//   const userCredentail = await signInWithEmailAndPassword(
+//     auth,
+//     loginEmail,
+//     loginPassword
+//   );
+//   console.log(userCredentail.user);
+// };
+
+// if (btnLogin != null) {
+//   btnLogin.addEventListener("click", loginEmailPassword);
+// }
+
+// const db = getFirestore(firebaseApp);
+
+// //Detect Authentication State
+// onAuthStateChanged(auth, (user) => {
+//   if (user != null) {
+//     console.log("User logged in");
+//   } else {
+//     console.log("No User");
+//   }
+// });
+//--------------------------------------------------------------
+//const db = getFirestore(app);
+// const analytics = getAnalytics(app);
+//
+
 const lst = ["item1", "item2", "item3"];
 ///home/nick/Documents/CSE115/total-fitness/src/pages/about.js
 
 function App() {
+  //Firebase Stuff
+  //var firebase = require("firebase");
+  //var firebaseui = require("firebaseui");
+  //var ui = new firebaseui.auth.AuthUI(firebase.auth());
+
   const [anchor, setAnchor] = useState(null);
   const menuOptions = [
     "home",
@@ -43,6 +107,9 @@ function App() {
     "fitnessHome",
     "userProfile",
   ];
+
+  //------------------------------------------------------------------
+
   const [selected, setSelected] = useState(-1);
 
   //Lock the menu open when clicked
@@ -61,8 +128,8 @@ function App() {
     setSelected(index);
   };
 
-  const openLogin = () => {
-    console.log("login call");
+  const openLogin = (event) => {
+    setAnchor(event.currentTarget);
   };
 
   // Allows for page redirects
@@ -115,25 +182,11 @@ function App() {
             <Typography variant="h4" component="div" sx={{ flexGrow: 1 }}>
               Total Fitness
             </Typography>
-            <Button id="loginButton" color="inherit">
-              Login
-            </Button>
-            {/* <button
-              id="loginButton"
-              class="float-left submit-button"
-              color="inherit"
-            >
-              Login
-            </button> */}
-            <script type="text/javascript">
-              //console.log("Button Clicked");
-              document.getElementById("loginButton").onclick =
-              console.log("button click event");
-              {/* {
-                //(location.href = "/Login")
-              } */}
-              ;
-            </script>
+            <div id="login">
+              <Button id="loginButton" color="inherit">
+                Login
+              </Button>
+            </div>
           </Toolbar>
         </AppBar>
       </Box>
@@ -142,6 +195,7 @@ function App() {
           <div>
             <Routes>
               <Route path="/" element={<Home />} />
+              <Route path="/Home" element={<Home />} />
               <Route path="/About" element={<About />} />
               <Route path="/FitnessHome" element={<FitnessHome />} />
               <Route path="/NutritionHome" element={<NutritionHome />} />
@@ -152,6 +206,7 @@ function App() {
           </div>
         </Router>
       </div>
+      <div id="firebaseui-auth-container"></div>
     </div>
   );
   //return <Home />;
