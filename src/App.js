@@ -30,6 +30,16 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 
+import {
+  experimental_extendTheme as materialExtendTheme,
+  Experimental_CssVarsProvider as MaterialCssVarsProvider,
+  THEME_ID
+} from '@mui/material/styles';
+import colors from '@mui/joy/colors';
+import { CssVarsProvider as JoyCssVarsProvider } from '@mui/joy/styles';
+
+const materialTheme = materialExtendTheme();
+
 //------------------------------------------------------------------
 //Firebase imports
 // import { initializeApp } from "firebase/app";
@@ -140,7 +150,11 @@ function App() {
   // };
 
   //const navigate = useNavigate();
+  
+  // https://mui.com/joy-ui/guides/using-joy-ui-and-material-ui-together/
   return (
+    <MaterialCssVarsProvider theme={{ [THEME_ID]: materialTheme }}>
+       <JoyCssVarsProvider>
     <div
       className="home"
       style={{
@@ -208,7 +222,10 @@ function App() {
       </div>
       <div id="firebaseui-auth-container"></div>
     </div>
+    </JoyCssVarsProvider>
+    </MaterialCssVarsProvider>
   );
+  
   //return <Home />;
   //return <Login />;
   // const title = "Total-Fitness";
