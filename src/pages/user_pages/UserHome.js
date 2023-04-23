@@ -7,13 +7,11 @@ ie
 "Our revolutionary app uses the XY api to accomplish ABC"
 */
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "../../UserPage.css";
 import { Style } from "@mui/icons-material";
 import { AccountCircle } from "@mui/icons-material";
-import { db } from "../../config/firebase";
-import { getDocs, collection } from "firebase/firestore";
-import Nutrition from "./components/nutrition";
+import NutritionTable from "./components/nutritionTable";
 
 function UserHome() {
   const [activeTab, setActiveTab] = useState(0);
@@ -101,10 +99,7 @@ function UserHome() {
               </div>
             )}
             {activeTab === 1 && (
-              // <div className="daily-preview-nutrition">
-              //   <p>Eat lots</p>
-              // </div>
-              <Nutrition />
+              <NutritionTable />
             )}
             {activeTab === 2 && (
               <div className="daily-preview-workout">

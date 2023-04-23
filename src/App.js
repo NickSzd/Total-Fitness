@@ -9,6 +9,8 @@ import NutritionHome from "./pages/user_pages/NutritionHome";
 import UserHome from "./pages/user_pages/UserHome";
 import UserProfile from "./pages/user_pages/UserProfile";
 import Login from "./containers/Login";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import {
   BrowserRouter as Router,
   Routes,
@@ -152,7 +154,11 @@ function App() {
   //const navigate = useNavigate();
   
   // https://mui.com/joy-ui/guides/using-joy-ui-and-material-ui-together/
+
+  // https://mui.com/x/react-date-pickers/date-picker/
+
   return (
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
     <MaterialCssVarsProvider theme={{ [THEME_ID]: materialTheme }}>
        <JoyCssVarsProvider>
     <div
@@ -224,6 +230,7 @@ function App() {
     </div>
     </JoyCssVarsProvider>
     </MaterialCssVarsProvider>
+    </LocalizationProvider>
   );
   
   //return <Home />;
