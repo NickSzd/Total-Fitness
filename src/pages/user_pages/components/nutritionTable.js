@@ -2,15 +2,22 @@
 
 import { useEffect, useState } from "react";
 import Table from "@mui/joy/Table";
+import Sheet from '@mui/joy/Sheet';
 import { db } from "../../../config/firebase";
-import { getDocs, collection, where, query, Timestamp, serverTimestamp } from "firebase/firestore";
+import { getDocs, collection, where, query } from "firebase/firestore";
 import UserCalendar from "./userCalendar";
-import dayjs from 'dayjs'
-import utc from 'dayjs/plugin/utc'
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
 
 function NutritionTable() {
   dayjs.extend(utc);
   const [nutrition, setNutrition] = useState([{}]);
+  const [totals, setTotals] = useState({
+    calories: 0,
+    fat: 0,
+    carbohydrates: 0,
+    protein: 0,
+  });
   const [selectedDate, setSelectedDate] = useState(dayjs());
 
   useEffect(() => {
@@ -18,28 +25,33 @@ function NutritionTable() {
       const nutritionRef = collection(db, "nutrition");
       const q = query(
         nutritionRef,
-        where("day", ">=", selectedDate.startOf('day').toDate()),
-        where("day", "<", selectedDate.endOf('day').add(1, "second").toDate())
+        where("day", ">=", selectedDate.startOf("day").toDate()),
+        where("day", "<", selectedDate.endOf("day").add(1, "second").toDate())
       );
       try {
-        const querySnapshot = await getDocs(q);
-        querySnapshot.forEach((doc) => {
-          // doc.data() is never undefined for query doc snapshots
-          console.log(doc.id, " => ", doc.data());
+        const data = (await getDocs(q)).docs.map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+        }));
+        totals.calories = 0;
+        totals.fat = 0;
+        totals.carbohydrates = 0;
+        totals.protein = 0;
+        const newTotal = totals;
+        data.forEach((macro) => {
+          newTotal.calories += macro.calories;
+          newTotal.fat += macro.fat;
+          newTotal.carbohydrates += macro.carbohydrates;
+          newTotal.protein += macro.protein;
         });
-        const data = (await getDocs(q)).docs.map(
-          (doc) => ({
-            ...doc.data(),
-            id: doc.id,
-          })
-        );
+        setTotals(newTotal);
         setNutrition(data);
       } catch (err) {
         console.log(err);
       }
     };
     getNutrition();
-  }, [selectedDate]);
+  }, [selectedDate, totals]);
 
   return (
     <>
@@ -47,7 +59,8 @@ function NutritionTable() {
         selectedDate={selectedDate}
         setSelectedDate={setSelectedDate}
       />
-      <Table variant="soft">
+      <Sheet sx={{ height: 'auto', overflow: 'auto' }}>
+      <Table stickyHeader hoverRow >
         <thead>
           <tr>
             <th>Meal</th>
@@ -70,7 +83,17 @@ function NutritionTable() {
               ))
             : null}
         </tbody>
+        <tfoot>
+          <tr>
+            <th scope="row">Totals</th>
+            <td>{totals.calories}</td>
+            <td>{totals.fat}</td>
+            <td>{totals.carbohydrates}</td>
+            <td>{totals.protein}</td>
+          </tr>
+        </tfoot>
       </Table>
+      </Sheet>
     </>
   );
 }
