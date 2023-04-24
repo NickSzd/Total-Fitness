@@ -9,6 +9,8 @@ import NutritionHome from "./pages/user_pages/NutritionHome";
 import UserHome from "./pages/user_pages/UserHome";
 import UserProfile from "./pages/user_pages/UserProfile";
 import Login from "./containers/Login";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import {
   BrowserRouter as Router,
   Routes,
@@ -29,6 +31,16 @@ import {
   MenuItem,
 } from "@mui/material";
 import { useState } from "react";
+
+import {
+  experimental_extendTheme as materialExtendTheme,
+  Experimental_CssVarsProvider as MaterialCssVarsProvider,
+  THEME_ID
+} from '@mui/material/styles';
+import colors from '@mui/joy/colors';
+import { CssVarsProvider as JoyCssVarsProvider } from '@mui/joy/styles';
+
+const materialTheme = materialExtendTheme();
 
 //------------------------------------------------------------------
 //Firebase imports
@@ -140,7 +152,15 @@ function App() {
   // };
 
   //const navigate = useNavigate();
+  
+  // https://mui.com/joy-ui/guides/using-joy-ui-and-material-ui-together/
+
+  // https://mui.com/x/react-date-pickers/date-picker/
+
   return (
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+    <MaterialCssVarsProvider theme={{ [THEME_ID]: materialTheme }}>
+       <JoyCssVarsProvider>
     <div
       className="home"
       style={{
@@ -208,7 +228,11 @@ function App() {
       </div>
       <div id="firebaseui-auth-container"></div>
     </div>
+    </JoyCssVarsProvider>
+    </MaterialCssVarsProvider>
+    </LocalizationProvider>
   );
+  
   //return <Home />;
   //return <Login />;
   // const title = "Total-Fitness";

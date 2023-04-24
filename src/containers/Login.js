@@ -10,32 +10,13 @@ import {
   Container,
 } from "@mui/material";
 
-import { initializeApp } from "firebase/app";
-import {
-  getAuth,
-  onAuthStateChanged,
-  connectAuthEmulator,
-  signInWithEmailAndPassword,
-} from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { auth } from "../config/firebase";
+
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 export const txtEmail = document.querySelector("#txtEmail");
 export const txtPassword = document.querySelector("#txtPassword");
 export const btnLogin = document.querySelector("#btnLogin");
-
-const firebaseApp = initializeApp({
-  apiKey: "AIzaSyBnUdeuOgI138qZDqv3ZtZ6n0jzQe5uDok",
-  authDomain: "total-fitness-c4eae.firebaseapp.com",
-  projectId: "total-fitness-c4eae",
-  storageBucket: "total-fitness-c4eae.appspot.com",
-  messagingSenderId: "861678033534",
-  appId: "1:861678033534:web:f99e0ef9b7dbf7d14e162f",
-  measurementId: "G-V9HJVL60R3",
-});
-
-const auth = getAuth(firebaseApp);
-//Local emulator for testing
-connectAuthEmulator(auth, "http://localhost:9899");
 
 const loginEmailPassword = async () => {
   const loginEmail = txtEmail.value;
@@ -51,8 +32,6 @@ const loginEmailPassword = async () => {
 if (btnLogin != null) {
   btnLogin.addEventListener("click", loginEmailPassword);
 }
-
-const db = getFirestore(firebaseApp);
 
 //Detect Authentication State
 // onAuthStateChanged(auth, (user) => {
