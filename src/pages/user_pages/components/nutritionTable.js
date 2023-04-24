@@ -3,15 +3,31 @@
 import { useEffect, useState } from "react";
 import Table from "@mui/joy/Table";
 import { db } from "../../../config/firebase";
-import { getDocs, collection } from "firebase/firestore";
+import { getDocs, collection, where, query, Timestamp, serverTimestamp } from "firebase/firestore";
 import UserCalendar from "./userCalendar";
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
 
 function NutritionTable() {
+  dayjs.extend(utc);
   const [nutrition, setNutrition] = useState([{}]);
+  const [selectedDate, setSelectedDate] = useState(dayjs());
+
   useEffect(() => {
     const getNutrition = async () => {
+      const nutritionRef = collection(db, "nutrition");
+      const q = query(
+        nutritionRef,
+        where("day", ">=", selectedDate.startOf('day').toDate()),
+        where("day", "<", selectedDate.endOf('day').add(1, "second").toDate())
+      );
       try {
-        const data = (await getDocs(collection(db, "nutrition"))).docs.map(
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((doc) => {
+          // doc.data() is never undefined for query doc snapshots
+          console.log(doc.id, " => ", doc.data());
+        });
+        const data = (await getDocs(q)).docs.map(
           (doc) => ({
             ...doc.data(),
             id: doc.id,
@@ -23,11 +39,14 @@ function NutritionTable() {
       }
     };
     getNutrition();
-  }, []);
+  }, [selectedDate]);
 
   return (
     <>
-      <UserCalendar />
+      <UserCalendar
+        selectedDate={selectedDate}
+        setSelectedDate={setSelectedDate}
+      />
       <Table variant="soft">
         <thead>
           <tr>

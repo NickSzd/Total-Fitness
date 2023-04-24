@@ -5,8 +5,7 @@ import { useState } from "react";
 
 const dayjs = require('dayjs');
 
-function UserCalendar() {
-  const [selectedDate, setSelectedDate] = useState(dayjs());
+function UserCalendar({selectedDate, setSelectedDate}) {
   return <DatePicker value={selectedDate} onChange={(newDate) => setSelectedDate(newDate)}/>;
 }
 
