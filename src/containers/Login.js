@@ -48,8 +48,8 @@ export default function Login() {
     event.preventDefault();
     console.log("handleSubmit");
     const data = new FormData(event.currentTarget);
-    const loginEmail = data.get("email");
-    const loginPassword = data.get("password");
+    const loginEmail = data.get("user-email");
+    const loginPassword = data.get("user-password");
     const userCredentail = await signInWithEmailAndPassword(
       auth,
       loginEmail,
@@ -83,7 +83,7 @@ export default function Login() {
             margin="normal"
             required
             fullWidth
-            id="email"
+            id="user-email"
             label="Email"
             name="email"
             autoComplete="email"
@@ -93,7 +93,7 @@ export default function Login() {
             margin="normal"
             required
             fullWidth
-            id="password"
+            id="user-password"
             label="Password"
             name="password"
             autoComplete="current-password"
