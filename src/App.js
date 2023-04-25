@@ -10,7 +10,7 @@ import UserHome from "./pages/user_pages/UserHome";
 import UserProfile from "./pages/user_pages/UserProfile";
 import Login from "./containers/Login";
 import { LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import {
   BrowserRouter as Router,
   Routes,
@@ -30,15 +30,15 @@ import {
   Menu,
   MenuItem,
 } from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
 import { useState } from "react";
-
 import {
   experimental_extendTheme as materialExtendTheme,
   Experimental_CssVarsProvider as MaterialCssVarsProvider,
-  THEME_ID
-} from '@mui/material/styles';
-import colors from '@mui/joy/colors';
-import { CssVarsProvider as JoyCssVarsProvider } from '@mui/joy/styles';
+  THEME_ID,
+} from "@mui/material/styles";
+import colors from "@mui/joy/colors";
+import { CssVarsProvider as JoyCssVarsProvider } from "@mui/joy/styles";
 
 const materialTheme = materialExtendTheme();
 
@@ -152,87 +152,87 @@ function App() {
   // };
 
   //const navigate = useNavigate();
-  
+
   // https://mui.com/joy-ui/guides/using-joy-ui-and-material-ui-together/
 
   // https://mui.com/x/react-date-pickers/date-picker/
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-    <MaterialCssVarsProvider theme={{ [THEME_ID]: materialTheme }}>
-       <JoyCssVarsProvider>
-    <div
-      className="home"
-      style={{
-        color: "black",
-      }}
-    >
-      <Box sx={{ flexgrow: 1 }}>
-        <AppBar position="static">
-          <Toolbar>
-            <IconButton
-              onClick={openMenu}
-              size="large"
-              edge="start"
-              aria-label="menu"
-              color="white"
-              sx={{ mr: 2 }}
-            >
-              Menu
-            </IconButton>
-            <Menu
-              open={Boolean(anchor)}
-              anchorEl={anchor}
-              onClose={closeMenu}
-              keepMounted
-            >
-              {menuOptions.map((item, index) => (
-                <MenuItem
-                  key={index}
-                  onClick={(event) => {
-                    document.location.href = "/" + item;
-                    console.log(item);
-                  }}
-                  selected={index === selected}
-                >
-                  {item}
-                </MenuItem>
-              ))}
-            </Menu>
-            <Typography variant="h4" component="div" sx={{ flexGrow: 1 }}>
-              Total Fitness
-            </Typography>
-            <div id="login">
-              <Button id="loginButton" color="inherit">
-                Login
-              </Button>
+      <MaterialCssVarsProvider theme={{ [THEME_ID]: materialTheme }}>
+        <JoyCssVarsProvider>
+          <div
+            className="home"
+            style={{
+              color: "black",
+            }}
+          >
+            <Box sx={{ flexgrow: 1 }}>
+              <AppBar position="static">
+                <Toolbar>
+                  <IconButton
+                    onClick={openMenu}
+                    size="large"
+                    edge="start"
+                    aria-label="menu"
+                    color="white"
+                    sx={{ mr: 2 }}
+                  >
+                    <MenuIcon />
+                  </IconButton>
+                  <Menu
+                    open={Boolean(anchor)}
+                    anchorEl={anchor}
+                    onClose={closeMenu}
+                    keepMounted
+                  >
+                    {menuOptions.map((item, index) => (
+                      <MenuItem
+                        key={index}
+                        onClick={(event) => {
+                          document.location.href = "/" + item;
+                          console.log(item);
+                        }}
+                        selected={index === selected}
+                      >
+                        {item}
+                      </MenuItem>
+                    ))}
+                  </Menu>
+                  <Typography variant="h4" component="div" sx={{ flexGrow: 1 }}>
+                    Total Fitness
+                  </Typography>
+                  <div id="login">
+                    <Button id="loginButton" color="inherit">
+                      Login
+                    </Button>
+                  </div>
+                </Toolbar>
+              </AppBar>
+            </Box>
+            <div className="routing">
+              <Router>
+                <div>
+                  <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/Home" element={<Home />} />
+                    <Route path="/About" element={<About />} />
+                    <Route path="/FitnessHome" element={<FitnessHome />} />
+                    <Route path="/NutritionHome" element={<NutritionHome />} />
+                    <Route path="/UserHome" element={<UserHome />} />
+                    <Route path="/UserProfile" element={<UserProfile />} />
+                    <Route path="/Login" element={<Login />} />
+                  </Routes>
+                </div>
+              </Router>
             </div>
-          </Toolbar>
-        </AppBar>
-      </Box>
-      <div className="routing">
-        <Router>
-          <div>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/Home" element={<Home />} />
-              <Route path="/About" element={<About />} />
-              <Route path="/FitnessHome" element={<FitnessHome />} />
-              <Route path="/NutritionHome" element={<NutritionHome />} />
-              <Route path="/UserHome" element={<UserHome />} />
-              <Route path="/UserProfile" element={<UserProfile />} />
-              <Route path="/Login" element={<Login />} />
-            </Routes>
+            <div id="firebaseui-auth-container"></div>
           </div>
-        </Router>
-      </div>
-      <div id="firebaseui-auth-container"></div>
-    </div>
-    </JoyCssVarsProvider>
-    </MaterialCssVarsProvider>
+        </JoyCssVarsProvider>
+      </MaterialCssVarsProvider>
     </LocalizationProvider>
   );
-  
+
   //return <Home />;
   //return <Login />;
   // const title = "Total-Fitness";
