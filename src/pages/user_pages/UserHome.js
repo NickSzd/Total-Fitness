@@ -62,6 +62,10 @@ function UserHome(props) {
   const container =
     window !== undefined ? () => window().document.body : undefined;
 
+import PieChartComponent from "./components/pieChart"
+import PieCaloriesComponent from "./components/pieCalories"
+
+
   const [activeTab, setActiveTab] = useState(0);
   const tabs = (index) => {
     setActiveTab(index);
@@ -172,14 +176,9 @@ function UserHome(props) {
 
           <div className="tab-content">
             {activeTab === 0 && (
-              <div className="daily-preview-goal">
-                <p className="nutrition">
-                  {" "}
-                  I want to improve my shirt size, so I want to go to gym.{" "}
-                </p>
-                <div className="daily-preview-goal">
-                  <p>Goal Protein xxx future</p>
-                </div>
+              <div>
+                <PieChartComponent />
+                <PieCaloriesComponent />
               </div>
             )}
             {activeTab === 1 && <NutritionTable />}

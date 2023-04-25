@@ -24,6 +24,7 @@ function Home() {
   */
   console.log("HOME");
   return (
+
     <div
       className="main"
       style={{
@@ -46,6 +47,13 @@ function Home() {
           <li>Make sure you are on that branch before you start working</li>
           <li>When you push make sure to add someone to review your request</li>
         </ol>
+      </div>
+      <div class="hero" id="home">
+        <div class="hero__container">
+          <h1 class="hero__heading">Make every bite count<span> towards a healthier you</span></h1>
+          <p class="hero__description">Unlimited Possibilities</p>
+          <button class="main__btn"><a href="#">Explore</a></button>
+        </div>
       </div>
     </div>
   );
