@@ -12,8 +12,56 @@ import "../../UserPage.css";
 import { Style } from "@mui/icons-material";
 import { AccountCircle } from "@mui/icons-material";
 import NutritionTable from "./components/nutritionTable";
+import {
+  AppBar,
+  Box,
+  Button,
+  Drawer,
+  Divider,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  Typography,
+} from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
 
-function UserHome() {
+const drawerWidth = 240;
+const userPages = ["Home", "Fitness", "Nutrition"]; // Holds Items for navbar
+const settings = ["Profile", "Account", "Dashboard", "Logout"]; // items for user profile
+
+function UserHome(props) {
+  const { window } = props;
+  const [mobileOpen, setMobileOpen] = React.useState(false);
+
+  const handleDrawerToggle = () => {
+    setMobileOpen((prevState) => !prevState);
+  };
+
+  /*
+  Configures the drawer so that the user can access user pages
+  */
+  const drawer = (
+    <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
+      <Typography variant="h6" sx={{ my: 2 }}>
+        MUI
+      </Typography>
+      <Divider />
+      <List>
+        {userPages.map((item) => (
+          <ListItem key={item} disablePadding>
+            <ListItemButton sx={{ textAlign: "center" }}>
+              <ListItemText primary={item} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+    </Box>
+  );
+
+  const container =
+    window !== undefined ? () => window().document.body : undefined;
+
   const [activeTab, setActiveTab] = useState(0);
   const tabs = (index) => {
     setActiveTab(index);
@@ -42,7 +90,43 @@ function UserHome() {
           </div>
         </div>
       </div>
-
+      {/* 
+        Creates nav bar so the user can move between user the users pages
+        home
+        fitness
+        nutrition
+      */}
+      <div className="userNav">
+        <AppBar component="nav" position="relative">
+          <Box sx={{ display: { xs: "none", sm: "block" } }}>
+            {userPages.map((item) => (
+              <Button key={item} sx={{ color: "#fff" }}>
+                {item}
+              </Button>
+            ))}
+          </Box>
+        </AppBar>
+      </div>
+      <Box component="nav">
+        <Drawer
+          container={container}
+          variant="temporary"
+          open={mobileOpen}
+          onClose={handleDrawerToggle}
+          ModalProps={{
+            keepMounted: true, // Better open performance on mobile.
+          }}
+          sx={{
+            display: { xs: "block", sm: "none" },
+            "& .MuiDrawer-paper": {
+              boxSizing: "border-box",
+              width: drawerWidth,
+            },
+          }}
+        >
+          {drawer}
+        </Drawer>
+      </Box>
       <div className="right-side">
         <div className="nav">
           <ul>
@@ -98,9 +182,7 @@ function UserHome() {
                 </div>
               </div>
             )}
-            {activeTab === 1 && (
-              <NutritionTable />
-            )}
+            {activeTab === 1 && <NutritionTable />}
             {activeTab === 2 && (
               <div className="daily-preview-workout">
                 <p>situp 1 EA</p>
@@ -113,7 +195,7 @@ function UserHome() {
             )}
             {activeTab === 4 && (
               <div className="daily-preview-summary">
-                <p>u fucked</p>
+                <p>Summery</p>
               </div>
             )}
           </div>

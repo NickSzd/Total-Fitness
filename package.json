@@ -17,6 +17,7 @@
     "dayjs": "^1.11.7",
     "firebase": "^9.20.0",
     "firebaseui": "^6.0.2",
+    "mui": "^0.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-dropzone": "^14.2.3",
