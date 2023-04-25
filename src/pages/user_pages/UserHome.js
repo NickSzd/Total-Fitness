@@ -12,6 +12,8 @@ import "../../UserPage.css";
 import { Style } from "@mui/icons-material";
 import { AccountCircle } from "@mui/icons-material";
 import NutritionTable from "./components/nutritionTable";
+import PieChartComponent from "./components/pieChart"
+import PieCaloriesComponent from "./components/pieCalories"
 
 function UserHome() {
   const [activeTab, setActiveTab] = useState(0);
@@ -88,14 +90,9 @@ function UserHome() {
 
           <div className="tab-content">
             {activeTab === 0 && (
-              <div className="daily-preview-goal">
-                <p className="nutrition">
-                  {" "}
-                  I want to improve my shirt size, so I want to go to gym.{" "}
-                </p>
-                <div className="daily-preview-goal">
-                  <p>Goal Protein xxx future</p>
-                </div>
+              <div>
+                <PieChartComponent />
+                <PieCaloriesComponent />
               </div>
             )}
             {activeTab === 1 && (
