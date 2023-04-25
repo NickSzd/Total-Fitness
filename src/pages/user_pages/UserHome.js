@@ -25,6 +25,8 @@ import {
   Typography,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
+import PieChartComponent from "./components/pieChart";
+import PieCaloriesComponent from "./components/pieCalories";
 
 const drawerWidth = 240;
 const userPages = ["Home", "Fitness", "Nutrition"]; // Holds Items for navbar
@@ -61,10 +63,6 @@ function UserHome(props) {
 
   const container =
     window !== undefined ? () => window().document.body : undefined;
-
-import PieChartComponent from "./components/pieChart"
-import PieCaloriesComponent from "./components/pieCalories"
-
 
   const [activeTab, setActiveTab] = useState(0);
   const tabs = (index) => {
