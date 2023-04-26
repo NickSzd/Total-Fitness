@@ -1,6 +1,9 @@
 import React from "react";
+import NutritionTable from "./components/nutritionTable";
 
 function NutritionHome() {
-  return <h1> NutritionHome</h1>;
+  return <>
+  <NutritionTable/>
+  </>
 }
 export default NutritionHome;
