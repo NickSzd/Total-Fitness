@@ -6,7 +6,6 @@ and otehr technical feature sof the app
 ie
 "Our revolutionary app uses the XY api to accomplish ABC"
 */
-
 import React, { useState } from "react";
 import "../../UserPage.css";
 import { Style } from "@mui/icons-material";
@@ -24,9 +23,12 @@ import {
   Typography,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import PieChartComponent from "./components/pieChart";
-import PieCaloriesComponent from "./components/pieCalories";
+
+import PieChartComponent from "./components/pieChart"
+import PieCaloriesComponent from "./components/pieCalories"
+
 import NutritionHome from "./NutritionHome";
+
 
 const drawerWidth = 240;
 const userPages = ["Home", "Fitness", "Nutrition"]; // Holds Items for navbar
@@ -61,8 +63,9 @@ function UserHome(props) {
     </Box>
   );
 
-  const container =
-    window !== undefined ? () => window().document.body : undefined;
+
+  const container = window !== undefined ? () => window().document.body : undefined;
+
 
   const [activeTab, setActiveTab] = useState(0);
   const tabs = (index) => {
