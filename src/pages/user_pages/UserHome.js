@@ -24,9 +24,9 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 
-import PieChartComponent from "./components/pieChart"
-import PieCaloriesComponent from "./components/pieCalories"
-
+import PieChartComponent from "./components/pieChart";
+import PieCaloriesComponent from "./components/pieCalories";
+import PressableCardBoards from "./components/workOutTable";
 import NutritionHome from "./NutritionHome";
 
 
@@ -184,8 +184,8 @@ function UserHome(props) {
             )}
             {activeTab === 1 && <NutritionHome />}
             {activeTab === 2 && (
-              <div className="daily-preview-workout">
-                <p>situp 1 EA</p>
+              <div>
+                <PressableCardBoards/>
               </div>
             )}
             {activeTab === 3 && (
