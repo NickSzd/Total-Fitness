@@ -10,7 +10,6 @@ import React, { useState } from "react";
 import "../../UserPage.css";
 import { Style } from "@mui/icons-material";
 import { AccountCircle } from "@mui/icons-material";
-import NutritionTable from "./components/nutritionTable";
 import {
   AppBar,
   Box,
@@ -24,8 +23,12 @@ import {
   Typography,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
+
 import PieChartComponent from "./components/pieChart"
 import PieCaloriesComponent from "./components/pieCalories"
+
+import NutritionHome from "./NutritionHome";
+
 
 const drawerWidth = 240;
 const userPages = ["Home", "Fitness", "Nutrition"]; // Holds Items for navbar
@@ -60,7 +63,9 @@ function UserHome(props) {
     </Box>
   );
 
+
   const container = window !== undefined ? () => window().document.body : undefined;
+
 
   const [activeTab, setActiveTab] = useState(0);
   const tabs = (index) => {
@@ -177,7 +182,7 @@ function UserHome(props) {
                 <PieCaloriesComponent />
               </div>
             )}
-            {activeTab === 1 && <NutritionTable />}
+            {activeTab === 1 && <NutritionHome />}
             {activeTab === 2 && (
               <div className="daily-preview-workout">
                 <p>situp 1 EA</p>
