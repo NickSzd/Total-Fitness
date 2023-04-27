@@ -9,6 +9,7 @@ import NutritionHome from "./pages/user_pages/NutritionHome";
 import UserHome from "./pages/user_pages/UserHome";
 import UserProfile from "./pages/user_pages/UserProfile";
 import Login from "./containers/Login";
+import Register from "./containers/Register";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import {
@@ -41,65 +42,6 @@ import colors from "@mui/joy/colors";
 import { CssVarsProvider as JoyCssVarsProvider } from "@mui/joy/styles";
 
 const materialTheme = materialExtendTheme();
-
-//------------------------------------------------------------------
-//Firebase imports
-// import { initializeApp } from "firebase/app";
-// import {
-//   getAuth,
-//   onAuthStateChanged,
-//   connectAuthEmulator,
-//   signInWithEmailAndPassword,
-// } from "firebase/auth";
-// import { getFirestore } from "firebase/firestore";
-
-// export const txtEmail = document.querySelector("#txtEmail");
-// export const txtPassword = document.querySelector("#txtPassword");
-// export const btnLogin = document.querySelector("#btnLogin");
-
-// const firebaseApp = initializeApp({
-//   apiKey: "AIzaSyBnUdeuOgI138qZDqv3ZtZ6n0jzQe5uDok",
-//   authDomain: "total-fitness-c4eae.firebaseapp.com",
-//   projectId: "total-fitness-c4eae",
-//   storageBucket: "total-fitness-c4eae.appspot.com",
-//   messagingSenderId: "861678033534",
-//   appId: "1:861678033534:web:f99e0ef9b7dbf7d14e162f",
-//   measurementId: "G-V9HJVL60R3",
-// });
-
-// const auth = getAuth(firebaseApp);
-// //Local emulator for testing
-// connectAuthEmulator(auth, "http://localhost:9899");
-
-// const loginEmailPassword = async () => {
-//   const loginEmail = txtEmail.value;
-//   const loginPassword = txtPassword.value;
-//   const userCredentail = await signInWithEmailAndPassword(
-//     auth,
-//     loginEmail,
-//     loginPassword
-//   );
-//   console.log(userCredentail.user);
-// };
-
-// if (btnLogin != null) {
-//   btnLogin.addEventListener("click", loginEmailPassword);
-// }
-
-// const db = getFirestore(firebaseApp);
-
-// //Detect Authentication State
-// onAuthStateChanged(auth, (user) => {
-//   if (user != null) {
-//     console.log("User logged in");
-//   } else {
-//     console.log("No User");
-//   }
-// });
-//--------------------------------------------------------------
-//const db = getFirestore(app);
-// const analytics = getAnalytics(app);
-//
 
 const lst = ["item1", "item2", "item3"];
 ///home/nick/Documents/CSE115/total-fitness/src/pages/about.js
@@ -222,6 +164,7 @@ function App() {
                     <Route path="/UserHome" element={<UserHome />} />
                     <Route path="/UserProfile" element={<UserProfile />} />
                     <Route path="/Login" element={<Login />} />
+                    <Route path="/Register" element={<Register />} />
                   </Routes>
                 </div>
               </Router>
@@ -232,37 +175,6 @@ function App() {
       </MaterialCssVarsProvider>
     </LocalizationProvider>
   );
-
-  //return <Home />;
-  //return <Login />;
-  // const title = "Total-Fitness";
-  // return (
-  //   <Container sx={{ bgcolor: "lightblue", height: "100vh" }}>
-  //     <Typography variant="h1">Total Fitness</Typography>
-  //     <Box sx={{ display: "flex" }}>
-  //       {lst.map((service) => (
-  //         <Paper elevation={3}>
-  //           <Typography>{service}</Typography>
-  //         </Paper>
-  //       ))}
-  //     </Box>
-  //   </Container>
-  // );
 }
-
-/*
-<Router>
-          <div>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/About" element={<About />} />
-              <Route path="/FitnessHome" element={<FitnessHome />} />
-              <Route path="/NutritionHome" element={<NutritionHome />} />
-              <Route path="/UserHome" element={<UserHome />} />
-              <Route path="/UserProfile" element={<UserProfile />} />
-            </Routes>
-          </div>
-        </Router>
-*/
 
 export default App;

@@ -29,7 +29,6 @@ import PieCaloriesComponent from "./components/pieCalories";
 import PressableCardBoards from "./components/workOutTable";
 import NutritionHome from "./NutritionHome";
 
-
 const drawerWidth = 240;
 const userPages = ["Home", "Fitness", "Nutrition"]; // Holds Items for navbar
 const settings = ["Profile", "Account", "Dashboard", "Logout"]; // items for user profile
@@ -63,9 +62,8 @@ function UserHome(props) {
     </Box>
   );
 
-
-  const container = window !== undefined ? () => window().document.body : undefined;
-
+  const container =
+    window !== undefined ? () => window().document.body : undefined;
 
   const [activeTab, setActiveTab] = useState(0);
   const tabs = (index) => {
@@ -185,7 +183,7 @@ function UserHome(props) {
             {activeTab === 1 && <NutritionHome />}
             {activeTab === 2 && (
               <div>
-                <PressableCardBoards/>
+                <PressableCardBoards />
               </div>
             )}
             {activeTab === 3 && (
