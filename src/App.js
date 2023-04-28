@@ -145,8 +145,13 @@ function App() {
                     Total Fitness
                   </Typography>
                   <div id="login">
-                    <Button id="loginButton" color="inherit">
+                    <Button id="loginButton" color="inherit" href="/Login">
                       Login
+                    </Button>
+                  </div>
+                  <div id="Register">
+                    <Button id="RegisterButton" color="inherit" href="/Register">
+                      Register
                     </Button>
                   </div>
                 </Toolbar>
