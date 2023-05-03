@@ -47,6 +47,7 @@ export default function Login() {
         // Signed in
         alert("User Logged In");
         const user = userCredential.user;
+        window.location.href = "userHome";
         // ...
       })
       .catch((error) => {

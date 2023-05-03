@@ -59,6 +59,7 @@ export default function Register() {
         const user = userCredential.user;
         // ...
         alert("User Created");
+        window.location.href = "userHome";
         //ADD REDIRECT TO USER HOME PAGE
       })
       .catch((error) => {

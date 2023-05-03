@@ -12,15 +12,7 @@ import Login from "./containers/Login";
 import Register from "./containers/Register";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  // Redirect,
-  // useNavigate,
-} from "react-router-dom";
-// import { render } from "react-dom";
-// import { ReactDOM } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import {
   IconButton,
   Button,
@@ -47,11 +39,6 @@ const lst = ["item1", "item2", "item3"];
 ///home/nick/Documents/CSE115/total-fitness/src/pages/about.js
 
 function App() {
-  //Firebase Stuff
-  //var firebase = require("firebase");
-  //var firebaseui = require("firebaseui");
-  //var ui = new firebaseui.auth.AuthUI(firebase.auth());
-
   const [anchor, setAnchor] = useState(null);
   const menuOptions = [
     "home",
@@ -86,13 +73,6 @@ function App() {
     setAnchor(event.currentTarget);
   };
 
-  // Allows for page redirects
-  // let navigate = useNavigate();
-  // const routeChange = (index) => {
-  //   let path = `./About`;
-  //   navigate(path);
-  // };
-
   //const navigate = useNavigate();
 
   // https://mui.com/joy-ui/guides/using-joy-ui-and-material-ui-together/
@@ -109,54 +89,6 @@ function App() {
               color: "black",
             }}
           >
-            <Box sx={{ flexgrow: 1 }}>
-              <AppBar position="static">
-                <Toolbar>
-                  <IconButton
-                    onClick={openMenu}
-                    size="large"
-                    edge="start"
-                    aria-label="menu"
-                    color="white"
-                    sx={{ mr: 2 }}
-                  >
-                    <MenuIcon />
-                  </IconButton>
-                  <Menu
-                    open={Boolean(anchor)}
-                    anchorEl={anchor}
-                    onClose={closeMenu}
-                    keepMounted
-                  >
-                    {menuOptions.map((item, index) => (
-                      <MenuItem
-                        key={index}
-                        onClick={(event) => {
-                          document.location.href = "/" + item;
-                          console.log(item);
-                        }}
-                        selected={index === selected}
-                      >
-                        {item}
-                      </MenuItem>
-                    ))}
-                  </Menu>
-                  <Typography variant="h4" component="div" sx={{ flexGrow: 1 }}>
-                    Total Fitness
-                  </Typography>
-                  <div id="login">
-                    <Button id="loginButton" color="inherit" href="/Login">
-                      Login
-                    </Button>
-                  </div>
-                  <div id="Register">
-                    <Button id="RegisterButton" color="inherit" href="/Register">
-                      Register
-                    </Button>
-                  </div>
-                </Toolbar>
-              </AppBar>
-            </Box>
             <div className="routing">
               <Router>
                 <div>
