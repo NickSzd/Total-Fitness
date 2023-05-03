@@ -2,10 +2,11 @@
 
 import { useEffect, useState } from "react";
 import Table from "@mui/joy/Table";
-import Sheet from '@mui/joy/Sheet';
+import Sheet from "@mui/joy/Sheet";
 import { db } from "../../../config/firebase";
 import { getDocs, collection, where, query } from "firebase/firestore";
-import UserCalendar from "./userCalendar";
+import { DatePicker } from "@mui/x-date-pickers";
+import { Grid } from "@mui/joy";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 
@@ -55,44 +56,46 @@ function NutritionTable() {
 
   return (
     <>
-      <UserCalendar
-        selectedDate={selectedDate}
-        setSelectedDate={setSelectedDate}
-      />
-      <Sheet sx={{ height: 'auto', overflow: 'auto' }}>
-      <Table stickyHeader hoverRow >
-        <thead>
-          <tr>
-            <th>Meal</th>
-            <th>Calories</th>
-            <th>Fat (g)</th>
-            <th>Carbs (g)</th>
-            <th>Protein (g)</th>
-          </tr>
-        </thead>
-        <tbody>
-          {nutrition
-            ? nutrition.map((data) => (
-                <tr key={data.id + data.meal}>
-                  <td>{data.meal}</td>
-                  <td>{data.calories}</td>
-                  <td>{data.fat}</td>
-                  <td>{data.carbohydrates}</td>
-                  <td>{data.protein}</td>
-                </tr>
-              ))
-            : null}
-        </tbody>
-        <tfoot>
-          <tr>
-            <th scope="row">Totals</th>
-            <td>{totals.calories}</td>
-            <td>{totals.fat}</td>
-            <td>{totals.carbohydrates}</td>
-            <td>{totals.protein}</td>
-          </tr>
-        </tfoot>
-      </Table>
+      <Grid container justifyContent="center">
+        <DatePicker
+          value={selectedDate}
+          onChange={(newDate) => setSelectedDate(newDate)}
+        />
+      </Grid>
+      <Sheet sx={{ height: "auto", overflow: "auto" }}>
+        <Table stickyHeader hoverRow>
+          <thead>
+            <tr>
+              <th>Meal</th>
+              <th>Calories</th>
+              <th>Fat (g)</th>
+              <th>Carbs (g)</th>
+              <th>Protein (g)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {nutrition[0] && Object.keys(nutrition[0].length > 0)
+              ? nutrition.map((data) => (
+                  <tr key={data.id + data.meal}>
+                    <td>{data.meal}</td>
+                    <td>{data.calories}</td>
+                    <td>{data.fat}</td>
+                    <td>{data.carbohydrates}</td>
+                    <td>{data.protein}</td>
+                  </tr>
+                ))
+              : null}
+          </tbody>
+          <tfoot>
+            <tr>
+              <th scope="row">Totals</th>
+              <td>{totals.calories}</td>
+              <td>{totals.fat}</td>
+              <td>{totals.carbohydrates}</td>
+              <td>{totals.protein}</td>
+            </tr>
+          </tfoot>
+        </Table>
       </Sheet>
     </>
   );
