@@ -28,6 +28,7 @@ import PieChartComponent from "./components/pieChart";
 import PieCaloriesComponent from "./components/pieCalories";
 import PressableCardBoards from "./components/workOutTable";
 import NutritionHome from "./NutritionHome";
+import UserCalendar from "./components/userCalendar";
 
 const drawerWidth = 240;
 const userPages = ["Home", "Fitness", "Nutrition"]; // Holds Items for navbar
@@ -188,7 +189,7 @@ function UserHome(props) {
             )}
             {activeTab === 3 && (
               <div className="daily-preview-calendar">
-                <p>november</p>
+               <UserCalendar />
               </div>
             )}
             {activeTab === 4 && (
