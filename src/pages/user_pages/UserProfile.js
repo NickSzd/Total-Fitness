@@ -11,8 +11,11 @@ import React from "react";
 import "../../App.css";
 function UserProfile() {
   return (
-    <div>
-      <h1>UserProfile</h1>
+    <div className="main">
+      <div className="UserHead" style={{ color: "white" }}>
+        <h1>UserProfile</h1>
+      </div>
+      <div className="UserInfo"></div>
     </div>
   );
 }

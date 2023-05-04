@@ -94,43 +94,51 @@ function UserHome(props) {
           </div>
         </div>
       </div>
-      {/* 
-        Creates nav bar so the user can move between user the users pages
-        home
-        fitness
-        nutrition
+      <div className="UserNavBar">
+        {/* 
+        userNav will have options to navigate between user pages. 
+        UserHome
+        UserProfile
+        And a logout button
+
+        ToDO 
+          Add Logout button
+          Add User Profile Button
+          Create User Profile Page
       */}
-      <div className="userNav">
-        <AppBar component="nav" position="relative">
-          <Box sx={{ display: { xs: "none", sm: "block" } }}>
-            {userPages.map((item) => (
-              <Button key={item} sx={{ color: "#fff" }}>
-                {item}
-              </Button>
-            ))}
-          </Box>
-        </AppBar>
+        <div className="userNav">
+          <AppBar component="nav" position="relative">
+            <Box sx={{ display: { xs: "none", sm: "block" } }}>
+              {userPages.map((item) => (
+                <Button key={item} sx={{ color: "#fff" }}>
+                  {item}
+                </Button>
+              ))}
+            </Box>
+          </AppBar>
+        </div>
+        <Box component="nav">
+          <Drawer
+            container={container}
+            variant="temporary"
+            open={mobileOpen}
+            onClose={handleDrawerToggle}
+            ModalProps={{
+              keepMounted: true, // Better open performance on mobile.
+            }}
+            sx={{
+              display: { xs: "block", sm: "none" },
+              "& .MuiDrawer-paper": {
+                boxSizing: "border-box",
+                width: drawerWidth,
+              },
+            }}
+          >
+            {drawer}
+          </Drawer>
+        </Box>
       </div>
-      <Box component="nav">
-        <Drawer
-          container={container}
-          variant="temporary"
-          open={mobileOpen}
-          onClose={handleDrawerToggle}
-          ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
-          }}
-          sx={{
-            display: { xs: "block", sm: "none" },
-            "& .MuiDrawer-paper": {
-              boxSizing: "border-box",
-              width: drawerWidth,
-            },
-          }}
-        >
-          {drawer}
-        </Drawer>
-      </Box>
+
       <div className="right-side">
         <div className="nav">
           <ul>
@@ -189,7 +197,7 @@ function UserHome(props) {
             )}
             {activeTab === 3 && (
               <div className="daily-preview-calendar">
-               <UserCalendar />
+                <UserCalendar />
               </div>
             )}
             {activeTab === 4 && (
