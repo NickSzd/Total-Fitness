@@ -4,7 +4,7 @@
 
 # When You add a new Library to the App create a  new Item in the list
 # WHen Pulling From Main run
-# bash ./libs
+# bash ./libs.sh
 # This will reinstall npm along with the lates libraries
 #!/bin/bash 
 
