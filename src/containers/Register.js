@@ -12,9 +12,14 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-
+import { db} from "../config/firebase";
+import { collection ,doc, setDoc, addDoc} from "firebase/firestore";
 import { auth } from "../config/firebase.js";
 import { createUserWithEmailAndPassword } from "firebase/auth";
+
+
+const user_collection = collection(db, "users");
+
 
 function Copyright(props) {
   return (
@@ -42,6 +47,7 @@ email: name@company.com
 passowrd: password123
 */
 // ADD FIREBASE STUFF
+
 export default function Register() {
   //Rregister a user
   const handleSubmit = (event) => {
@@ -53,11 +59,16 @@ export default function Register() {
     var password = document.getElementById("password").value;
 
     // Register User
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
+    createUserWithEmailAndPassword (auth, email, password)
+      .then(async (userCredential) => {
         // Signed in
         const user = userCredential.user;
         // ...
+        await setDoc(doc(user_collection), {
+          userID : user.uid,
+          email : email
+      
+        });
         alert("User Created");
         window.location.href = "userHome";
         //ADD REDIRECT TO USER HOME PAGE
