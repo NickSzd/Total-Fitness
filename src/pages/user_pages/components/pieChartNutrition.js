@@ -43,7 +43,7 @@ function PieChartNutrition({ pieData }) {
   const classes = useStyles();
   return (
     <div className={classes.chartContainer}>
-      <Typography variant="h4">Nutrition Summary</Typography>
+      <Typography variant="h4">Macronutrient Summary</Typography>
       <PieChart width={800} height={400}>
         <Pie
           data={pieData}
