@@ -1,16 +1,26 @@
 // https://mui.com/joy-ui/react-table/
 
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Table from "@mui/joy/Table";
 import Sheet from "@mui/joy/Sheet";
 import { db } from "../../../config/firebase";
-import { getDocs, collection, where, query } from "firebase/firestore";
+import {
+  getDocs,
+  collection,
+  where,
+  query,
+  getDoc,
+  doc,
+} from "firebase/firestore";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { DatePicker } from "@mui/x-date-pickers";
 import { Grid } from "@mui/joy";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 
-function NutritionTable() {
+function NutritionTable({ selectedDate, setPieData }) {
+  const history = useNavigate();
   dayjs.extend(utc);
   const [nutrition, setNutrition] = useState([{}]);
   const [totals, setTotals] = useState({
@@ -19,18 +29,18 @@ function NutritionTable() {
     carbohydrates: 0,
     protein: 0,
   });
-  const [selectedDate, setSelectedDate] = useState(dayjs());
 
   useEffect(() => {
-    const getNutrition = async () => {
-      const nutritionRef = collection(db, "nutrition");
+    const getNutrition = async (user) => {
+      const userRef = doc(db, "users", user);
+      const nutritionRef = collection(userRef, "nutrition");
       const q = query(
         nutritionRef,
         where("day", ">=", selectedDate.startOf("day").toDate()),
         where("day", "<", selectedDate.endOf("day").add(1, "second").toDate())
       );
       try {
-        const data = (await getDocs(q)).docs.map((doc) => ({
+        const nutritionData = (await getDocs(q)).docs.map((doc) => ({
           ...doc.data(),
           id: doc.id,
         }));
@@ -39,29 +49,38 @@ function NutritionTable() {
         totals.carbohydrates = 0;
         totals.protein = 0;
         const newTotal = totals;
-        data.forEach((macro) => {
+        nutritionData.forEach((macro) => {
           newTotal.calories += macro.calories;
           newTotal.fat += macro.fat;
           newTotal.carbohydrates += macro.carbohydrates;
           newTotal.protein += macro.protein;
         });
+        const newPieData = [
+          { name: "Fat", value: 0, fill: "#8884d8" },
+          { name: "Carbohydrate", value: 0, fill: "#82ca9d" },
+          { name: "Protein", value: 0, fill: "#ffc658" },
+        ];
+        newPieData[0].value = newTotal.fat;
+        newPieData[1].value = newTotal.carbohydrates;
+        newPieData[2].value = newTotal.protein;
         setTotals(newTotal);
-        setNutrition(data);
+        setNutrition(nutritionData);
+        setPieData(newPieData);
       } catch (err) {
         console.log(err);
       }
     };
-    getNutrition();
-  }, [selectedDate, totals]);
+    const auth = getAuth();
+    const loggedInUser = auth.currentUser;
+    if (!loggedInUser) {
+      history("/Login", { replace: true });
+    } else {
+      getNutrition(loggedInUser.uid);
+    }
+  }, [history, selectedDate, setPieData, totals]);
 
   return (
     <>
-      <Grid container justifyContent="center">
-        <DatePicker
-          value={selectedDate}
-          onChange={(newDate) => setSelectedDate(newDate)}
-        />
-      </Grid>
       <Sheet sx={{ height: "auto", overflow: "auto" }}>
         <Table stickyHeader hoverRow>
           <thead>
