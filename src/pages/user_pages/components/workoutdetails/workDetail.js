@@ -1,5 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button, Card, CardContent, Dialog, DialogTitle, TextField, Typography } from '@material-ui/core';
+import { db } from "../../../../config/firebase";
+import { getDocs, collection, addDoc } from "firebase/firestore";
 
 function Workouts({ onWorkoutClick }) {
   const [isLoading, setIsLoading] = useState(false);
@@ -25,17 +27,6 @@ function Workouts({ onWorkoutClick }) {
 
       const data = await response.json(); 
       setExercises(data);
-
-      //const data = await response.json();
-      /*
-        name:
-        type:
-        msucle:
-        equipment:
-        difficulty:
-        instructions:
-      */ 
-    
     } 
     catch (error) {
       setError(error.message);
@@ -44,12 +35,41 @@ function Workouts({ onWorkoutClick }) {
     setIsLoading(false);
   };
 
-  const handleExerciseClick = (exercise) => {
+  const handleExerciseClick = async (exercise) => {
     const confirmAdd = window.confirm(`Add ${exercise.name} to the Exercise Plan?`);
     if (confirmAdd) {
-      onWorkoutClick(exercise.name);
+      try {
+        const docRef = await addDoc(collection(db, "workout"), {
+          name: exercise.name,
+          instructions: exercise.instructions,
+          equipment: exercise.equipment
+        });
+        console.log("Document written with ID: ", docRef.id);
+        onWorkoutClick(exercise.name);
+      } catch (e) {
+        console.error("Error adding document: ", e);
+      }
     }
   };
+
+  useEffect(() => {
+    const getWorkouts = async () => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const querySnapshot = await getDocs(collection(db, "workout"));
+        const workoutData = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        setExercises(workoutData);
+      } catch (error) {
+        setError(error.message);
+      }
+      setIsLoading(false);
+    };
+    getWorkouts();
+  }, []);
 
   return (
     // you can add more detail in a card.

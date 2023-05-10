@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Card, CardContent, Typography, Dialog, DialogTitle, DialogContent, DialogActions, TextField, CardActions } from '@material-ui/core';
-import Workouts from './workoutdetails/workDetail';
 import { makeStyles } from '@material-ui/core/styles';
+import { db } from "../../../config/firebase";
+import { getDocs, collection, addDoc, setDoc, doc, some } from "firebase/firestore";
+
 const useStyles = makeStyles({
   card: {
     aspectRatio: 'auto', 
@@ -18,15 +20,137 @@ const useStyles = makeStyles({
   },
 })
 
+function Workouts({ onWorkoutClick }) {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [exercises, setExercises] = useState([{}]);
+
+  const getExercises = async (muscle) => {
+    setIsLoading(true);
+    setError(null);
+
+    const apiUrl = `https://api.api-ninjas.com/v1/exercises?muscle=${muscle}`;
+    
+    try {
+      const response = await fetch(apiUrl, {
+        headers: {
+          'X-Api-Key': '93CaTdAxk/uE8CzDY6GrRw==OKxj1C2694mFeH4H'
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch exercises.');
+      }
+
+      const data = await response.json(); 
+      setExercises(data);
+    } 
+    catch (error) {
+      setError(error.message);
+    }
+
+    setIsLoading(false);
+  };
+
+  const handleExerciseClick = async (exercise) => {
+    const confirmAdd = window.confirm(`Add ${exercise.name} to the Exercise Plan?`);
+  
+    if (confirmAdd) {
+      try {
+        const workoutCollectionRef = collection(db, "workout");
+        const querySnapshot = await getDocs(workoutCollectionRef);
+  
+        if (querySnapshot.empty) {
+          // Create a new workout document with an empty exercises field
+          const newWorkoutDocRef = await addDoc(workoutCollectionRef, { exercises: [exercise] });
+          onWorkoutClick(exercise.name);
+        } else {
+          const workoutDoc = querySnapshot.docs[0]; // Assuming there is only one workout document
+          const workoutDocRef = doc(db, "workout", workoutDoc.id);
+          const workoutData = workoutDoc.data();
+          const exercises = workoutData.exercises || [];
+  
+          // Check if the exercise already exists in the workout document
+          if (exercises.some((ex) => ex.name === exercise.name)) {
+            console.log("Exercise already exists in the workout document.");
+            return;
+          }
+  
+          // Add the new exercise to the exercises field of the workout document
+          await setDoc(workoutDocRef, { exercises: [...exercises, exercise] });
+          onWorkoutClick(exercise.name);
+        }
+      } catch (e) {
+        console.error("Error adding document: ", e);
+      }
+    }
+  };
+
+  useEffect(() => {
+    const initializeWorkout = async () => {
+      const workoutCollectionRef = collection(db, "workout");
+      const querySnapshot = await getDocs(workoutCollectionRef);
+  
+      if (querySnapshot.empty) {
+        // Create a new workout document with an empty exercises subcollection
+        await addDoc(workoutCollectionRef, { exercises: [] });
+      }
+    };
+  
+    initializeWorkout();
+  }, []);
+  return (
+    <div>
+      <Typography>
+        __________________________________________________________
+      </Typography>
+      <Typography variant="h4" gutterBottom>
+        Exercise List
+      </Typography>
+      <Button onClick={() => getExercises('chest')}>Chest Exercises</Button>
+      <Button onClick={() => getExercises('calves')}>calves Exercises</Button>
+      <Button onClick={() => getExercises('abdominals')}>abdominals Exercises</Button>
+      <Button onClick={() => getExercises('lower_back')}>Back Exercises</Button>
+      <Button onClick={() => getExercises('biceps')}>biceps Exercises</Button>
+
+      <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+        {exercises.map((workout) => (
+        <Card key={workout.name} style={{ margin: '8px', minWidth: '200px' }} onClick={() => handleExerciseClick(workout)}>
+          <CardContent>
+            <Typography variant="h6" component="h2">
+              {workout.name}
+            </Typography>
+            <Typography color="textSecondary" gutterBottom>
+              {workout.instructions}
+            </Typography>
+            <Typography color="textSecondary">
+            equipment: {workout.equipment}
+          </Typography>
+        </CardContent>
+      </Card>
+      ))}
+      </div>
+      {isLoading && <Typography>Loading...</Typography>}
+      {error && <Typography color="error">{error}</Typography>}
+    </div>
+  );
+}
+
 function PressableCardBoards() {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [content, setContent] = useState('');
   const [cardboards, setCardboards] = useState([]);
-
-  const handleAddCard = () => {
-    setCardboards(prevCardboards => [...prevCardboards, '']);
-    setOpen(true);
+  const handleAddCard = async () => {
+    try {
+      const workoutCollectionRef = collection(db, "workout");
+      const newWorkoutDocRef = await addDoc(workoutCollectionRef, { exercises: [] });
+  
+      setCardboards((prevCardboards) => [...prevCardboards, ""]);
+      setOpen(true);
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
   };
 
   const handleEditCard = (index) => {
