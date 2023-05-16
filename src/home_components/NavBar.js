@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import "../../../App";
+import "../App";
 import {
   Button,
   IconButton,

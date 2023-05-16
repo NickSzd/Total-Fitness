@@ -9,7 +9,7 @@ Reqs
 */
 
 import React, { useEffect } from "react";
-//import "../App.css";
+import "../App.css";
 import {
   IconButton,
   Button,
@@ -24,7 +24,7 @@ import { useState } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Outlet } from "react-router-dom";
 import SharedContext from "./user_pages/components/SharedContext";
-import NavBar from "./user_pages/components/NavBar";
+import NavBar from "../home_components/NavBar";
 //import "../Home.css";
 
 function Home() {
