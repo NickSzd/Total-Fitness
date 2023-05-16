@@ -70,9 +70,7 @@ function NutritionTable({ selectedDate, setPieData }) {
         console.log(err);
       }
     };
-    const auth = getAuth();
-    const loggedInUser = auth.currentUser;
-    getNutrition(loggedInUser.uid);
+    getNutrition(localStorage.getItem("user"));
   }, [history, selectedDate, setPieData, totals]);
 
   return (

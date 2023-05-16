@@ -16,8 +16,6 @@ libraries=(
     "@emotion/react@11.10.6"
     "@emotion/styled@11.10.6"
     "@fontsource/roboto@4.5.8"
-    "@material-ui/core@4.12.4"
-    "@material-ui/styles@4.11.5"
     "@mui/icons-material@5.11.16"
     "@mui/joy@5.0.0-alpha.76"
     "@mui/material@5.12.0"

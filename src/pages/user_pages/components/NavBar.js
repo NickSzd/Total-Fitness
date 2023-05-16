@@ -13,17 +13,10 @@ import {
 import { useState } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Outlet, useNavigate } from "react-router-dom";
-import {
-  experimental_extendTheme as materialExtendTheme,
-  Experimental_CssVarsProvider as MaterialCssVarsProvider,
-  THEME_ID,
-} from "@mui/material/styles";
-import { CssVarsProvider as JoyCssVarsProvider } from "@mui/joy/styles";
 
 import { getAuth, signOut } from "firebase/auth";
 
 function NavBar({ user, setUser }) {
-  const materialTheme = materialExtendTheme();
   const history = useNavigate();
   const [anchor, setAnchor] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -92,76 +85,69 @@ function NavBar({ user, setUser }) {
   }, [setUser]);
   return (
     <div>
+      <Box sx={{ flexgrow: 1 }}>
+        <AppBar position="static">
+          <Toolbar>
+            <IconButton
+              onClick={openMenu}
+              size="large"
+              edge="start"
+              aria-label="menu"
+              sx={{ mr: 2, color: "white" }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Menu
+              open={Boolean(anchor)}
+              anchorEl={anchor}
+              onClose={closeMenu}
+              keepMounted
+            >
+              {menuOptions.map((item, index) => (
+                <MenuItem
+                  key={index}
+                  onClick={(event) => {
+                    document.location.href =
+                      "/" + (item === "home" ? "" : item);
+                  }}
+                  selected={index === selected}
+                >
+                  {item}
+                </MenuItem>
+              ))}
+            </Menu>
+            <Typography variant="h4" component="div" sx={{ flexGrow: 20 }}>
+              <div id="Home">
+                <Button id="HomeButton" color="inherit" href="/">
+                  <h1>Total Fitness</h1>
+                </Button>
+              </div>
+            </Typography>
+            {loading ? null : (
+              <div id="login">
+                <Button id="loginButton" color="inherit" onClick={handleClick}>
+                  {user ? "Logout" : "Login"}
+                </Button>
+              </div>
+            )}
 
-          <Box sx={{ flexgrow: 1 }}>
-            <AppBar position="static">
-              {/* <Toolbar>
-                <IconButton
-                  onClick={openMenu}
-                  size="large"
-                  edge="start"
-                  aria-label="menu"
-                  color="white"
-                  sx={{ mr: 2 }}
-                >
-                  <MenuIcon />
-                </IconButton>
-                <Menu
-                  open={Boolean(anchor)}
-                  anchorEl={anchor}
-                  onClose={closeMenu}
-                  keepMounted
-                >
-                  {menuOptions.map((item, index) => (
-                    <MenuItem
-                      key={index}
-                      onClick={(event) => {
-                        document.location.href =
-                          "/" + (item === "home" ? "" : item);
-                      }}
-                      selected={index === selected}
-                    >
-                      {item}
-                    </MenuItem>
-                  ))}
-                </Menu>
-                <Typography variant="h4" component="div" sx={{ flexGrow: 20 }}>
-                  <div id="Home">
-                    <Button id="HomeButton" color="inherit" href="/">
-                      <h1>Total Fitness</h1>
-                    </Button>
-                  </div>
-                </Typography>
-                {loading ? null : (
-                  <div id="login">
+            {loading
+              ? null
+              : !user && (
+                  <div id="Register">
                     <Button
-                      id="loginButton"
+                      id="RegisterButton"
                       color="inherit"
-                      onClick={handleClick}
+                      href="/Register"
                     >
-                      {user ? "Logout" : "Login"}
+                      Register
                     </Button>
                   </div>
                 )}
-
-                {loading
-                  ? null
-                  : !user && (
-                      <div id="Register">
-                        <Button
-                          id="RegisterButton"
-                          color="inherit"
-                          href="/Register"
-                        >
-                          Register
-                        </Button>
-                      </div>
-                    )}
-              </Toolbar> */}
-            </AppBar>
-          </Box>
-          <Outlet />
-       
+          </Toolbar>
+        </AppBar>
+      </Box>
+      <Outlet />
     </div>
   );
 }

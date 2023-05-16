@@ -34,7 +34,7 @@ import colors from "@mui/joy/colors";
 import { CssVarsProvider as JoyCssVarsProvider } from "@mui/joy/styles";
 import Summary from "./pages/Summary";
 import SharedContext from "./pages/user_pages/components/SharedContext";
-import { AuthenticatedRoute } from "./pages/user_pages/components/AuthenticatedRoute";
+import { AuthenticatedRoute } from "./AuthenticatedRoute";
 
 const materialTheme = materialExtendTheme();
 
@@ -86,7 +86,7 @@ function App() {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <MaterialCssVarsProvider theme={{ [THEME_ID]: materialTheme }}>
-        <JoyCssVarsProvider >
+        <JoyCssVarsProvider>
           <div
             className="home"
             style={{

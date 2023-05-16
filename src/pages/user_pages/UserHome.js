@@ -23,27 +23,20 @@ import {
   Typography,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import { CssVarsProvider as JoyCssVarsProvider } from "@mui/joy/styles";
 
 import PieChartComponent from "./components/pieChart";
 import PieCaloriesComponent from "./components/pieCalories";
 import PressableCardBoards from "./components/workOutTable";
 import NutritionHome from "./NutritionHome";
 import UserCalendar from "./components/userCalendar";
-import {
-  experimental_extendTheme as materialExtendTheme,
-  Experimental_CssVarsProvider as MaterialCssVarsProvider,
-  THEME_ID,
-} from "@mui/material/styles";
 
 const drawerWidth = 240;
 const userPages = ["Home", "Fitness", "Nutrition"]; // Holds Items for navbar
 const settings = ["Profile", "Account", "Dashboard", "Logout"]; // items for user profile
 
 function UserHome(props) {
-  const materialTheme = materialExtendTheme();
   const { window } = props;
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [mobileOpen, setMobileOpen] = React.useState(true);
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
@@ -79,32 +72,30 @@ function UserHome(props) {
   };
 
   return (
-    <MaterialCssVarsProvider theme={{ [THEME_ID]: materialTheme }}>
-      <JoyCssVarsProvider>
-        <div>
-          <div className="profile-header">
-            <AccountCircle sx={{ ...Style.accountBox, fontSize: "250px" }} />
-            <div className="user-name">
-              <h3>Username</h3>
+    <div>
+      <div className="profile-header">
+        <AccountCircle sx={{ ...Style.accountBox, fontSize: "250px" }} />
+        <div className="user-name">
+          <h3>Username</h3>
 
-              <div className="user-bio">
-                <p className="bio">
-                  {" "}
-                  I want to improve my shirt size, so I want to go to gym.{" "}
-                </p>
-                <div className="user-mail">
-                  <p>xlismysize@ucsc.edu</p>
-                  <div className="change-profile-btn">
-                    <button>
-                      <i></i> change profile
-                    </button>
-                  </div>
-                </div>
+          <div className="user-bio">
+            <p className="bio">
+              {" "}
+              I want to improve my shirt size, so I want to go to gym.{" "}
+            </p>
+            <div className="user-mail">
+              <p>xlismysize@ucsc.edu</p>
+              <div className="change-profile-btn">
+                <button>
+                  <i></i> change profile
+                </button>
               </div>
             </div>
           </div>
-          <div className="UserNavBar">
-            {/* 
+        </div>
+      </div>
+      <div className="UserNavBar">
+        {/* 
         userNav will have options to navigate between user pages. 
         UserHome
         UserProfile
@@ -115,111 +106,109 @@ function UserHome(props) {
           Add User Profile Button
           Create User Profile Page
       */}
-            <div className="userNav">
-              <AppBar component="nav" position="relative">
-                <Box sx={{ display: { xs: "none", sm: "block" } }}>
-                  {userPages.map((item) => (
-                    <Button key={item} sx={{ color: "#fff" }}>
-                      {item}
-                    </Button>
-                  ))}
-                </Box>
-              </AppBar>
-            </div>
-            <Box component="nav">
-              <Drawer
-                container={container}
-                variant="temporary"
-                open={mobileOpen}
-                onClose={handleDrawerToggle}
-                ModalProps={{
-                  keepMounted: true, // Better open performance on mobile.
-                }}
-                sx={{
-                  display: { xs: "block", sm: "none" },
-                  "& .MuiDrawer-paper": {
-                    boxSizing: "border-box",
-                    width: drawerWidth,
-                  },
-                }}
-              >
-                {drawer}
-              </Drawer>
+        <div className="userNav">
+          <AppBar component="nav" position="relative">
+            <Box sx={{ display: { xs: "none", sm: "block" } }}>
+              {userPages.map((item) => (
+                <Button key={item} sx={{ color: "#fff" }}>
+                  {item}
+                </Button>
+              ))}
             </Box>
-          </div>
+          </AppBar>
+        </div>
+        <Box component="nav">
+          <Drawer
+            container={container}
+            variant="temporary"
+            open={mobileOpen}
+            onClose={handleDrawerToggle}
+            ModalProps={{
+              keepMounted: true, // Better open performance on mobile.
+            }}
+            sx={{
+              display: { xs: "block", sm: "none" },
+              "& .MuiDrawer-paper": {
+                boxSizing: "border-box",
+                width: drawerWidth,
+              },
+            }}
+          >
+            {drawer}
+          </Drawer>
+        </Box>
+      </div>
 
-          <div className="right-side">
-            <div className="nav">
-              <ul>
-                <li
-                  onClick={() => tabs(0)}
-                  className={activeTab === 0 ? "active user-goal" : "user-goal"}
-                >
-                  Goal
-                </li>
-                <li
-                  onClick={() => tabs(1)}
-                  className={
-                    activeTab === 1 ? "active user-nutrition" : "user-nutrition"
-                  }
-                >
-                  Nutrition
-                </li>
-                <li
-                  onClick={() => tabs(2)}
-                  className={
-                    activeTab === 2 ? "active user-workout" : "user-workout"
-                  }
-                >
-                  Workout
-                </li>
-                <li
-                  onClick={() => tabs(3)}
-                  className={
-                    activeTab === 3 ? "active user-calendar" : "user-calendar"
-                  }
-                >
-                  Calendar
-                </li>
-                <li
-                  onClick={() => tabs(4)}
-                  className={
-                    activeTab === 4 ? "active user-summary" : "user-summary"
-                  }
-                >
-                  Summary
-                </li>
-              </ul>
+      <div className="right-side">
+        <div className="nav">
+          <ul>
+            <li
+              onClick={() => tabs(0)}
+              className={activeTab === 0 ? "active user-goal" : "user-goal"}
+            >
+              Goal
+            </li>
+            <li
+              onClick={() => tabs(1)}
+              className={
+                activeTab === 1 ? "active user-nutrition" : "user-nutrition"
+              }
+            >
+              Nutrition
+            </li>
+            <li
+              onClick={() => tabs(2)}
+              className={
+                activeTab === 2 ? "active user-workout" : "user-workout"
+              }
+            >
+              Workout
+            </li>
+            <li
+              onClick={() => tabs(3)}
+              className={
+                activeTab === 3 ? "active user-calendar" : "user-calendar"
+              }
+            >
+              Calendar
+            </li>
+            <li
+              onClick={() => tabs(4)}
+              className={
+                activeTab === 4 ? "active user-summary" : "user-summary"
+              }
+            >
+              Summary
+            </li>
+          </ul>
 
-              <div className="tab-content">
-                {activeTab === 0 && (
-                  <div>
-                    <PieChartComponent />
-                    <PieCaloriesComponent />
-                  </div>
-                )}
-                {activeTab === 1 && <NutritionHome />}
-                {activeTab === 2 && (
-                  <div>
-                    <PressableCardBoards />
-                  </div>
-                )}
-                {activeTab === 3 && (
-                  <div className="daily-preview-calendar">
-                    <UserCalendar />
-                  </div>
-                )}
-                {activeTab === 4 && (
-                  <div className="daily-preview-summary">
-                    <p>Summery</p>
-                  </div>
-                )}
+          <div className="tab-content">
+            {activeTab === 0 && (
+              <div>
+                <PieChartComponent />
+                <PieCaloriesComponent />
               </div>
-            </div>
+            )}
+            {activeTab === 1 && <NutritionHome />}
+            {activeTab === 2 && (
+              <div>
+                <PressableCardBoards />
+              </div>
+            )}
+            {activeTab === 3 && (
+              <div className="daily-preview-calendar">
+                <UserCalendar />
+              </div>
+            )}
+            {activeTab === 4 && (
+              <div className="daily-preview-summary">
+                <p>Summery</p>
+              </div>
+            )}
           </div>
         </div>
-      </JoyCssVarsProvider>
-    </MaterialCssVarsProvider>
+      </div>
+    </div>
   );
 }
 

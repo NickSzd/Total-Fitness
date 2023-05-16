@@ -1,33 +1,23 @@
 import React, { useState } from "react";
 import { PieChart, Pie, Legend, Tooltip } from "recharts";
-import { Typography, TextField } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import { Typography, TextField } from "@mui/material";
+import { styled } from "@mui/material/styles";
+const PREFIX = "PieChartComponent";
 
-/**********************************
+const classes = {
+  chartContainer: `${PREFIX}-chartContainer`,
+  formContainer: `${PREFIX}-formContainer`,
+};
 
-Please read beforehand
-
-please download @material-ui/core
-
-by using 
-
-npm install @material-ui/core --force
-npm install @material-ui/styles --force
-npm install recharts
-
-In ordder to, run this!!!!
-
-*************************************/
-
-const useStyles = makeStyles({
-  chartContainer: {
+const Root = styled("div")({
+  [`&.${classes.chartContainer}`]: {
     height: "500px",
     display: "flex",
     justifyContent: "left",
     alignItems: "left",
     flexDirection: "column",
   },
-  formContainer: {
+  [`& .${classes.formContainer}`]: {
     display: "flex",
     flexDirection: "column",
     justifyContent: "flex-start",
@@ -40,7 +30,6 @@ const useStyles = makeStyles({
 });
 
 function PieChartComponent() {
-  const classes = useStyles();
   const [data, setData] = useState([
     { name: "Fat", value: 0 },
     { name: "Carbohydrate", value: 0 },
@@ -70,7 +59,7 @@ function PieChartComponent() {
   };
 
   return (
-    <div className={classes.chartContainer}>
+    <Root className={classes.chartContainer}>
       <Typography variant="h4">Nutrition Daily Summary</Typography>
       <PieChart width={800} height={400}>
         <Pie
@@ -113,7 +102,7 @@ function PieChartComponent() {
         />
         <button type="submit">Update Data</button>
       </form>
-    </div>
+    </Root>
   );
 }
 
