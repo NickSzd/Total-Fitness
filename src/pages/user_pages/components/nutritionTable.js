@@ -31,8 +31,8 @@ function NutritionTable({ selectedDate, setPieData }) {
   });
 
   useEffect(() => {
-    const getNutrition = async (user) => {
-      const userRef = doc(db, "users", user);
+    const getNutrition = async (uid) => {
+      const userRef = doc(db, "users", uid);
       const nutritionRef = collection(userRef, "nutrition");
       const q = query(
         nutritionRef,
@@ -72,11 +72,7 @@ function NutritionTable({ selectedDate, setPieData }) {
     };
     const auth = getAuth();
     const loggedInUser = auth.currentUser;
-    if (!loggedInUser) {
-      history("/Login", { replace: true });
-    } else {
-      getNutrition(loggedInUser.uid);
-    }
+    getNutrition(loggedInUser.uid);
   }, [history, selectedDate, setPieData, totals]);
 
   return (
