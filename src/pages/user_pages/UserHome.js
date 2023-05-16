@@ -36,7 +36,7 @@ const settings = ["Profile", "Account", "Dashboard", "Logout"]; // items for use
 
 function UserHome(props) {
   const { window } = props;
-  const [mobileOpen, setMobileOpen] = React.useState(true);
+  const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
