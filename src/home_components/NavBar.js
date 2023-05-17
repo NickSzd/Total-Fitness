@@ -123,27 +123,20 @@ function NavBar({ user, setUser }) {
                 </Button>
               </div>
             </Typography>
-            {loading ? null : (
-              <div id="login">
-                <Button id="loginButton" color="inherit" onClick={handleClick}>
-                  {user ? "Logout" : "Login"}
+
+            <div id="login">
+              <Button id="loginButton" color="inherit" onClick={handleClick}>
+                {localStorage.getItem("user") ? "Logout" : "Login"}
+              </Button>
+            </div>
+
+            {!localStorage.getItem("user") && (
+              <div id="Register">
+                <Button id="RegisterButton" color="inherit" href="/Register">
+                  Register
                 </Button>
               </div>
             )}
-
-            {loading
-              ? null
-              : !user && (
-                  <div id="Register">
-                    <Button
-                      id="RegisterButton"
-                      color="inherit"
-                      href="/Register"
-                    >
-                      Register
-                    </Button>
-                  </div>
-                )}
           </Toolbar>
         </AppBar>
       </Box>
