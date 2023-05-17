@@ -12,18 +12,13 @@ import {
 import { getDatabase, ref, set } from "firebase/database";
 // import { getDocs, collection, where, query } from "firebase/firestore";
 import Box from "@mui/material/Box";
-import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import AddIcon from "@mui/icons-material/Add";
-import { DatePicker } from "@mui/x-date-pickers";
 import { Grid } from "@mui/joy";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
-import PieChartComponent from "./components/pieChart";
-import PieChartNutrition from "./components/pieChartNutrition";
+import PieChartNutrition from "./components/pieChartMacros";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 
 const nutrition_collection = collection(db, "nutrition");

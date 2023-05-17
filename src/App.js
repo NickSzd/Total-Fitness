@@ -1,7 +1,7 @@
 //import { Box, Container, Paper, Typography } from "@mui/material";
 import "./App.css";
 import "./index.js";
-import React from "react";
+import React, { createContext } from "react";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import FitnessHome from "./pages/FitnessHome";
@@ -32,6 +32,9 @@ import {
 } from "@mui/material/styles";
 import colors from "@mui/joy/colors";
 import { CssVarsProvider as JoyCssVarsProvider } from "@mui/joy/styles";
+import Summary from "./pages/Summary";
+import SharedContext from "./pages/user_pages/components/SharedContext";
+import { AuthenticatedRoute } from "./AuthenticatedRoute";
 
 const materialTheme = materialExtendTheme();
 
@@ -52,6 +55,7 @@ function App() {
   //------------------------------------------------------------------
 
   const [selected, setSelected] = useState(-1);
+  const [user, setUser] = useState(null);
 
   //Lock the menu open when clicked
   const openMenu = (event) => {
@@ -92,17 +96,48 @@ function App() {
             <div className="routing">
               <Router>
                 <div>
-                  <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/Home" element={<Home />} />
-                    <Route path="/About" element={<About />} />
-                    <Route path="/FitnessHome" element={<FitnessHome />} />
-                    <Route path="/NutritionHome" element={<NutritionHome />} />
-                    <Route path="/UserHome" element={<UserHome />} />
-                    <Route path="/UserProfile" element={<UserProfile />} />
-                    <Route path="/Login" element={<Login />} />
-                    <Route path="/Register" element={<Register />} />
-                  </Routes>
+                  <SharedContext.Provider value={{ user, setUser }}>
+                    <Routes>
+                      <Route path="/" element={<Home />}>
+                        <Route index exact element={<Summary />} />
+                        <Route path="/About" element={<About />} />
+                        <Route
+                          path="/FitnessHome"
+                          element={
+                            <AuthenticatedRoute>
+                              <FitnessHome />
+                            </AuthenticatedRoute>
+                          }
+                        />
+                        <Route
+                          path="/NutritionHome"
+                          element={
+                            <AuthenticatedRoute>
+                              <NutritionHome />
+                            </AuthenticatedRoute>
+                          }
+                        />
+                        <Route
+                          path="/UserHome"
+                          element={
+                            <AuthenticatedRoute>
+                              <UserHome />
+                            </AuthenticatedRoute>
+                          }
+                        />
+                        <Route
+                          path="/UserProfile"
+                          element={
+                            <AuthenticatedRoute>
+                              <UserProfile />
+                            </AuthenticatedRoute>
+                          }
+                        />
+                      </Route>
+                      <Route path="/Login" element={<Login />} />
+                      <Route path="/Register" element={<Register />} />
+                    </Routes>
+                  </SharedContext.Provider>
                 </div>
               </Router>
             </div>

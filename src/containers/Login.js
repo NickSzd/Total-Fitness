@@ -12,6 +12,7 @@ import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { useNavigate } from "react-router-dom";
 
 // Imports fro Logging in
 import { auth } from "../config/firebase.js";
@@ -38,6 +39,7 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function Login() {
+  const history = useNavigate();
   const handleSubmit = async (event) => {
     event.preventDefault();
     var email = document.getElementById("email").value;
@@ -47,7 +49,9 @@ export default function Login() {
         // Signed in
         alert("User Logged In");
         const user = userCredential.user;
-        window.location.href = "userHome";
+        localStorage.setItem("user", user.uid);
+        history("/UserHome", { replace: true });
+
         // ...
       })
       .catch((error) => {

@@ -1,81 +1,71 @@
-import React, { useState } from 'react';
-import { PieChart, Pie, Legend, Tooltip } from 'recharts';
-import { Typography, TextField, Button } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import React, { useState } from "react";
+import { PieChart, Pie, Legend, Tooltip } from "recharts";
+import { Button, TextField, Typography } from "@mui/material";
+import { styled } from "@mui/material/styles";
 
-/************************************
+const PREFIX = "PieCaloriesComponent";
 
-Please read beforehand
+const classes = {
+  chartContainer: `${PREFIX}-chartContainer`,
+  formContainer: `${PREFIX}-formContainer`,
+  dataContainer: `${PREFIX}-dataContainer`,
+};
 
-please download @material-ui/core
-
-by using 
-
-npm install @material-ui/core --force
-npm install @material-ui/core/styles --force
-npm install recharts
-
-In ordder to, run this!!!!
-
-*************************************/
-
-
-const useStyles = makeStyles({
-  chartContainer: {
-    height: '500px',
-    display: 'flex',
-    justifyContent: 'left',
-    alignItems: 'left',
-    flexDirection: 'column',
+const Root = styled("div")({
+  [`&.${classes.chartContainer}`]: {
+    height: "500px",
+    display: "flex",
+    justifyContent: "left",
+    alignItems: "left",
+    flexDirection: "column",
   },
-  formContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-    alignItems: 'flex-end',
-    marginLeft: '70%', // adjust the percentage value to move the container to a certain point
-    transform: 'translateX(-50%)', // horizontally center the container relative to its parent element
-    marginTop: '-400px', // adjust the pixel value to move the container upward
-    transform: 'translateX(-50%)',
+  [`& .${classes.formContainer}`]: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "flex-start",
+    alignItems: "flex-end",
+    marginLeft: "70%", // adjust the percentage value to move the container to a certain point
+    transform: "translateX(-50%)", // horizontally center the container relative to its parent element
+    marginTop: "-400px", // adjust the pixel value to move the container upward
+    transform: "translateX(-50%)",
   },
-  dataContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'relative',
-    marginTop: '50px',
-    left: '400px',
+  [`& .${classes.dataContainer}`]: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    position: "relative",
+    marginTop: "50px",
+    left: "400px",
   },
 });
 
 function PieCaloriesComponent() {
-    const classes = useStyles();
-    const [data, setData] = useState([
-      { name: 'Input Value', value: 0 },
-      { name: 'Remaining Value', value: 2500 },
+  const [data, setData] = useState([
+    { name: "Input Value", value: 0 },
+    { name: "Remaining Value", value: 2500 },
+  ]);
+  const [inputValue, setInputValue] = useState(0);
+
+  const handleInputChange = (event) => {
+    const newInputValue = Number(event.target.value);
+    setInputValue(newInputValue);
+    setData([
+      { name: "Input Value", value: newInputValue },
+      { name: "Remaining Value", value: 2500 - newInputValue },
     ]);
-    const [inputValue, setInputValue] = useState(0);
-  
-    const handleInputChange = (event) => {
-      const newInputValue = Number(event.target.value);
-      setInputValue(newInputValue);
-      setData([
-        { name: 'Input Value', value: newInputValue },
-        { name: 'Remaining Value', value: 2500 - newInputValue },
-      ]);
-    };
-  
-    const handleUpdateData = (event) => {
-      event.preventDefault();
-      setData([
-        { name: 'Input Value', value: inputValue, fill: '#8884d8' },
-        { name: 'Remaining Value', value: 2500 - inputValue, fill: '#82ca9d' },
-      ]);
-    };
-  
+  };
+
+  const handleUpdateData = (event) => {
+    event.preventDefault();
+    setData([
+      { name: "Input Value", value: inputValue, fill: "#8884d8" },
+      { name: "Remaining Value", value: 2500 - inputValue, fill: "#82ca9d" },
+    ]);
+  };
+
   return (
-    <div className={classes.chartContainer}>
+    <Root className={classes.chartContainer}>
       <Typography variant="h4">Calories-Intake Daily Goal</Typography>
       <PieChart width={800} height={400}>
         <Pie
@@ -106,19 +96,19 @@ function PieCaloriesComponent() {
       </form>
       <div className={classes.dataContainer}>
         <div>
-            <Typography variant="h6">Input Value:</Typography>
-            <Typography variant="h6" color="primary">
+          <Typography variant="h6">Input Value:</Typography>
+          <Typography variant="h6" color="primary">
             {inputValue}
-            </Typography>
+          </Typography>
         </div>
         <div>
-            <Typography variant="h6">Remaining Value:</Typography>
-            <Typography variant="h6" color="secondary">
+          <Typography variant="h6">Remaining Value:</Typography>
+          <Typography variant="h6" color="secondary">
             {2500 - inputValue}
-            </Typography>
+          </Typography>
         </div>
       </div>
-    </div>
+    </Root>
   );
 }
 

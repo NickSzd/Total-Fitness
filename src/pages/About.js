@@ -59,54 +59,6 @@ function About() {
   };
   return (
     <div>
-      <Box sx={{ flexgrow: 1 }}>
-        <AppBar position="static">
-          <Toolbar>
-            <IconButton
-              onClick={openMenu}
-              size="large"
-              edge="start"
-              aria-label="menu"
-              color="white"
-              sx={{ mr: 2 }}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              open={Boolean(anchor)}
-              anchorEl={anchor}
-              onClose={closeMenu}
-              keepMounted
-            >
-              {menuOptions.map((item, index) => (
-                <MenuItem
-                  key={index}
-                  onClick={(event) => {
-                    document.location.href = "/" + item;
-                    console.log(item);
-                  }}
-                  selected={index === selected}
-                >
-                  {item}
-                </MenuItem>
-              ))}
-            </Menu>
-            <Typography variant="h4" component="div" sx={{ flexGrow: 1 }}>
-              Total Fitness
-            </Typography>
-            <div id="login">
-              <Button id="loginButton" color="inherit" href="/Login">
-                Login
-              </Button>
-            </div>
-            <div id="Register">
-              <Button id="RegisterButton" color="inherit" href="/Register">
-                Register
-              </Button>
-            </div>
-          </Toolbar>
-        </AppBar>
-      </Box>
       <h1>About Page</h1>
       <div class="main" id="about">
         <div class="main__container">
