@@ -13,13 +13,16 @@ import {
 import { useState } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Outlet, useNavigate } from "react-router-dom";
-
+import { useContext } from "react";
 import { getAuth, signOut } from "firebase/auth";
+import SharedContext from "../pages/user_pages/components/SharedContext";
 
-function NavBar({ user, setUser }) {
+function NavBar() {
   const history = useNavigate();
+  const ctx = useContext(SharedContext);
+  const { user, loading, error } = ctx;
   const [anchor, setAnchor] = useState(null);
-  const [loading, setLoading] = useState(true);
+
   const menuOptions = [
     "home",
     "about",
@@ -66,23 +69,6 @@ function NavBar({ user, setUser }) {
       : history("/Login");
   };
 
-  useEffect(() => {
-    const auth = getAuth();
-    const unsubscribe = auth.onAuthStateChanged((loggedInUser) => {
-      if (loggedInUser) {
-        setUser(loggedInUser.uid);
-        localStorage.setItem("user", loggedInUser.uid);
-      } else {
-        setUser(null);
-        localStorage.removeItem("user");
-      }
-      setLoading(false);
-    });
-
-    return () => {
-      unsubscribe();
-    };
-  }, [setUser]);
   return (
     <div>
       <Box sx={{ flexgrow: 1 }}>
@@ -123,20 +109,27 @@ function NavBar({ user, setUser }) {
                 </Button>
               </div>
             </Typography>
-
-            <div id="login">
-              <Button id="loginButton" color="inherit" onClick={handleClick}>
-                {localStorage.getItem("user") ? "Logout" : "Login"}
-              </Button>
-            </div>
-
-            {!localStorage.getItem("user") && (
-              <div id="Register">
-                <Button id="RegisterButton" color="inherit" href="/Register">
-                  Register
+            {!loading ? (
+              <div id="login">
+                <Button id="loginButton" color="inherit" onClick={handleClick}>
+                  {user ? "Logout" : "Login"}
                 </Button>
               </div>
-            )}
+            ) : null}
+
+            {!loading
+              ? !user && (
+                  <div id="Register">
+                    <Button
+                      id="RegisterButton"
+                      color="inherit"
+                      href="/Register"
+                    >
+                      Register
+                    </Button>
+                  </div>
+                )
+              : null}
           </Toolbar>
         </AppBar>
       </Box>

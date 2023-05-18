@@ -1,8 +1,13 @@
 import { Navigate } from "react-router-dom";
+import { useContext } from "react";
+import SharedContext from "./pages/user_pages/components/SharedContext";
 
 export const AuthenticatedRoute = ({ children }) => {
-  if (localStorage.getItem("user")) {
+  const ctx = useContext(SharedContext);
+  if (ctx.user) {
     return children;
   }
-  return <Navigate to="/Login" replace />;
+  if (!ctx.loading) {
+    return <Navigate to="/Login" replace />;
+  }
 };

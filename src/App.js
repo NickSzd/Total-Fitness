@@ -35,6 +35,8 @@ import { CssVarsProvider as JoyCssVarsProvider } from "@mui/joy/styles";
 import Summary from "./pages/Summary";
 import SharedContext from "./pages/user_pages/components/SharedContext";
 import { AuthenticatedRoute } from "./AuthenticatedRoute";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "./config/firebase";
 
 const materialTheme = materialExtendTheme();
 
@@ -55,7 +57,8 @@ function App() {
   //------------------------------------------------------------------
 
   const [selected, setSelected] = useState(-1);
-  const [user, setUser] = useState(null);
+  // const [user, setUser] = useState(null);
+  const [user, loading, error] = useAuthState(auth);
 
   //Lock the menu open when clicked
   const openMenu = (event) => {
@@ -96,7 +99,7 @@ function App() {
             <div className="routing">
               <Router>
                 <div>
-                  <SharedContext.Provider value={{ user, setUser }}>
+                  <SharedContext.Provider value={{ user, loading, error }}>
                     <Routes>
                       <Route path="/" element={<Home />}>
                         <Route index exact element={<Summary />} />
