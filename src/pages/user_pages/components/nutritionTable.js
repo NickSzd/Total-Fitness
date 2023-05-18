@@ -18,8 +18,14 @@ import { DatePicker } from "@mui/x-date-pickers";
 import { Grid } from "@mui/joy";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
+import { useContext } from "react";
+import SharedContext from "./SharedContext";
+import CircularProgress from "@mui/joy/CircularProgress";
+import Box from "@mui/material/Box";
 
 function NutritionTable({ selectedDate, setPieData }) {
+  const ctx = useContext(SharedContext);
+  const [loading, setLoading] = useState(true);
   const history = useNavigate();
   dayjs.extend(utc);
   const [nutrition, setNutrition] = useState([{}]);
@@ -32,6 +38,7 @@ function NutritionTable({ selectedDate, setPieData }) {
 
   useEffect(() => {
     const getNutrition = async (uid) => {
+      setLoading(true)
       const userRef = doc(db, "users", uid);
       const nutritionRef = collection(userRef, "nutrition");
       const q = query(
@@ -66,50 +73,57 @@ function NutritionTable({ selectedDate, setPieData }) {
         setTotals(newTotal);
         setNutrition(nutritionData);
         setPieData(newPieData);
+        setLoading(false);
       } catch (err) {
         console.log(err);
       }
     };
-    getNutrition(localStorage.getItem("user"));
-  }, [history, selectedDate, setPieData, totals]);
+    getNutrition(ctx.user.uid);
+  }, [ctx.user.uid, history, selectedDate, setPieData, totals]);
 
   return (
     <>
-      <Sheet sx={{ height: "auto", overflow: "auto" }}>
-        <Table stickyHeader hoverRow>
-          <thead>
-            <tr>
-              <th>Meal</th>
-              <th>Calories</th>
-              <th>Fat (g)</th>
-              <th>Carbs (g)</th>
-              <th>Protein (g)</th>
-            </tr>
-          </thead>
-          <tbody>
-            {nutrition[0] && Object.keys(nutrition[0].length > 0)
-              ? nutrition.map((data) => (
-                  <tr key={data.id + data.meal}>
-                    <td>{data.meal}</td>
-                    <td>{data.calories}</td>
-                    <td>{data.fat}</td>
-                    <td>{data.carbohydrates}</td>
-                    <td>{data.protein}</td>
-                  </tr>
-                ))
-              : null}
-          </tbody>
-          <tfoot>
-            <tr>
-              <th scope="row">Totals</th>
-              <td>{totals.calories}</td>
-              <td>{totals.fat}</td>
-              <td>{totals.carbohydrates}</td>
-              <td>{totals.protein}</td>
-            </tr>
-          </tfoot>
-        </Table>
-      </Sheet>
+      {!loading ? (
+        <Sheet sx={{ height: "auto", overflow: "auto" }}>
+          <Table stickyHeader hoverRow>
+            <thead>
+              <tr>
+                <th>Meal</th>
+                <th>Calories</th>
+                <th>Fat (g)</th>
+                <th>Carbs (g)</th>
+                <th>Protein (g)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {nutrition[0] && Object.keys(nutrition[0].length > 0)
+                ? nutrition.map((data) => (
+                    <tr key={data.id + data.meal}>
+                      <td>{data.meal}</td>
+                      <td>{data.calories}</td>
+                      <td>{data.fat}</td>
+                      <td>{data.carbohydrates}</td>
+                      <td>{data.protein}</td>
+                    </tr>
+                  ))
+                : null}
+            </tbody>
+            <tfoot>
+              <tr>
+                <th scope="row">Totals</th>
+                <td>{totals.calories}</td>
+                <td>{totals.fat}</td>
+                <td>{totals.carbohydrates}</td>
+                <td>{totals.protein}</td>
+              </tr>
+            </tfoot>
+          </Table>
+        </Sheet>
+      ) : (
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <CircularProgress  size="lg" />
+        </Box>
+      )}
     </>
   );
 }

@@ -28,6 +28,7 @@
     "react-dom": "^18.2.0",
     "react-draggable": "^4.4.5",
     "react-dropzone": "^14.2.3",
+    "react-firebase-hooks": "^5.1.1",
     "react-scripts": "5.0.1",
     "recharts": "^2.5.0",
     "styled-components": "^5.3.9",
