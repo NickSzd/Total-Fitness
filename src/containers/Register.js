@@ -53,8 +53,8 @@ export default function Register() {
   const handleSubmit = (event) => {
     event.preventDefault();
     // Get user data
-    //var firstName = document.getElementById("firstName").value;
-    //var lastName = document.getElementById("lastName").value;
+    var firstName = document.getElementById("firstName").value;
+    var lastName = document.getElementById("lastName").value;
     var email = document.getElementById("email").value;
     var password = document.getElementById("password").value;
 
@@ -63,11 +63,10 @@ export default function Register() {
       .then(async (userCredential) => {
         // Signed in
         const user = userCredential.user;
-        // ...
-        await setDoc(doc(user_collection), {
+
+        await setDoc(doc(user_collection,user.uid), {
           userID : user.uid,
           email : email
-      
         });
         alert("User Created");
         window.location.href = "userHome";
@@ -77,6 +76,8 @@ export default function Register() {
         console.log("Error Creating User");
         const errorCode = error.code;
         const errorMessage = error.message;
+        console.log("Error code: "+ errorCode);
+        console.log("Error Message: "+ errorMessage);
         // ..
       });
 
