@@ -64,10 +64,19 @@ export default function Register() {
         // Signed in
         const user = userCredential.user;
 
-        await setDoc(doc(user_collection,user.uid), {
+        await setDoc(doc(collection(db, "users"),user.uid), {
           userID : user.uid,
           email : email
-        });
+
+        })
+        await setDoc(doc(collection(doc(collection(db, "users"),user.uid),"nutrition")), {
+          userID : user.uid,
+
+        })
+        await setDoc(doc(collection(doc(collection(db, "users"),user.uid),"workout")), {
+          userID : user.uid,
+
+        })
         alert("User Created");
         window.location.href = "userHome";
         //ADD REDIRECT TO USER HOME PAGE
