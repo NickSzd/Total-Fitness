@@ -18,8 +18,7 @@ import { auth } from "../config/firebase.js";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 
 
-const user_collection = collection(db, "users");
-
+const users_collection  = collection(db, "users");
 
 function Copyright(props) {
   return (
@@ -63,17 +62,20 @@ export default function Register() {
       .then(async (userCredential) => {
         // Signed in
         const user = userCredential.user;
+        const nutrition_collection = collection(doc(users_collection ,user.uid),"nutrition")
+        const workout_collection = collection(doc(users_collection ,user.uid),"workout")
 
-        await setDoc(doc(collection(db, "users"),user.uid), {
+
+        await setDoc(doc(users_collection,user.uid), {
           userID : user.uid,
           email : email
 
         })
-        await setDoc(doc(collection(doc(collection(db, "users"),user.uid),"nutrition")), {
+        await setDoc(doc(nutrition_collection), {
           userID : user.uid,
 
         })
-        await setDoc(doc(collection(doc(collection(db, "users"),user.uid),"workout")), {
+        await setDoc(doc(workout_collection), {
           userID : user.uid,
 
         })
