@@ -1,4 +1,6 @@
+import { useNavigate } from "react-router-dom";
 function Summary() {
+  const history = useNavigate();
   return (
     <div className="main" style={{ color: "white" }}>
       <h1>Total Fitness</h1>
@@ -19,8 +21,13 @@ function Summary() {
             Make every bite count<span> towards a healthier you</span>
           </h1>
           <p class="hero__description">Unlimited Possibilities</p>
-          <button class="main__btn">
-            <a href="\About">Explore</a>
+          <button
+            class="main__btn"
+            onClick={() => {
+              history("/about");
+            }}
+          >
+            Explore
           </button>
         </div>
       </div>

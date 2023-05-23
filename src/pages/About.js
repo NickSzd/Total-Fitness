@@ -9,54 +9,13 @@ ie
 
 import React from "react";
 import "../App.css";
-import {
-  IconButton,
-  Button,
-  Typography,
-  Box,
-  AppBar,
-  Toolbar,
-  Menu,
-  MenuItem,
-} from "@mui/material";
-import { useState } from "react";
-import MenuIcon from "@mui/icons-material/Menu";
-//import "../Home.css";
+import { useNavigate } from "react-router-dom";
 import "../App.css";
 function About() {
-  const [anchor, setAnchor] = useState(null);
-  const menuOptions = [
-    "home",
-    "about",
-    "userHome",
-    "nutritionHome",
-    "fitnessHome",
-    "userProfile",
-  ];
+  const history = useNavigate();
 
   //------------------------------------------------------------------
 
-  const [selected, setSelected] = useState(-1);
-
-  //Lock the menu open when clicked
-  const openMenu = (event) => {
-    setAnchor(event.currentTarget);
-  };
-
-  //Closes Menu on Click
-  const closeMenu = () => {
-    setAnchor(null);
-  };
-
-  // On Selecting an item from the menu
-  const onMenuItemClick = (event, index) => {
-    setAnchor(null);
-    setSelected(index);
-  };
-
-  const openLogin = (event) => {
-    setAnchor(event.currentTarget);
-  };
   return (
     <div>
       <h1>About Page</h1>
@@ -74,8 +33,13 @@ function About() {
               Login and start tracking your daily nutrition and workout plan for
               greater rewards for yourself.
             </p>
-            <button class="main__btn">
-              <a href="\Register">Sign up</a>
+            <button
+              class="main__btn"
+              onClick={() => {
+                history("/Register");
+              }}
+            >
+              Sign up
             </button>
           </div>
         </div>
@@ -83,13 +47,5 @@ function About() {
     </div>
   );
 }
-
-// const About = () => {
-//   return (
-//     <div>
-//       <h1>About Page</h1>
-//     </div>
-//   );
-// };
 
 export default About;
