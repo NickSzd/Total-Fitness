@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import "../App";
 import {
   Button,
@@ -22,26 +22,20 @@ function NavBar() {
   const ctx = useContext(SharedContext);
   const { user, loading, error } = ctx;
   const [anchor, setAnchor] = useState(null);
-
-  const menuOptions = [
-    "home",
-    "about",
-    "userHome",
-    "nutritionHome",
-    "fitnessHome",
-    "userProfile",
-  ];
+  const [isScrolled, setIsScrolled] = useState(false); // Added state to track scroll
+  const scrollRef = useRef(null);
+  const menuOptions = ["userHome", "nutritionHome", "fitnessHome", "userProfile"];
 
   //------------------------------------------------------------------
 
   const [selected, setSelected] = useState(-1);
 
-  //Lock the menu open when clicked
+  // Lock the menu open when clicked
   const openMenu = (event) => {
     setAnchor(event.currentTarget);
   };
 
-  //Closes Menu on Click
+  // Closes Menu on Click
   const closeMenu = () => {
     setAnchor(null);
   };
@@ -69,11 +63,95 @@ function NavBar() {
       : history("/Login");
   };
 
+  const handleHomeButtonClick = () => {
+    const homeSection = document.getElementById("home");
+    if (homeSection) {
+      homeSection.scrollIntoView({ behavior: "smooth" });
+    } else {
+      history("/");
+    }
+  };
+
+  // Function to handle scroll event
+  const handleScroll = () => {
+    const scrollPosition = window.scrollY;
+    const scrollThreshold = 100; // Adjust this value to change the scroll threshold
+
+    if (scrollPosition > scrollThreshold) {
+      setIsScrolled(true);
+    } else {
+      setIsScrolled(false);
+    }
+  };
+
+  const handleAboutLinkClick = () => {
+    const homeSection = document.getElementById("about");
+    if (homeSection) {
+      homeSection.scrollIntoView({ behavior: "smooth" });
+    } else {
+      history("/");
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
     <div>
       <Box sx={{ flexgrow: 1 }}>
-        <AppBar position="static">
+        <AppBar position={isScrolled ? "fixed" : "static"}> {/* Updated position based on scroll */}
           <Toolbar>
+            <Typography variant="h4" component="div" sx={{ flexGrow: 1 }}>
+              <div id="Home">
+                <Button
+                  id="HomeButton"
+                  color="inherit"
+                  onClick={handleHomeButtonClick}
+                >
+                  <h1>Total Fitness</h1>
+                </Button>
+              </div>
+            </Typography>
+
+            <Button
+              id="homeButton"
+              color="inherit"
+              onClick={handleHomeButtonClick}
+              sx={{ mr: 2 }}
+            >
+              Home
+            </Button>
+
+            <Button
+              id="aboutButton"
+              color="inherit"
+              onClick={handleAboutLinkClick}
+              selected={0 === selected}
+              sx={{ mr: 2 }}
+            >
+              About
+            </Button>
+
+            {!loading && !user && (
+              <div id="Register">
+                <Button id="RegisterButton" color="inherit" href="/Register">
+                  Register
+                </Button>
+              </div>
+            )}
+
+            {!loading ? (
+              <div id="login">
+                <Button id="loginButton" color="inherit" onClick={handleClick}>
+                  {user ? "Logout" : "Login"}
+                </Button>
+              </div>
+            ) : null}
+
             <IconButton
               onClick={openMenu}
               size="large"
@@ -88,48 +166,28 @@ function NavBar() {
               anchorEl={anchor}
               onClose={closeMenu}
               keepMounted
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "left",
+              }}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "left",
+              }}
+              getContentAnchorEl={null}
             >
               {menuOptions.map((item, index) => (
                 <MenuItem
                   key={index}
                   onClick={(event) => {
-                    document.location.href =
-                      "/" + (item === "home" ? "" : item);
+                    document.location.href = "/" + item;
                   }}
-                  selected={index === selected}
+                  selected={index + 1 === selected}
                 >
                   {item}
                 </MenuItem>
               ))}
             </Menu>
-            <Typography variant="h4" component="div" sx={{ flexGrow: 20 }}>
-              <div id="Home">
-                <Button id="HomeButton" color="inherit" href="/">
-                  <h1>Total Fitness</h1>
-                </Button>
-              </div>
-            </Typography>
-            {!loading ? (
-              <div id="login">
-                <Button id="loginButton" color="inherit" onClick={handleClick}>
-                  {user ? "Logout" : "Login"}
-                </Button>
-              </div>
-            ) : null}
-
-            {!loading
-              ? !user && (
-                  <div id="Register">
-                    <Button
-                      id="RegisterButton"
-                      color="inherit"
-                      href="/Register"
-                    >
-                      Register
-                    </Button>
-                  </div>
-                )
-              : null}
           </Toolbar>
         </AppBar>
       </Box>

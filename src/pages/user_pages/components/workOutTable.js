@@ -21,6 +21,8 @@ import {
   doc,
   some,
 } from "firebase/firestore";
+import { useContext } from "react";
+import SharedContext from "./SharedContext";
 
 const PREFIX = "PressableCardBoards";
 
@@ -48,6 +50,7 @@ function Workouts({ onWorkoutClick }) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [exercises, setExercises] = useState([{}]);
+  const ctx = useContext(SharedContext);
 
   const getExercises = async (muscle) => {
     setIsLoading(true);
@@ -58,7 +61,7 @@ function Workouts({ onWorkoutClick }) {
     try {
       const response = await fetch(apiUrl, {
         headers: {
-          "X-Api-Key": "93CaTdAxk/uE8CzDY6GrRw==OKxj1C2694mFeH4H",
+          "X-Api-Key": process.env.API_KEY,
         },
       });
 
@@ -115,6 +118,7 @@ function Workouts({ onWorkoutClick }) {
 
   useEffect(() => {
     const initializeWorkout = async () => {
+      //const userRef = doc(db, "users", uid);
       const workoutCollectionRef = collection(db, "workout");
       const querySnapshot = await getDocs(workoutCollectionRef);
 
@@ -124,7 +128,7 @@ function Workouts({ onWorkoutClick }) {
       }
     };
 
-    initializeWorkout();
+    initializeWorkout(ctx.user.uid);
   }, []);
   return (
     <Root>
