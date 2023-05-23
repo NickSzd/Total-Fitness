@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { getAuth, signOut } from "firebase/auth";
 import SharedContext from "../pages/user_pages/components/SharedContext";
@@ -92,9 +92,9 @@ function NavBar() {
               {menuOptions.map((item, index) => (
                 <MenuItem
                   key={index}
-                  onClick={(event) => {
-                    document.location.href =
-                      "/" + (item === "home" ? "" : item);
+                  onClick={() => {
+                    closeMenu();
+                    history(item === "home" ? "/" : item);
                   }}
                   selected={index === selected}
                 >
@@ -104,7 +104,13 @@ function NavBar() {
             </Menu>
             <Typography variant="h4" component="div" sx={{ flexGrow: 20 }}>
               <div id="Home">
-                <Button id="HomeButton" color="inherit" href="/">
+                <Button
+                  id="HomeButton"
+                  color="inherit"
+                  onClick={() => {
+                    history("/");
+                  }}
+                >
                   <h1>Total Fitness</h1>
                 </Button>
               </div>
@@ -123,7 +129,9 @@ function NavBar() {
                     <Button
                       id="RegisterButton"
                       color="inherit"
-                      href="/Register"
+                      onClick={() => {
+                        history("/Register");
+                      }}
                     >
                       Register
                     </Button>
