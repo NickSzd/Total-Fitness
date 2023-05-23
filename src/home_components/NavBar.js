@@ -24,7 +24,12 @@ function NavBar() {
   const [anchor, setAnchor] = useState(null);
   const [isScrolled, setIsScrolled] = useState(false); // Added state to track scroll
   const scrollRef = useRef(null);
-  const menuOptions = ["userHome", "nutritionHome", "fitnessHome", "userProfile"];
+  const menuOptions = [
+    "userHome",
+    "nutritionHome",
+    "fitnessHome",
+    "userProfile",
+  ];
 
   //------------------------------------------------------------------
 
@@ -103,7 +108,9 @@ function NavBar() {
   return (
     <div>
       <Box sx={{ flexgrow: 1 }}>
-        <AppBar position={isScrolled ? "fixed" : "static"}> {/* Updated position based on scroll */}
+        <AppBar position={isScrolled ? "fixed" : "static"}>
+          {" "}
+          {/* Updated position based on scroll */}
           <Toolbar>
             <Typography variant="h4" component="div" sx={{ flexGrow: 1 }}>
               <div id="Home">
@@ -138,7 +145,13 @@ function NavBar() {
 
             {!loading && !user && (
               <div id="Register">
-                <Button id="RegisterButton" color="inherit" href="/Register">
+                <Button
+                  id="RegisterButton"
+                  color="inherit"
+                  onClick={() => {
+                    history("/Register");
+                  }}
+                >
                   Register
                 </Button>
               </div>
@@ -179,8 +192,9 @@ function NavBar() {
               {menuOptions.map((item, index) => (
                 <MenuItem
                   key={index}
-                  onClick={(event) => {
-                    document.location.href = "/" + item;
+                  onClick={() => {
+                    closeMenu();
+                    history(item === "home" ? "/" : item);
                   }}
                   selected={index + 1 === selected}
                 >

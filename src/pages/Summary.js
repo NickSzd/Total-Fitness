@@ -1,7 +1,8 @@
 import React from "react";
-
+import { useNavigate } from "react-router-dom";
 
 function Summary() {
+  const history = useNavigate();
   return (
     <div className="main" style={{ color: "white" }}>
       <div class="hero" id="home">
@@ -10,8 +11,13 @@ function Summary() {
             Make every bite count<span> towards a healthier you</span>
           </h1>
           <p class="hero__description">Unlimited Possibilities</p>
-          <button class="main__btn">
-            <a href="\About">Explore</a>
+          <button
+            class="main__btn"
+            onClick={() => {
+              history("/about");
+            }}
+          >
+            Explore
           </button>
         </div>
       </div>
@@ -29,14 +35,18 @@ function Summary() {
               Login and start tracking your daily nutrition and workout plan for
               greater rewards for yourself.
             </p>
-            <button className="main__btn">
-              <a href="/Register">Sign up</a>
+            <button
+              className="main__btn"
+              onClick={() => {
+                history("/Register");
+              }}
+            >
+              Sign up
             </button>
           </div>
         </div>
       </div>
     </div>
-
   );
 }
 export default Summary;
