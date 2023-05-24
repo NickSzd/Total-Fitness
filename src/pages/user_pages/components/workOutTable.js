@@ -61,7 +61,7 @@ function Workouts({ onWorkoutClick }) {
     try {
       const response = await fetch(apiUrl, {
         headers: {
-          "X-Api-Key": process.env.API_KEY,
+          "X-Api-Key": process.env.REACT_APP_API_KEY,
         },
       });
 
@@ -85,6 +85,8 @@ function Workouts({ onWorkoutClick }) {
 
     if (confirmAdd) {
       try {
+        const userRef = doc(db, "users", ctx.user.uid);
+        
         const workoutCollectionRef = collection(db, "workout");
         const querySnapshot = await getDocs(workoutCollectionRef);
 
@@ -107,7 +109,9 @@ function Workouts({ onWorkoutClick }) {
           }
 
           // Add the new exercise to the exercises field of the workout document
-          await setDoc(workoutDocRef, { exercises: [...exercises, exercise] });
+          const docRef = await addDoc(collection(userRef, "workout"), {
+            exercises: [...exercises, exercise]
+          });
           onWorkoutClick(exercise.name);
         }
       } catch (e) {
@@ -129,7 +133,7 @@ function Workouts({ onWorkoutClick }) {
     };
 
     initializeWorkout(ctx.user.uid);
-  }, []);
+  }, [ctx.user.uid]);
   return (
     <Root>
       <Typography>
