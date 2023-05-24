@@ -20,7 +20,10 @@ import {
   setDoc,
   doc,
   some,
+  updateDoc,
+  deleteDoc,
 } from "firebase/firestore";
+import { useCollection } from "react-firebase-hooks/firestore";
 import { useContext } from "react";
 import SharedContext from "./SharedContext";
 
@@ -46,10 +49,11 @@ const Root = styled("div")({
   },
 });
 
-function Workouts({ onWorkoutClick }) {
+function Workouts({ onWorkoutClick, savedExercises, setSavedExercises }) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [exercises, setExercises] = useState([{}]);
+  const [exercises, setExercises] = useState([]);
+
   const ctx = useContext(SharedContext);
 
   const getExercises = async (muscle) => {
@@ -61,7 +65,7 @@ function Workouts({ onWorkoutClick }) {
     try {
       const response = await fetch(apiUrl, {
         headers: {
-          "X-Api-Key": process.env.API_KEY,
+          "X-Api-Key": process.env.REACT_APP_API_KEY,
         },
       });
 
@@ -84,35 +88,10 @@ function Workouts({ onWorkoutClick }) {
     );
 
     if (confirmAdd) {
-      try {
-        const workoutCollectionRef = collection(db, "workout");
-        const querySnapshot = await getDocs(workoutCollectionRef);
-
-        if (querySnapshot.empty) {
-          // Create a new workout document with an empty exercises field
-          const newWorkoutDocRef = await addDoc(workoutCollectionRef, {
-            exercises: [exercise],
-          });
-          onWorkoutClick(exercise.name);
-        } else {
-          const workoutDoc = querySnapshot.docs[0]; // Assuming there is only one workout document
-          const workoutDocRef = doc(db, "workout", workoutDoc.id);
-          const workoutData = workoutDoc.data();
-          const exercises = workoutData.exercises || [];
-
-          // Check if the exercise already exists in the workout document
-          if (exercises.some((ex) => ex.name === exercise.name)) {
-            console.log("Exercise already exists in the workout document.");
-            return;
-          }
-
-          // Add the new exercise to the exercises field of the workout document
-          await setDoc(workoutDocRef, { exercises: [...exercises, exercise] });
-          onWorkoutClick(exercise.name);
-        }
-      } catch (e) {
-        console.error("Error adding document: ", e);
-      }
+      const newSavedExercises = savedExercises;
+      newSavedExercises.push(exercise);
+      setSavedExercises(newSavedExercises);
+      onWorkoutClick(exercise.name);
     }
   };
 
@@ -129,7 +108,7 @@ function Workouts({ onWorkoutClick }) {
     };
 
     initializeWorkout(ctx.user.uid);
-  }, []);
+  }, [ctx.user.uid]);
   return (
     <Root>
       <Typography>
@@ -147,25 +126,26 @@ function Workouts({ onWorkoutClick }) {
       <Button onClick={() => getExercises("biceps")}>biceps Exercises</Button>
 
       <div style={{ display: "flex", flexWrap: "wrap" }}>
-        {exercises.map((workout) => (
-          <Card
-            key={workout.name}
-            style={{ margin: "8px", minWidth: "200px" }}
-            onClick={() => handleExerciseClick(workout)}
-          >
-            <CardContent>
-              <Typography variant="h6" component="h2">
-                {workout.name}
-              </Typography>
-              <Typography color="textSecondary" gutterBottom>
-                {workout.instructions}
-              </Typography>
-              <Typography color="textSecondary">
-                equipment: {workout.equipment}
-              </Typography>
-            </CardContent>
-          </Card>
-        ))}
+        {exercises.length > 1 &&
+          exercises.map((workout, index) => (
+            <Card
+              key={workout.name + index}
+              style={{ margin: "8px", minWidth: "200px" }}
+              onClick={() => handleExerciseClick(workout)}
+            >
+              <CardContent>
+                <Typography variant="h6" component="h2">
+                  {workout.name}
+                </Typography>
+                <Typography color="textSecondary" gutterBottom>
+                  {workout.instructions}
+                </Typography>
+                <Typography color="textSecondary">
+                  equipment: {workout.equipment}
+                </Typography>
+              </CardContent>
+            </Card>
+          ))}
       </div>
       {isLoading && <Typography>Loading...</Typography>}
       {error && <Typography color="error">{error}</Typography>}
@@ -176,28 +156,32 @@ function Workouts({ onWorkoutClick }) {
 function PressableCardBoards() {
   const [open, setOpen] = useState(false);
   const [content, setContent] = useState("");
-  const [cardboards, setCardboards] = useState([]);
-  const handleAddCard = async () => {
-    try {
-      const workoutCollectionRef = collection(db, "workout");
-      const newWorkoutDocRef = await addDoc(workoutCollectionRef, {
-        exercises: [],
-      });
+  const [savedExercises, setSavedExercises] = useState([]);
+  const [editMode, setEditMode] = useState("");
+  const ctx = useContext(SharedContext);
+  const userRef = doc(db, "users", ctx.user.uid);
 
-      setCardboards((prevCardboards) => [...prevCardboards, ""]);
-      setOpen(true);
-    } catch (e) {
-      console.error("Error adding document: ", e);
+  const [value, loading, error] = useCollection(
+    collection(userRef, "workout"),
+    {
+      snapshotListenOptions: { includeMetadataChanges: true },
     }
-  };
+  );
 
-  const handleEditCard = (index) => {
-    setContent(cardboards[index]);
+  const handleEditCard = (data) => {
+    let exercisesContent = "";
+    data.exercises.forEach(
+      (exercise) => (exercisesContent += `\n- ${exercise.name}`)
+    );
+    setSavedExercises(data.exercises);
+    setContent(exercisesContent);
     setOpen(true);
   };
 
   const handleClose = () => {
     setContent("");
+    setEditMode("");
+    setSavedExercises([]);
     setOpen(false);
   };
 
@@ -206,73 +190,92 @@ function PressableCardBoards() {
     setOpen(true);
   };
 
-  const handleCardChange = (index, newContent) => {
-    setCardboards((prevCardboards) => {
-      const newCardboards = [...prevCardboards];
-      newCardboards[index] = newContent;
-      return newCardboards;
-    });
+  const handleCardChange = async () => {
+    if (editMode) {
+      const workoutRef = collection(userRef, "workout");
+      const workoutDoc = doc(workoutRef, editMode);
+      await updateDoc(workoutDoc, { exercises: savedExercises });
+    } else {
+      await addDoc(collection(userRef, "workout"), {
+        exercises: savedExercises,
+      });
+    }
   };
 
-  const handleRemoveCard = (event, index) => {
-    event.stopPropagation(); // stop propagation if the button clicked is "Remove"
-    setCardboards((prevCardboards) =>
-      prevCardboards.filter((_, i) => i !== index)
-    );
+  const handleRemoveCard = async (event, id) => {
+    // stop propagation if the button clicked is "Remove"
+    event.stopPropagation();
+    const workoutRef = collection(userRef, "workout");
+    const workoutDoc = doc(workoutRef, id);
+    await deleteDoc(workoutDoc);
   };
 
   return (
     <div>
       <Typography variant="h1" style={{ fontSize: "2rem", lineHeight: "1.5" }}>
-        My WorkOut Plans
+        My Workout Plans
       </Typography>
-      <Button variant="contained" color="primary" onClick={handleAddCard}>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={() => {
+          setOpen(true);
+        }}
+      >
         Add Exercise Plans
       </Button>
-      {cardboards.map((cardboard, index) => (
-        <Card
-          key={index}
-          style={{
-            aspectRatio: "auto",
-            borderRadius: 20,
-            margin: "20px",
-            backgroundColor: "#f0f0f0",
-            boxShadow: "0px 5px 10px rgba(0, 0, 0, 0.2)",
-            cursor: "pointer",
-            transition: "all 0.2s ease-in-out",
-            "&:hover": {
-              transform: "scale(1.05)",
-              boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.3)",
-            },
-          }}
-          onClick={() => handleEditCard(index)}
-        >
-          <CardContent>
-            <Typography variant="h5" component="h2">
-              My Exercise {index + 1}
-            </Typography>
-            <Typography color="textSecondary">Click here to edit</Typography>
-            <Typography
-              variant="body2"
-              component="p"
-              style={{ whiteSpace: "pre-wrap" }}
-            >
-              {cardboard}
-            </Typography>
-          </CardContent>
-          <CardActions>
-            <Button
-              size="small"
-              color="primary"
-              onClick={(e) => handleRemoveCard(e, index)}
-            >
-              Remove
-            </Button>
-          </CardActions>
-        </Card>
-      ))}
+      {value &&
+        value.docs.map((doc, index) => (
+          <Card
+            key={doc.id + index}
+            style={{
+              aspectRatio: "auto",
+              borderRadius: 20,
+              margin: "20px",
+              backgroundColor: "#f0f0f0",
+              boxShadow: "0px 5px 10px rgba(0, 0, 0, 0.2)",
+              cursor: "pointer",
+              transition: "all 0.2s ease-in-out",
+              "&:hover": {
+                transform: "scale(1.05)",
+                boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.3)",
+              },
+            }}
+            onClick={() => {
+              setEditMode(doc.id);
+              handleEditCard(doc.data());
+            }}
+          >
+            <CardContent>
+              <Typography variant="h5" component="h2">
+                My Exercise {index + 1}
+              </Typography>
+              <Typography color="textSecondary">Click here to edit</Typography>
+              {doc.data().exercises.map((exercise) => (
+                <Typography
+                  variant="body2"
+                  component="p"
+                  style={{ whiteSpace: "pre-wrap" }}
+                >
+                  {exercise.name}
+                </Typography>
+              ))}
+            </CardContent>
+            <CardActions>
+              <Button
+                size="small"
+                color="primary"
+                onClick={(e) => {
+                  handleRemoveCard(e, doc.id);
+                }}
+              >
+                Remove
+              </Button>
+            </CardActions>
+          </Card>
+        ))}
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>{content ? "Edit Exercise" : "Add Exercise"}</DialogTitle>
+        <DialogTitle>{editMode ? "Edit Exercise" : "Add Exercise"}</DialogTitle>
         <DialogContent>
           <TextField
             label="Exercise Planner/Note"
@@ -283,16 +286,22 @@ function PressableCardBoards() {
             value={content}
             onChange={(e) => setContent(e.target.value)}
           />
-          {open && <Workouts onWorkoutClick={handleWorkoutClick} />}
+          {open && (
+            <Workouts
+              onWorkoutClick={handleWorkoutClick}
+              savedExercises={savedExercises}
+              setSavedExercises={setSavedExercises}
+            />
+          )}
         </DialogContent>
         <Button
           color="primary"
-          onClick={() => {
-            handleCardChange(cardboards.length - 1, content);
+          onClick={(e) => {
+            handleCardChange();
             handleClose();
           }}
         >
-          {content ? "Save Changes" : "Add Card"}
+          {editMode ? "Save Changes" : "Add Card"}
         </Button>
       </Dialog>
     </div>
