@@ -21,6 +21,7 @@ import {
   doc,
   some,
 } from "firebase/firestore";
+import { useCollection } from "react-firebase-hooks/firestore";
 import { useContext } from "react";
 import SharedContext from "./SharedContext";
 
@@ -86,7 +87,7 @@ function Workouts({ onWorkoutClick }) {
     if (confirmAdd) {
       try {
         const userRef = doc(db, "users", ctx.user.uid);
-        
+
         const workoutCollectionRef = collection(db, "workout");
         const querySnapshot = await getDocs(workoutCollectionRef);
 
@@ -110,7 +111,7 @@ function Workouts({ onWorkoutClick }) {
 
           // Add the new exercise to the exercises field of the workout document
           const docRef = await addDoc(collection(userRef, "workout"), {
-            exercises: [...exercises, exercise]
+            exercises: [...exercises, exercise],
           });
           onWorkoutClick(exercise.name);
         }
@@ -181,6 +182,26 @@ function PressableCardBoards() {
   const [open, setOpen] = useState(false);
   const [content, setContent] = useState("");
   const [cardboards, setCardboards] = useState([]);
+  const ctx = useContext(SharedContext);
+  const userRef = doc(db, "users", ctx.user.uid);
+
+  const [value, loading, error] = useCollection(
+    collection(userRef, "workout"),
+    {
+      snapshotListenOptions: { includeMetadataChanges: true },
+    }
+  );
+
+  useEffect(() => {
+    if (value) {
+      value.docs.map((doc, index) =>
+        doc.data().exercises.forEach((exercise) => {
+          //console.log(exercise);
+        })
+      );
+    }
+  }, [value]);
+
   const handleAddCard = async () => {
     try {
       const workoutCollectionRef = collection(db, "workout");
@@ -233,48 +254,53 @@ function PressableCardBoards() {
       <Button variant="contained" color="primary" onClick={handleAddCard}>
         Add Exercise Plans
       </Button>
-      {cardboards.map((cardboard, index) => (
-        <Card
-          key={index}
-          style={{
-            aspectRatio: "auto",
-            borderRadius: 20,
-            margin: "20px",
-            backgroundColor: "#f0f0f0",
-            boxShadow: "0px 5px 10px rgba(0, 0, 0, 0.2)",
-            cursor: "pointer",
-            transition: "all 0.2s ease-in-out",
-            "&:hover": {
-              transform: "scale(1.05)",
-              boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.3)",
-            },
-          }}
-          onClick={() => handleEditCard(index)}
-        >
-          <CardContent>
-            <Typography variant="h5" component="h2">
-              My Exercise {index + 1}
-            </Typography>
-            <Typography color="textSecondary">Click here to edit</Typography>
-            <Typography
-              variant="body2"
-              component="p"
-              style={{ whiteSpace: "pre-wrap" }}
+      {value &&
+        value.docs.map((doc) =>
+          doc.data().exercises.map((exercise, index) => (
+            <Card
+              key={doc.id}
+              style={{
+                aspectRatio: "auto",
+                borderRadius: 20,
+                margin: "20px",
+                backgroundColor: "#f0f0f0",
+                boxShadow: "0px 5px 10px rgba(0, 0, 0, 0.2)",
+                cursor: "pointer",
+                transition: "all 0.2s ease-in-out",
+                "&:hover": {
+                  transform: "scale(1.05)",
+                  boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.3)",
+                },
+              }}
+              // onClick={() => handleEditCard(index)}
             >
-              {cardboard}
-            </Typography>
-          </CardContent>
-          <CardActions>
-            <Button
-              size="small"
-              color="primary"
-              onClick={(e) => handleRemoveCard(e, index)}
-            >
-              Remove
-            </Button>
-          </CardActions>
-        </Card>
-      ))}
+              <CardContent>
+                <Typography variant="h5" component="h2">
+                  My Exercise {index + 1}
+                </Typography>
+                <Typography color="textSecondary">
+                  Click here to edit
+                </Typography>
+                <Typography
+                  variant="body2"
+                  component="p"
+                  style={{ whiteSpace: "pre-wrap" }}
+                >
+                  {exercise.name}
+                </Typography>
+              </CardContent>
+              <CardActions>
+                <Button
+                  size="small"
+                  color="primary"
+                  onClick={(e) => handleRemoveCard(e, index)}
+                >
+                  Remove
+                </Button>
+              </CardActions>
+            </Card>
+          ))
+        )}
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>{content ? "Edit Exercise" : "Add Exercise"}</DialogTitle>
         <DialogContent>
