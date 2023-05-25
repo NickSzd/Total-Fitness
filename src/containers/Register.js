@@ -12,14 +12,13 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { db} from "../config/firebase";
-import { collection ,doc, setDoc, addDoc} from "firebase/firestore";
+import { db } from "../config/firebase";
+import { collection, doc, setDoc, addDoc } from "firebase/firestore";
 import { auth } from "../config/firebase.js";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import SelectInput from "@mui/material/Select/SelectInput";
 
 const user_collection = collection(db, "users");
-
 
 function Copyright(props) {
   return (
@@ -59,7 +58,7 @@ export default function Register() {
     var password = document.getElementById("password").value;
 
     // Register User
-    createUserWithEmailAndPassword (auth, email, password)
+    createUserWithEmailAndPassword(auth, email, password)
       .then(async (userCredential) => {
         // Signed in
         const user = userCredential.user;
@@ -67,8 +66,13 @@ export default function Register() {
         await setDoc(doc(collection(db, "users"),user.uid), {
           userID : user.uid,
           email : email
+          firstName: firstName,
+          lastName: lastName,
 
         })
+        
+      await updateProfile(user, { displayName: firstName });
+        
         await setDoc(doc(collection(doc(collection(db, "users"),user.uid),"nutrition")), {
           userID : user.uid,
 
@@ -79,12 +83,15 @@ export default function Register() {
         })
         alert("User Created");
         window.location.href = "userHome";
+
+        // return userCredential.updateProfile({dis})
         //ADD REDIRECT TO USER HOME PAGE
       })
       .catch((error) => {
         console.log("Error Creating User");
         const errorCode = error.code;
         const errorMessage = error.message;
+
         console.log("Error code: "+ errorCode);
         console.log("Error Message: "+ errorMessage);
         // ..

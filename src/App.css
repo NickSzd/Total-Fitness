@@ -14,7 +14,7 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: #5e626a;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -181,6 +181,7 @@
   -webkit-text-fill-color: transparent;
   -moz-text-fill-color: transparent;
 }
+
 
 .main__content p {
   margin-top: 1rem;
@@ -566,3 +567,4 @@
     width: 100%;
   }
 }
+
