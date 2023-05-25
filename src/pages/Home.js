@@ -39,12 +39,6 @@ function Home() {
   */
   // Menu Options
 
-  return (
-    <div>
-      <SharedContext.Consumer>
-        {({ user, setUser }) => <NavBar user={user} setUser={setUser}/>}
-      </SharedContext.Consumer>
-    </div>
-  );
+  return <NavBar />;
 }
 export default Home;

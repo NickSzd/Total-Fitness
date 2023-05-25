@@ -62,14 +62,25 @@ export default function Register() {
       .then(async (userCredential) => {
         // Signed in
         const user = userCredential.user;
-        // ...
-        await setDoc(doc(user_collection), {
-          userID: user.uid,
-          email: email,
+
+        await setDoc(doc(collection(db, "users"),user.uid), {
+          userID : user.uid,
+          email : email
           firstName: firstName,
           lastName: lastName,
-        });
-        await updateProfile(user, { displayName: firstName });
+
+        })
+        
+      await updateProfile(user, { displayName: firstName });
+        
+        await setDoc(doc(collection(doc(collection(db, "users"),user.uid),"nutrition")), {
+          userID : user.uid,
+
+        })
+        await setDoc(doc(collection(doc(collection(db, "users"),user.uid),"workout")), {
+          userID : user.uid,
+
+        })
         alert("User Created");
         window.location.href = "userHome";
 
@@ -80,8 +91,9 @@ export default function Register() {
         console.log("Error Creating User");
         const errorCode = error.code;
         const errorMessage = error.message;
-        console.log(errorCode);
-        console.log(errorMessage);
+
+        console.log("Error code: "+ errorCode);
+        console.log("Error Message: "+ errorMessage);
         // ..
       });
 

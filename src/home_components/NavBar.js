@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import "../App";
 import {
   Button,
@@ -13,16 +13,18 @@ import {
 import { useState } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Outlet, useNavigate } from "react-router-dom";
-
+import { useContext } from "react";
 import { getAuth, signOut } from "firebase/auth";
+import SharedContext from "../pages/user_pages/components/SharedContext";
 
-function NavBar({ user, setUser }) {
+function NavBar() {
   const history = useNavigate();
+  const ctx = useContext(SharedContext);
+  const { user, loading, error } = ctx;
   const [anchor, setAnchor] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [isScrolled, setIsScrolled] = useState(false); // Added state to track scroll
+  const scrollRef = useRef(null);
   const menuOptions = [
-    "home",
-    "about",
     "userHome",
     "nutritionHome",
     "fitnessHome",
@@ -33,12 +35,12 @@ function NavBar({ user, setUser }) {
 
   const [selected, setSelected] = useState(-1);
 
-  //Lock the menu open when clicked
+  // Lock the menu open when clicked
   const openMenu = (event) => {
     setAnchor(event.currentTarget);
   };
 
-  //Closes Menu on Click
+  // Closes Menu on Click
   const closeMenu = () => {
     setAnchor(null);
   };
@@ -66,28 +68,103 @@ function NavBar({ user, setUser }) {
       : history("/Login");
   };
 
-  useEffect(() => {
-    const auth = getAuth();
-    const unsubscribe = auth.onAuthStateChanged((loggedInUser) => {
-      if (loggedInUser) {
-        setUser(loggedInUser.uid);
-        localStorage.setItem("user", loggedInUser.uid);
-      } else {
-        setUser(null);
-        localStorage.removeItem("user");
-      }
-      setLoading(false);
-    });
+  const handleHomeButtonClick = () => {
+    const homeSection = document.getElementById("home");
+    if (homeSection) {
+      homeSection.scrollIntoView({ behavior: "smooth" });
+    } else {
+      history("/");
+    }
+  };
 
+  // Function to handle scroll event
+  const handleScroll = () => {
+    const scrollPosition = window.scrollY;
+    const scrollThreshold = 100; // Adjust this value to change the scroll threshold
+
+    if (scrollPosition > scrollThreshold) {
+      setIsScrolled(true);
+    } else {
+      setIsScrolled(false);
+    }
+  };
+
+  const handleAboutLinkClick = () => {
+    const homeSection = document.getElementById("about");
+    if (homeSection) {
+      homeSection.scrollIntoView({ behavior: "smooth" });
+    } else {
+      history("/");
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
     return () => {
-      unsubscribe();
+      window.removeEventListener("scroll", handleScroll);
     };
-  }, [setUser]);
+  }, []);
+
   return (
     <div>
       <Box sx={{ flexgrow: 1 }}>
-        <AppBar position="static">
+        <AppBar position={isScrolled ? "fixed" : "static"}>
+          {" "}
+          {/* Updated position based on scroll */}
           <Toolbar>
+            <Typography variant="h4" component="div" sx={{ flexGrow: 1 }}>
+              <div id="Home">
+                <Button
+                  id="HomeButton"
+                  color="inherit"
+                  onClick={handleHomeButtonClick}
+                >
+                  <h1>Total Fitness</h1>
+                </Button>
+              </div>
+            </Typography>
+
+            <Button
+              id="homeButton"
+              color="inherit"
+              onClick={handleHomeButtonClick}
+              sx={{ mr: 2 }}
+            >
+              Home
+            </Button>
+
+            <Button
+              id="aboutButton"
+              color="inherit"
+              onClick={handleAboutLinkClick}
+              selected={0 === selected}
+              sx={{ mr: 2 }}
+            >
+              About
+            </Button>
+
+            {!loading && !user && (
+              <div id="Register">
+                <Button
+                  id="RegisterButton"
+                  color="inherit"
+                  onClick={() => {
+                    history("/Register");
+                  }}
+                >
+                  Register
+                </Button>
+              </div>
+            )}
+
+            {!loading ? (
+              <div id="login">
+                <Button id="loginButton" color="inherit" onClick={handleClick}>
+                  {user ? "Logout" : "Login"}
+                </Button>
+              </div>
+            ) : null}
+
             <IconButton
               onClick={openMenu}
               size="large"
@@ -102,41 +179,29 @@ function NavBar({ user, setUser }) {
               anchorEl={anchor}
               onClose={closeMenu}
               keepMounted
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "left",
+              }}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "left",
+              }}
+              getContentAnchorEl={null}
             >
               {menuOptions.map((item, index) => (
                 <MenuItem
                   key={index}
-                  onClick={(event) => {
-                    document.location.href =
-                      "/" + (item === "home" ? "" : item);
+                  onClick={() => {
+                    closeMenu();
+                    history(item === "home" ? "/" : item);
                   }}
-                  selected={index === selected}
+                  selected={index + 1 === selected}
                 >
                   {item}
                 </MenuItem>
               ))}
             </Menu>
-            <Typography variant="h4" component="div" sx={{ flexGrow: 20 }}>
-              <div id="Home">
-                <Button id="HomeButton" color="inherit" href="/">
-                  <h1>Total Fitness</h1>
-                </Button>
-              </div>
-            </Typography>
-
-            <div id="login">
-              <Button id="loginButton" color="inherit" onClick={handleClick}>
-                {localStorage.getItem("user") ? "Logout" : "Login"}
-              </Button>
-            </div>
-
-            {!localStorage.getItem("user") && (
-              <div id="Register">
-                <Button id="RegisterButton" color="inherit" href="/Register">
-                  Register
-                </Button>
-              </div>
-            )}
           </Toolbar>
         </AppBar>
       </Box>

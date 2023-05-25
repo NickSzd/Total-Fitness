@@ -34,6 +34,7 @@ libraries=(
     "react-dom@18.2.0"
     "react-draggable@4.4.5"
     "react-dropzone@14.2.3"
+    "react-firebase-hooks@^5.1.1"
     "react-router-dom@6.10.0"
     "react-scripts@5.0.1"
     "react@18.2.0"
