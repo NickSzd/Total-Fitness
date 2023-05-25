@@ -1,0 +1,21 @@
+.profileDiv {
+  display: flex;
+  justify-content: center;
+}
+
+.left-div {
+  margin-right: auto;
+}
+
+.right-div {
+  margin-left: auto;
+}
+
+/* Additional styling for demonstration purposes */
+.left-div,
+.right-div {
+  width: 800px;
+  height: 800;
+  background-color: #ccc;
+  margin: 10px;
+}

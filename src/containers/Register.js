@@ -12,14 +12,13 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { db} from "../config/firebase";
-import { collection ,doc, setDoc, addDoc} from "firebase/firestore";
+import { db } from "../config/firebase";
+import { collection, doc, setDoc, addDoc } from "firebase/firestore";
 import { auth } from "../config/firebase.js";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import SelectInput from "@mui/material/Select/SelectInput";
 
 const user_collection = collection(db, "users");
-
 
 function Copyright(props) {
   return (
@@ -53,30 +52,36 @@ export default function Register() {
   const handleSubmit = (event) => {
     event.preventDefault();
     // Get user data
-    //var firstName = document.getElementById("firstName").value;
-    //var lastName = document.getElementById("lastName").value;
+    var firstName = document.getElementById("firstName").value;
+    var lastName = document.getElementById("lastName").value;
     var email = document.getElementById("email").value;
     var password = document.getElementById("password").value;
 
     // Register User
-    createUserWithEmailAndPassword (auth, email, password)
+    createUserWithEmailAndPassword(auth, email, password)
       .then(async (userCredential) => {
         // Signed in
         const user = userCredential.user;
         // ...
         await setDoc(doc(user_collection), {
-          userID : user.uid,
-          email : email
-      
+          userID: user.uid,
+          email: email,
+          firstName: firstName,
+          lastName: lastName,
         });
+        await updateProfile(user, { displayName: firstName });
         alert("User Created");
         window.location.href = "userHome";
+
+        // return userCredential.updateProfile({dis})
         //ADD REDIRECT TO USER HOME PAGE
       })
       .catch((error) => {
         console.log("Error Creating User");
         const errorCode = error.code;
         const errorMessage = error.message;
+        console.log(errorCode);
+        console.log(errorMessage);
         // ..
       });
 
