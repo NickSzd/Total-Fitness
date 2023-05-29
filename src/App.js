@@ -45,7 +45,7 @@ const materialTheme = materialExtendTheme();
 ///home/nick/Documents/CSE115/total-fitness/src/pages/about.js
 
 function App() {
-  // const [anchor, setAnchor] = useState(null);
+  const [anchor, setAnchor] = useState(null);
   // const menuOptions = [
   //   "home",
   //   "about",

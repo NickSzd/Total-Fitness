@@ -20,7 +20,7 @@ function Summary() {
           <button
             class="main__btn"
             onClick={() => {
-              history("/about");
+              history("/");
             }}
           >
             Explore
@@ -54,7 +54,7 @@ function Summary() {
         </div>
       </div>
       {/* <!-- Services Section --> */}
-      <div class="services" id="services">
+      <div class="services" id="feature">
       <h1>What we offer for you?</h1>
       <div class="services__wrapper">
         <div class="services__card">
@@ -75,7 +75,7 @@ function Summary() {
       </div>
       </div>
       {/* --Footer Section-- */}
-      <div class="footer__container">
+      <div class="footer__container" id="contact">
       <div class="footer__links">
         <div class="footer__link--wrapper">
           <div class="footer__link--items">
