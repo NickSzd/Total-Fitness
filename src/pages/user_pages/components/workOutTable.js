@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import {
-  Button,
   Card,
   CardContent,
-  Typography,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -26,7 +24,18 @@ import {
 import { useCollection } from "react-firebase-hooks/firestore";
 import { useContext } from "react";
 import SharedContext from "./SharedContext";
-
+import Stepper from "@mui/material/Stepper";
+import Modal from "@mui/joy/Modal";
+import ModalDialog from "@mui/joy/ModalDialog";
+import Stack from "@mui/joy/Stack";
+import FormControl from "@mui/joy/FormControl";
+import FormLabel from "@mui/joy/FormLabel";
+import Input from "@mui/joy/Input";
+import Typography from "@mui/joy/Typography";
+import Divider from "@mui/joy/Divider";
+import Button from "@mui/joy/Button";
+import ModalOverflow from "@mui/joy/ModalOverflow";
+import NameWorkout from "./form/nameWorkout";
 const PREFIX = "PressableCardBoards";
 
 const classes = {
@@ -111,19 +120,45 @@ function Workouts({ onWorkoutClick, savedExercises, setSavedExercises }) {
   }, [ctx.user.uid]);
   return (
     <Root>
-      <Typography>
-        __________________________________________________________
-      </Typography>
-      <Typography variant="h4" gutterBottom>
+      <Divider />
+      <Typography variant="body2" gutterBottom sx={{ color: "black" }}>
         Exercise List
       </Typography>
-      <Button onClick={() => getExercises("chest")}>Chest Exercises</Button>
-      <Button onClick={() => getExercises("calves")}>calves Exercises</Button>
-      <Button onClick={() => getExercises("abdominals")}>
-        abdominals Exercises
+      <Button
+        sx={{ m: 1 }}
+        variant="soft"
+        onClick={() => getExercises("chest")}
+      >
+        Chest Exercises
       </Button>
-      <Button onClick={() => getExercises("lower_back")}>Back Exercises</Button>
-      <Button onClick={() => getExercises("biceps")}>biceps Exercises</Button>
+      <Button
+        sx={{ m: 1 }}
+        variant="soft"
+        onClick={() => getExercises("calves")}
+      >
+        Calves Exercises
+      </Button>
+      <Button
+        sx={{ m: 1 }}
+        variant="soft"
+        onClick={() => getExercises("abdominals")}
+      >
+        Abdominal Exercises
+      </Button>
+      <Button
+        sx={{ m: 1 }}
+        variant="soft"
+        onClick={() => getExercises("lower_back")}
+      >
+        Back Exercises
+      </Button>
+      <Button
+        sx={{ m: 1 }}
+        variant="soft"
+        onClick={() => getExercises("biceps")}
+      >
+        Bicep Exercises
+      </Button>
 
       <div style={{ display: "flex", flexWrap: "wrap" }}>
         {exercises.length > 1 &&
@@ -153,6 +188,21 @@ function Workouts({ onWorkoutClick, savedExercises, setSavedExercises }) {
   );
 }
 
+function getContent(step) {
+  switch (step) {
+    case 0:
+      return <NameWorkout />;
+    case 1:
+      return <Workouts />;
+    // case 2:
+    //   return <ItemForm />;
+    // case 3:
+    //   return <PriceForm />;
+    // case 4:
+    //   return <ImageForm />;
+  }
+}
+
 function PressableCardBoards() {
   const [open, setOpen] = useState(false);
   const [content, setContent] = useState("");
@@ -160,6 +210,8 @@ function PressableCardBoards() {
   const [editMode, setEditMode] = useState("");
   const ctx = useContext(SharedContext);
   const userRef = doc(db, "users", ctx.user.uid);
+  const [step, setStep] = useState(0);
+  const steps = ["Name", "Workouts", "Schedule"];
 
   const [value, loading, error] = useCollection(
     collection(userRef, "workout"),
@@ -202,6 +254,13 @@ function PressableCardBoards() {
     }
   };
 
+  const handleNextStep = () => {
+    setStep((prevStep) => prevStep + 1);
+    if (step === steps.length - 1) {
+      handleCardChange();
+    }
+  };
+
   const handleRemoveCard = async (event, id) => {
     // stop propagation if the button clicked is "Remove"
     event.stopPropagation();
@@ -212,11 +271,14 @@ function PressableCardBoards() {
 
   return (
     <div>
-      <Typography variant="h1" style={{ fontSize: "2rem", lineHeight: "1.5" }}>
+      <Typography
+        variant="h1"
+        style={{ fontSize: "2rem", lineHeight: "1.5", color: "black" }}
+      >
         My Workout Plans
       </Typography>
       <Button
-        variant="contained"
+        variant="soft"
         color="primary"
         onClick={() => {
           setOpen(true);
@@ -274,36 +336,57 @@ function PressableCardBoards() {
             </CardActions>
           </Card>
         ))}
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>{editMode ? "Edit Exercise" : "Add Exercise"}</DialogTitle>
-        <DialogContent>
-          <TextField
-            label="Exercise Planner/Note"
-            multiline
-            minRows={10}
-            fullWidth
-            variant="outlined"
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-          />
-          {open && (
+
+      <Modal open={open} onClose={() => setOpen(false)} disableScrollLock>
+        <ModalOverflow>
+          <ModalDialog
+            aria-labelledby="basic-modal-dialog-title"
+            aria-describedby="basic-modal-dialog-description"
+            sx={{ maxWidth: 1000 }}
+          >
+            <Typography id="basic-modal-dialog-title" component="h2">
+              {editMode ? "Edit Exercise" : "Add Exercise"}
+            </Typography>
+
+            <Typography level="body1">{content}</Typography>
+
             <Workouts
               onWorkoutClick={handleWorkoutClick}
               savedExercises={savedExercises}
               setSavedExercises={setSavedExercises}
             />
-          )}
-        </DialogContent>
-        <Button
-          color="primary"
-          onClick={(e) => {
-            handleCardChange();
-            handleClose();
-          }}
-        >
-          {editMode ? "Save Changes" : "Add Card"}
-        </Button>
-      </Dialog>
+            {getContent(step)}
+
+            <form
+              onSubmit={(event) => {
+                event.preventDefault();
+                setOpen(false);
+              }}
+            >
+              <Stack spacing={2}>
+                <FormControl>
+                  <FormLabel>Name</FormLabel>
+                  <Input autoFocus required />
+                </FormControl>
+                <FormControl>
+                  <FormLabel>Description</FormLabel>
+                  <Input required />
+                </FormControl>
+                {/* <Button type="submit">Submit</Button> */}
+                <Button
+                  color="primary"
+                  onClick={(e) => {
+                    handleCardChange();
+                    handleClose();
+                  }}
+                >
+                  {editMode ? "Save Changes" : "Add Card"}
+                </Button>
+              </Stack>
+            </form>
+          </ModalDialog>
+        </ModalOverflow>
+      </Modal>
     </div>
   );
 }
