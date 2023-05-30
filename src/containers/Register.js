@@ -65,7 +65,7 @@ export default function Register() {
 
         await setDoc(doc(collection(db, "users"),user.uid), {
           userID : user.uid,
-          email : email
+          email : email,
           firstName: firstName,
           lastName: lastName,
 

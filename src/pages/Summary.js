@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 function Summary() {
   const history = useNavigate();
   return (
-    <div className="main" style={{ color: "white" }}>
+    <div className="backgroundd">
       <link
       href="https://use.fontawesome.com/releases/v5.14.0/css/all.css"
       integrity="sha384-HzLeBuhoNPvSl5KYnjx0BT+WB0QEEqLprO+NBkkk5gbc67FTaL7XIGa2w1L0Xbgc"
@@ -20,7 +20,7 @@ function Summary() {
           <button
             class="main__btn"
             onClick={() => {
-              history("/about");
+              history("/");
             }}
           >
             Explore
@@ -54,7 +54,7 @@ function Summary() {
         </div>
       </div>
       {/* <!-- Services Section --> */}
-      <div class="services" id="services">
+      <div class="services" id="feature">
       <h1>What we offer for you?</h1>
       <div class="services__wrapper">
         <div class="services__card">
@@ -75,7 +75,7 @@ function Summary() {
       </div>
       </div>
       {/* --Footer Section-- */}
-      <div class="footer__container">
+      <div class="footer__container" id="contact">
       <div class="footer__links">
         <div class="footer__link--wrapper">
           <div class="footer__link--items">
