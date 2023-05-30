@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 function Summary() {
   const history = useNavigate();
   return (
-    <div className="main" style={{ color: "white" }}>
+    <div className="backgroundd">
       <link
       href="https://use.fontawesome.com/releases/v5.14.0/css/all.css"
       integrity="sha384-HzLeBuhoNPvSl5KYnjx0BT+WB0QEEqLprO+NBkkk5gbc67FTaL7XIGa2w1L0Xbgc"

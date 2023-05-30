@@ -25,7 +25,7 @@
 }
 
 .App-link {
-  color: #61dafb;
+  color: #69d2e7;
 }
 
 @keyframes App-logo-spin {
@@ -38,14 +38,14 @@
 }
 /* Hero Section */
 .hero {
-  background-image: url("coolLogo.jpg");
-  /* /* opacity: 0.6; */
+  background-image: url("coolLogo2.jpg");
   /* background: #545ee182;
   background: linear-gradient(to right, #90c3eb, #3e3edc); */
   /* background-image: transparent; 1850px 1500px;*/
-  background-size: 1850px 1500px;
-  background-repeat: no-repeat, repeat;
-  border: 2px solid;
+  background-size: 1000px 1000px;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: none;
   padding: 200px 0;
 }
 
@@ -64,7 +64,7 @@
 .hero__heading {
   font-size: 100px;
   margin-bottom: 24px;
-  color: #7a95eb;
+  color: #0a0d18;
 }
 
 .hero__heading span {
@@ -88,15 +88,15 @@
 
 .hero__description {
   font-size: 60px;
-  background: #da22ff; /* fallback for old browsers */
+  background: #ca2216; /* fallback for old browsers */
   background: -webkit-linear-gradient(
     to right,
-    #9114ff,
+    #ff0d0d,
     #da22ff
   ); /* Chrome 10-25, Safari 5.1-6 */
   background: linear-gradient(
     to right,
-    #8f0eff,
+    #ff160e,
     #da22ff
   ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   background-size: 100%;
@@ -120,16 +120,21 @@
   }
 }
 
+.backgroundd{
+  background-image: linear-gradient(#69d2e7,#69d2e7,#ffe884, #f87c08);
+}
+
 /* About Section */
 .main {
-  background-image: url("AnotherLogo.webp"), linear-gradient(#61dafb, rgb(164, 235, 117));
+  background-image: url("AnotherLogo.webp");
   background-size: 1000px 1000px;
-  background-repeat: no-repeat, repeat;
-  border: 2px solid;
+  background-repeat: no-repeat;
+  border: none;
   /* background-color: blue; */
   padding: 10rem 0;
   width: 100%;
 }
+
 
 .main__container {
   display: grid;
@@ -363,8 +368,7 @@
 
 .services__card {
   margin: 15px;
-  height: 475px;
-  width: 330px;
+  height: 2000px;
   border-radius: 4px;
   display: flex;
   flex-direction: column;
@@ -375,24 +379,40 @@
   opacity: 0.8;
 }
 
+.services__card:nth-child(1) {
+  width: 400px; /* Modify the width to your desired value */
+  height: 700px;
+  background-image: linear-gradient(
+    -225deg,
+    #3c2394 0%,
+    #6720b3 29%,
+    #e45987 67%,
+  );
+  opacity: 0.8;
+}
+
 .services__card:nth-child(2) {
-  background: #1fa2ff; /* fallback for old browsers */
+  width: 400px; /* Modify the width to your desired value */
+  height: 700px;
+  background: #696be7; /* fallback for old browsers */
   background: -webkit-linear-gradient(
     to right,
-    #a6ffcb,
-    #12d8fa,
-    #1fa2ff
+    #184dfd,
+    #26c1e0,
+    #71e0f7
   ); /* Chrome 10-25, Safari 5.1-6 */
   background: linear-gradient(
     to right,
-    #a6ffcb,
-    #12d8fa,
-    #1fa2ff
+    #0f8bff,
+    #47d4ff,
+    #9cffd9
   ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   opacity: 0.8;
 }
 
 .services__card:nth-child(3) {
+  width: 400px; /* Modify the width to your desired value */
+  height: 700px;
   background-image: linear-gradient(
     -225deg,
     #231557 0%,
@@ -401,6 +421,10 @@
     #fff800 100%
   );
   opacity: 0.8;
+}
+
+.services__card:not(:nth-child(1)):not(:nth-child(2)):not(:nth-child(3)) {
+  height: 1000px; /* Modify the height to your desired value */
 }
 
 .services__card h2 {
@@ -439,7 +463,7 @@
   cursor: pointer;
 }
 
-@media screen and (max-width: 1300px) {
+@media screen and (max-width: 1600px) {
   .services__wrapper {
     grid-template-columns: 1fr 1fr;
   }
@@ -454,7 +478,7 @@
 /* Footer CSS */
 .footer__container {
   background-color: #131313;
-  padding: 5rem 0;
+  padding: 0.5rem 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
