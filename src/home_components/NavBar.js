@@ -45,16 +45,6 @@ function NavBar() {
     setAnchor(null);
   };
 
-  // On Selecting an item from the menu
-  const onMenuItemClick = (event, index) => {
-    setAnchor(null);
-    setSelected(index);
-  };
-
-  const openLogin = (event) => {
-    setAnchor(event.currentTarget);
-  };
-
   const handleClick = () => {
     const auth = getAuth();
     user
