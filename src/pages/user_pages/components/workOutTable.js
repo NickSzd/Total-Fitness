@@ -534,7 +534,17 @@ function PressableCardBoards() {
                   sx={{ display: "flex", justifyContent: "flex-end", mt: 1 }}
                 >
                   <Box>
-                    <Button color="primary">Back</Button>{" "}
+                    <Button
+                      color="primary"
+                      onClick={() => {
+                        step === 0
+                          ? handleClose()
+                          : setStep((prevStep) => prevStep - 1);
+                      }}
+                      sx={{ mr: 1 }}
+                    >
+                      Back
+                    </Button>
                     <Button
                       color="primary"
                       type="submit"
