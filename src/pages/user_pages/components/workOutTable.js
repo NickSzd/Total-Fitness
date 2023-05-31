@@ -438,8 +438,9 @@ function PressableCardBoards() {
   return (
     <div>
       <Typography
-        variant="h1"
-        style={{ fontSize: "2rem", lineHeight: "1.5", color: "black" }}
+        level="h1"
+        style={{ fontSize: "2rem", lineHeight: "1.5" }}
+        sx={{ ml: 1 }}
       >
         My Workout Plans
       </Typography>
@@ -449,6 +450,7 @@ function PressableCardBoards() {
         onClick={() => {
           setOpen(true);
         }}
+        sx={{ ml: 1 }}
       >
         Add Exercise Plans
       </Button>
