@@ -19,7 +19,11 @@ import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import SelectInput from "@mui/material/Select/SelectInput";
 import { useNavigate } from "react-router-dom";
 
+<<<<<<< HEAD
 const user_collection = collection(db, "users");
+=======
+const users_collection  = collection(db, "users");
+>>>>>>> 8120caad82123561a12d564a25335dd761983d21
 
 function Copyright(props) {
   
@@ -65,12 +69,27 @@ export default function Register() {
       .then(async (userCredential) => {
         // Signed in
         const user = userCredential.user;
+        const nutrition_collection = collection(doc(users_collection ,user.uid),"nutrition")
+        const workout_collection = collection(doc(users_collection ,user.uid),"workout")
 
-        await setDoc(doc(collection(db, "users"),user.uid), {
+
+        await setDoc(doc(users_collection,user.uid), {
           userID : user.uid,
+<<<<<<< HEAD
           email : email,
           firstName: firstName,
           lastName: lastName,
+=======
+          email : email
+
+        })
+        await setDoc(doc(nutrition_collection), {
+          userID : user.uid,
+
+        })
+        await setDoc(doc(workout_collection), {
+          userID : user.uid,
+>>>>>>> 8120caad82123561a12d564a25335dd761983d21
 
         })
         
