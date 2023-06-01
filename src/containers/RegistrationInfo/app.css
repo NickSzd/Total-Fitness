@@ -132,6 +132,8 @@ input[type="radio"]::before {
 
 input[type="radio"]:checked::before {
   transform: scale(1);
+  font-size: 1.3rem;
+  color: #56a5eb;
 }
 .btn:hover {
   cursor: pointer;
@@ -157,6 +159,27 @@ form {
 #username{
   margin-bottom: 1rem;
   width: 20rem;
+  padding: 1.5rem;
+  font-size: 1.8rem;
+  border: none;
+  box-shadow: 0 0.1rem 1.4rem 0 rgba(86, 185, 235, 0.5);
+}
+#feet{
+  margin-bottom: 1rem;
+  margin-right: 10rem;
+  width: 10rem;
+  padding: 1.5rem;
+  font-size: 1.8rem;
+  border: none;
+  box-shadow: 0 0.1rem 1.4rem 0 rgba(86, 185, 235, 0.5);
+}
+#inches{
+  position:fixed;
+  right:810px; 
+  bottom: 255px;
+  margin-bottom: 1rem;
+  margin-left: 13rem;
+  width: 10rem;
   padding: 1.5rem;
   font-size: 1.8rem;
   border: none;
