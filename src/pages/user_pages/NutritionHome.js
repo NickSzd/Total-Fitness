@@ -38,6 +38,7 @@ async function save() {
   var carbs_doc = document.getElementById("carbs").value;
   var protein_doc = document.getElementById("protein").value;
   // console.log(user.uid);
+  
   await setDoc(doc(collection(doc(collection(db, "users"),user.uid),"nutrition")), {
     meal: meal_doc,
     calories: calories_doc,
