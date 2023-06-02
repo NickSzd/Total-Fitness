@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import NutritionTable from "./components/nutritionTable";
-import { db, db_n } from "../../config/firebase";
+import { auth, db, db_n } from "../../config/firebase";
 import {
   getFirestore,
   collection,
@@ -21,7 +21,6 @@ import utc from "dayjs/plugin/utc";
 import PieChartNutrition from "./components/pieChartMacros";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 
-const nutrition_collection = collection(db, "nutrition");
 
 function clear_box() {
   document.getElementById("meal").value = "";
@@ -30,14 +29,17 @@ function clear_box() {
   document.getElementById("carbs").value = "";
   document.getElementById("protein").value = "";
 }
-function save() {
+
+async function save() {
+  const user = auth.currentUser;
   var meal_doc = document.getElementById("meal").value;
   var calories_doc = document.getElementById("calories").value;
   var fat_doc = document.getElementById("fat").value;
   var carbs_doc = document.getElementById("carbs").value;
   var protein_doc = document.getElementById("protein").value;
-
-  setDoc(doc(nutrition_collection), {
+  // console.log(user.uid);
+  
+  await setDoc(doc(collection(doc(collection(db, "users"),user.uid),"nutrition")), {
     meal: meal_doc,
     calories: calories_doc,
     fat: fat_doc,
