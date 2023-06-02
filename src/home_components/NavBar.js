@@ -16,7 +16,6 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { getAuth, signOut } from "firebase/auth";
 import SharedContext from "../pages/user_pages/components/SharedContext";
-import { Link } from "react-router-dom";
 
 function NavBar() {
   const history = useNavigate();
@@ -25,7 +24,12 @@ function NavBar() {
   const [anchor, setAnchor] = useState(null);
   const [isScrolled, setIsScrolled] = useState(false); // Added state to track scroll
   const scrollRef = useRef(null);
-  const menuOptions = ["userHome", "nutritionHome", "fitnessHome", "userProfile"];
+  const menuOptions = [
+    "userHome",
+    "nutritionHome",
+    "fitnessHome",
+    "userProfile",
+  ];
   const isLoggedIn = !!user; // Check if user is logged in
 
   //------------------------------------------------------------------
@@ -82,12 +86,12 @@ function NavBar() {
       history("/");
     }
   };
-  
+
   const handleContactButtonClick = () => {
     const homeSection = document.getElementById("contact");
     if (homeSection) {
       homeSection.scrollIntoView({ behavior: "smooth" });
-    }  else {
+    } else {
       history("/");
     }
   };
@@ -217,7 +221,7 @@ function NavBar() {
                 <MenuIcon />
               </IconButton>
             )}
-            
+
             <Menu
               open={Boolean(anchor)}
               anchorEl={anchor}

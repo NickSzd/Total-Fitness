@@ -10,20 +10,6 @@ Reqs
 
 import React, { useEffect } from "react";
 import "../App.css";
-import {
-  IconButton,
-  Button,
-  Typography,
-  Box,
-  AppBar,
-  Toolbar,
-  Menu,
-  MenuItem,
-} from "@mui/material";
-import { useState } from "react";
-import MenuIcon from "@mui/icons-material/Menu";
-import { Outlet } from "react-router-dom";
-import SharedContext from "./user_pages/components/SharedContext";
 import NavBar from "../home_components/NavBar";
 //import "../Home.css";
 
