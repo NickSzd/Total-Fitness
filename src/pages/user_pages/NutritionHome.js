@@ -2,6 +2,7 @@ import React from "react";
 import { useEffect, useState } from "react";
 import NutritionTable from "./components/nutritionTable";
 import { auth, db, db_n } from "../../config/firebase";
+import { serverTimestamp } from 'firebase/firestore'
 import {
   getFirestore,
   collection,
@@ -37,14 +38,16 @@ async function save() {
   var fat_doc = document.getElementById("fat").value;
   var carbs_doc = document.getElementById("carbs").value;
   var protein_doc = document.getElementById("protein").value;
+  const timestamp = serverTimestamp();
   // console.log(user.uid);
   
   await setDoc(doc(collection(doc(collection(db, "users"),user.uid),"nutrition")), {
     meal: meal_doc,
-    calories: calories_doc,
-    fat: fat_doc,
-    carbs: carbs_doc,
-    protein: protein_doc,
+    calories: Number(calories_doc),
+    fat: Number(fat_doc),
+    carbohydrates: Number(carbs_doc),
+    protein: Number(protein_doc),
+    day: timestamp
   });
   clear_box();
   alert("Added Meal");
