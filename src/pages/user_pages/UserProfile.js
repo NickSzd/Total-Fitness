@@ -16,7 +16,7 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 const auth = getAuth();
 const user = auth.currentUser;
 
-onAuthStateChanged(auth, (user) => {
+window.onload = onAuthStateChanged(auth, (user) => {
   if (user) {
     // User is signed in, see docs for a list of available properties
     // https://firebase.google.com/docs/reference/js/auth.user
@@ -73,11 +73,17 @@ function UserProfile() {
               className="profileUserName"
               id="profileUserName"
               style={{ fontWeight: "Bold", fontSize: "24" }}
-            ></div>
+            >
+              DEFAULT NAME
+            </div>
 
-            <div className="profileUserEmail" id="profileUserEmail"></div>
+            <div className="profileUserEmail" id="profileUserEmail">
+              DEFAULT EMAIL
+            </div>
 
-            <div className="profileUserBlurb" id="profileUserBlurb"></div>
+            <div className="profileUserBlurb" id="profileUserBlurb">
+              DEFAULT Blurb
+            </div>
 
             <Button variant="contained" onClick={openProfileForm}>
               Edit Profile
