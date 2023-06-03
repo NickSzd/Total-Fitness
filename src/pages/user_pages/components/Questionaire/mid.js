@@ -1,6 +1,7 @@
 import "./gameP1.css"
 import "./gameP2.css"
-import {useState} from 'react'
+import Button from "@mui/material/Button";
+import {useState, useEffect} from 'react'
 function MidGame(handleNext) {
     const [progressText, setProgess] = useState("");
     const [mainQ, setMainQ] = useState("");
@@ -12,7 +13,7 @@ function MidGame(handleNext) {
     const choices = Array.from(document.getElementsByClassName("choice-text"));
     //const progressText = document.getElementById("progressText");
     // const storeText = document.getElementById("store");
-    const progressBarFull = document.getElementById("progressBarFull"); 
+    //const progressBarFull = document.getElementById("progressBarFull"); 
     let currentQuestion = {};
     let acceptingAnswers = false;
     let store = 0;
@@ -103,7 +104,7 @@ function MidGame(handleNext) {
         //Update the progress bar
         //progressBarFull.style.width = `${(questionCounter / MAX_QUESTIONS) * 100}%`;
 
-        if(num === 0){
+        if(num === 0){ 
             currentQuestion = availableQuesions[0];
         }else if(num === 1){
             currentQuestion = loseQuestion;
@@ -168,7 +169,7 @@ function MidGame(handleNext) {
     store += num;
     //storeText.innerText = store;
   };
-  startGame();
+  //startGame();
 
   return (
     <body>

@@ -9,8 +9,6 @@ function EndGame() {
     const highScores = JSON.parse(localStorage.getItem('highScores')) || [];
 
     const MAX_HIGH_SCORES = 5;
-
-
     username.addEventListener('keyup', () => {
         saveScoreBtn.disabled = !username.value;
     });

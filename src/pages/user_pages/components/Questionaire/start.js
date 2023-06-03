@@ -46,7 +46,7 @@ function Start() {
   };
 
   const handleClose = () => {
-    setStep(0);
+    setStep(4);
   };
   return <>{getContent(step, handleNext)}</>;
 }
