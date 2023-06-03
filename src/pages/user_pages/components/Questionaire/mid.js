@@ -1,17 +1,24 @@
 import "./gameP1.css"
 import "./gameP2.css"
+import {useState} from 'react'
 function MidGame(handleNext) {
-    const question = document.getElementById("question");
+    const [progressText, setProgess] = useState("");
+    const [mainQ, setMainQ] = useState("");
+    const [firstOpt, setFirstOpt] = useState("");
+    const [secondOpt, setSecondOpt] = useState("");
+    const [thirdOpt, setThirdOpt] = useState("");
+    const [fourthOpt, setFourthOpt] = useState("");
+    // const question = document.getElementById("question");
     const choices = Array.from(document.getElementsByClassName("choice-text"));
-    const progressText = document.getElementById("progressText");
-    const storeText = document.getElementById("store");
+    //const progressText = document.getElementById("progressText");
+    // const storeText = document.getElementById("store");
     const progressBarFull = document.getElementById("progressBarFull"); 
     let currentQuestion = {};
     let acceptingAnswers = false;
     let store = 0;
     let questionCounter = 0;
     let availableQuesions = [];
-    let questionIndex = 0;
+    // let questionIndex = 0;
 
     // the general questions you can ask any of the users
     let questions = [
@@ -59,6 +66,7 @@ function MidGame(handleNext) {
             choice1: "For sport reasons",
             choice2: "For general fitness",
             choice3: "Being underweight",
+            choice4: "You consume less calories than you need to",
             answer: 1
     };
     // Question if you choose to gain muscle
@@ -67,6 +75,7 @@ function MidGame(handleNext) {
             choice1: "Tone Up - Visible physique with little mass",
             choice2: "Bulk Up - Went large, well defined muscles",
             choice3: "Get Strong - Lift maximum amount of weight(no essence on muscle definition)",
+            choice4: "Increases metabolic rate - Increase body's energy requirments to burn fat", 
             answer: 1
     };
 
@@ -83,35 +92,49 @@ function MidGame(handleNext) {
 
     function getNewQuestion(num){
         if (availableQuesions.length === 0 || questionCounter >= MAX_QUESTIONS) {
-            localStorage.setItem("mostRecentstore", store);
+            //localStorage.setItem("mostRecentstore", store);
             handleNext();
             return;
             //go to the end page
             //return window.location.assign("end.html");
         }
         questionCounter++;
-        progressText.innerText = `Question ${questionCounter}/${MAX_QUESTIONS}`;
+        setProgess(`Question ${questionCounter}/${MAX_QUESTIONS}`);
         //Update the progress bar
-        progressBarFull.style.width = `${(questionCounter / MAX_QUESTIONS) * 100}%`;
+        //progressBarFull.style.width = `${(questionCounter / MAX_QUESTIONS) * 100}%`;
 
-        if(num == 0){
+        if(num === 0){
             currentQuestion = availableQuesions[0];
-        }else if(num == 1){
+        }else if(num === 1){
             currentQuestion = loseQuestion;
-        }else if(num == 2){
+        }else if(num === 2){
             currentQuestion = maintainQuestion;
-        }else if(num == 3){
+        }else if(num === 3){
             currentQuestion = gainWQuestion;
         }else{
             currentQuestion = gainMQuestion;
         }
-        question.innerText = currentQuestion.question;
+        setMainQ(currentQuestion.question);
 
+        let i = 0;
         choices.forEach(choice => {
             const number = choice.dataset["number"];
-            choice.innerText = currentQuestion["choice" + number];
+            if(i === 0){
+              setFirstOpt(currentQuestion["choice" + number]);
+            }
+            else if(i === 1){
+              setSecondOpt(currentQuestion["choice" + number]);
+            }
+            else if(i === 2){
+              setThirdOpt(currentQuestion["choice" + number]);
+            }
+            else{
+              setFourthOpt(currentQuestion["choice" + number]);
+            }
+            i += 1;
+            //choice.innerText = currentQuestion["choice" + number];
         });
-        if(num == 0){
+        if(num === 0){
             availableQuesions.splice(0, 1);
         }
         acceptingAnswers = true;
@@ -126,7 +149,7 @@ function MidGame(handleNext) {
 
         let classToApply = "correct";
         let num = 0;
-        if(question.innerText == questions[0].question){
+        if(mainQ === questions[0].question){
             num = selectedAnswer;
         }
         if (classToApply === "correct") {
@@ -153,8 +176,8 @@ function MidGame(handleNext) {
         <div id="game" className="justify-center flex-column">
           <div id="hud">
             <div id="hud-item">
-              <p id="progressText" className="hud-prefix">
-                Question
+              <p className="hud-prefix">
+                Question {progressText}
               </p>
               <div id="progressBar">
                 <div id="progressBarFull" />
@@ -165,30 +188,30 @@ function MidGame(handleNext) {
               <h1 className="hud-main-text" id="store"></h1>
             </div>
           </div>
-          <h2 id="question">What is the answer to this questions?</h2>
+          <h2 id="question">{mainQ}</h2>
           <div className="border">
             <div className="choice-container">
               <p className="choice-prefix">1</p>
               <p className="choice-text" data-number={1}>
-                Choice 1
+                {firstOpt}
               </p>
             </div>
             <div className="choice-container">
               <p className="choice-prefix">2</p>
               <p className="choice-text" data-number={2}>
-                Choice 2
+                {secondOpt}
               </p>
             </div>
             <div className="choice-container">
               <p className="choice-prefix">3</p>
               <p className="choice-text" data-number={3}>
-                Choice 3
+                {thirdOpt}
               </p>
             </div>
             <div className="choice-container">
               <p className="choice-prefix">4</p>
               <p className="choice-text" data-number={4}>
-                Choice 4
+                {fourthOpt}
               </p>
             </div>
           </div>
