@@ -76,8 +76,9 @@ export default function Register() {
         
       await updateProfile(user, { displayName: firstName });
         alert("User Created");
-        window.location.href = "userHome";
-        history("/userHome")
+        history("/Start");
+        // window.location.href = "userHome";
+        // history("/userHome")
 
         // return userCredential.updateProfile({dis})
         //ADD REDIRECT TO USER HOME PAGE
