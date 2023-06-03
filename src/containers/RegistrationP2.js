@@ -14,7 +14,10 @@ function RegistrationPart2(){
     name: '',
     email: '',
     gender: '',
-    weight: '',
+    currWeight: '',
+    goalWeight: '',
+    heightFeet: '', 
+    heightInch: '',
   });
 
   const handleGoalSelect = (selectedGoal) => {
@@ -42,15 +45,11 @@ function RegistrationPart2(){
     // Perform database registration and redirection logic here
   };
   const defaultStyling ={
-    //border: '1px solid blue',
-    //backgroundColor: 'rgba(20,20,20,0.4)', 
     width: 500,
-    //left: 600,
     mt: 23,
     ml: 58,
     justifycontent:"center", 
-    //alignItems:"center"
-  }
+  };
   return (
     <div>
       {step === 1 && (
@@ -152,8 +151,8 @@ function RegistrationPart2(){
       )}
       {step === 4 && (
         <Stack sx={defaultStyling} divider={<Divider orientation="horizontal" flexItem />}spacing={1}>
-        <Typography variant="h5">Registration Form</Typography>
-        <form onSubmit={handleFormSubmit}>
+        <Typography variant="h5"  align='center' color='lightblue'>Registration Form</Typography>
+        <form onSubmit={handleFormSubmit} align='center'>
           <TextField
             name="name"
             label="Name"
@@ -168,7 +167,7 @@ function RegistrationPart2(){
             onChange={handleInputChange}
             required
           />
-          <FormGroup>
+          <FormGroup row="true">
             <FormControlLabel
               control={
                 <Checkbox
@@ -179,6 +178,7 @@ function RegistrationPart2(){
                 />
               }
               label="Male"
+              sx={{ml:21}}
             />
             <FormControlLabel
               control={
@@ -193,14 +193,40 @@ function RegistrationPart2(){
             />
           </FormGroup>
           <TextField
-            name="weight"
-            label="Weight"
+            name="currWeight"
+            label="Current Weight"
             type="number"
-            value={formData.weight}
+            value={formData.currWeight}
             onChange={handleInputChange}
             required
           />
-          <Button type="submit" variant="contained" color="primary">
+          <TextField
+            name="goalWeight"
+            label="Goal Weight"
+            type="number"
+            value={formData.goalWeight}
+            onChange={handleInputChange}
+            required
+          />
+          <TextField
+            name="heightFeet"
+            label="Height - Feet "
+            type="number"
+            value={formData.heightFeet}
+            onChange={handleInputChange}
+            // sx = {{ml:13}}
+            required
+          />
+          <TextField
+            name="heightIn"
+            label="Height - Inches"
+            type="number"
+            value={formData.heightInch}
+            onChange={handleInputChange}
+            // sx = {{ml:13}}
+            required
+          />
+          <Button type="submit" variant="contained" color="primary" sx={{ml:1, mt:5}}> 
             Register
           </Button>
         </form>
