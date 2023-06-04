@@ -4,20 +4,24 @@ import { Button, Checkbox, FormControlLabel, FormGroup, TextField, Typography } 
 import Stack from  "@mui/material/Stack"
 import Divider from '@mui/material/Divider';
 import './my-styles.css';
+import {auth, db} from "../config/firebase.js";
+import {collection, doc, setDoc, updateDoc} from "firebase/firestore";
 
 function RegistrationPart2(){
+  const history = useNavigate();
   const [step, setStep] = useState(1);
   const [goal, setGoal] = useState('');
   const [activityLevel, setActivityLevel] = useState('');
   const [difficulty, setDifficulty] = useState('');
   const [formData, setFormData] = useState({
-    name: '',
+    userName: '',
     email: '',
     gender: '',
     currWeight: '',
     goalWeight: '',
     heightFeet: '', 
     heightInch: '',
+
   });
 
   const handleGoalSelect = (selectedGoal) => {
@@ -40,9 +44,56 @@ function RegistrationPart2(){
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleFormSubmit = (event) => {
-    event.preventDefault();
+  async function handleFormSubmit(){
+        // event.preventDefault();
+        const user = auth.currentUser;
+        await updateDoc(doc(collection(db, "users"), user.uid),{
+            userName: formData.userName,
+            gender: formData.gender,
+            currWeight: formData.currWeight,
+            goalWeight: formData.goalWeight,
+            heightFeet: formData.heightFeet,
+            heightInch: formData.heightInch,
+            mainGoal: goal,
+            whyGoal: difficulty,
+            activityLevel: activityLevel,
+        })
+        history("/Home");
+        //const data = new FormData(event.currentTarget);
     // Perform database registration and redirection logic here
+    // var firstName = document.getElementById("firstName").value;
+    // var lastName = document.getElementById("lastName").value;
+    // var email = document.getElementById("email").value;
+    // var password = document.getElementById("password").value;
+
+    // Register User
+    // createUserWithEmailAndPassword(auth, email, password)
+    //   .then(async (userCredential) => {
+    //     // Signed in
+    //     const user = userCredential.user;
+
+    //     await setDoc(doc(collection(db, "users"),user.uid), {
+    //       userID : user.uid,
+    //       email : email,
+    //       firstName: firstName,
+    //       lastName: lastName,
+
+    //     })
+        
+    // window.location.href = "userHome";
+    // history("/userHome")
+
+    // return userCredential.updateProfile({dis})
+    //ADD REDIRECT TO USER HOME PAGE
+
+    // .catch((error) => {
+    // console.log("Error Creating User");
+    // const errorCode = error.code;
+    // const errorMessage = error.message;
+
+    // console.log("Error code: "+ errorCode);
+    // console.log("Error Message: "+ errorMessage);
+    // ..
   };
   const defaultStyling ={
     width: 500,
@@ -151,12 +202,12 @@ function RegistrationPart2(){
       )}
       {step === 4 && (
         <Stack sx={defaultStyling} divider={<Divider orientation="horizontal" flexItem />}spacing={1}>
-        <Typography variant="h5"  align='center' color='lightblue'>Registration Form</Typography>
+        <Typography variant="h5"  align='center' color='lightblue'>User Information</Typography>
         <form onSubmit={handleFormSubmit} align='center'>
           <TextField
-            name="name"
-            label="Name"
-            value={formData.name}
+            name="userName"
+            label="UserName"
+            value={formData.userName}
             onChange={handleInputChange}
             required
           />
@@ -218,7 +269,7 @@ function RegistrationPart2(){
             required
           />
           <TextField
-            name="heightIn"
+            name="heightInch"
             label="Height - Inches"
             type="number"
             value={formData.heightInch}
