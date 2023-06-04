@@ -10,6 +10,8 @@ import UserHome from "./pages/user_pages/UserHome";
 import UserProfile from "./pages/user_pages/UserProfile";
 import Login from "./containers/Login";
 import Register from "./containers/Register";
+// import Start from "./pages/user_pages/components/Questionaire/start"
+import RegistrationPart2 from "./containers/RegistrationP2"
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -142,6 +144,7 @@ function App() {
                       </Route>
                       <Route path="/Login" element={<Login />} />
                       <Route path="/Register" element={<Register />} />
+                      <Route path="/Start" element={<RegistrationPart2 />} />
                     </Routes>
                   </SharedContext.Provider>
                 </div>

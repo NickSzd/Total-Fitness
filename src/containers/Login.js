@@ -13,8 +13,9 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
+import backgroundImage from "./6.jpg"; // Import the image file
 
-// Imports fro Logging in
+// Imports for Logging in
 import { auth } from "../config/firebase.js";
 import { signInWithEmailAndPassword } from "firebase/auth";
 
@@ -59,8 +60,11 @@ export default function Login() {
         const errorMessage = error.message;
       });
   };
-
+  const mystyle={
+    backgroundImage: `url("g.jpg")`,
+  }
   return (
+    <div style={mystyle}>
     <ThemeProvider theme={theme}>
       <Grid container component="main" sx={{ height: "100vh" }}>
         <CssBaseline />
@@ -70,7 +74,7 @@ export default function Login() {
           sm={4}
           md={7}
           sx={{
-            backgroundImage: "url(https://source.unsplash.com/random)",
+            backgroundImage: `url(${backgroundImage})`, // Use the imported image file
             backgroundRepeat: "no-repeat",
             backgroundColor: (t) =>
               t.palette.mode === "light"
@@ -152,7 +156,6 @@ export default function Login() {
         </Grid>
       </Grid>
     </ThemeProvider>
+    </div>
   );
 }
-
-// export default Login;
