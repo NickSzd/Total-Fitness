@@ -46,6 +46,8 @@ function RegistrationPart2(){
 
   async function handleFormSubmit(){
         // event.preventDefault();
+        window.location.href = "userHome";
+        history("/userHome");
         const user = auth.currentUser;
         await updateDoc(doc(collection(db, "users"), user.uid),{
             userName: formData.userName,
@@ -57,10 +59,9 @@ function RegistrationPart2(){
             mainGoal: goal,
             whyGoal: difficulty,
             activityLevel: activityLevel,
-        }).then( () => {
-        window.location.href = "userHome";
-        history("/userHome");
-      });
+        });
+        
+  
         //const data = new FormData(event.currentTarget);
     // Perform database registration and redirection logic here
     // var firstName = document.getElementById("firstName").value;
@@ -98,12 +99,11 @@ function RegistrationPart2(){
     // ..
   };
 
-  const defaultStyling ={
-    width: 500,
-    mt: 23,
-    ml: 58,
-    justifycontent:"center", 
-  };
+ const defaultStyling ={
+  width: 500,
+  margin: "23px auto",
+  justifyContent: "center",
+};
   return (
     <div>
       {step === 1 && (
@@ -214,13 +214,13 @@ function RegistrationPart2(){
             onChange={handleInputChange}
             required
           />
-          <TextField
+          {/* <TextField
             name="email"
             label="Email"
             value={formData.email}
             onChange={handleInputChange}
             required
-          />
+          /> */}
           <FormGroup row="true">
             <FormControlLabel
               control={
