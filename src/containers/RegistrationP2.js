@@ -57,8 +57,10 @@ function RegistrationPart2(){
             mainGoal: goal,
             whyGoal: difficulty,
             activityLevel: activityLevel,
-        })
-        history("/Home");
+        }).then( () => {
+        window.location.href = "userHome";
+        history("/userHome");
+      });
         //const data = new FormData(event.currentTarget);
     // Perform database registration and redirection logic here
     // var firstName = document.getElementById("firstName").value;
@@ -95,6 +97,7 @@ function RegistrationPart2(){
     // console.log("Error Message: "+ errorMessage);
     // ..
   };
+
   const defaultStyling ={
     width: 500,
     mt: 23,

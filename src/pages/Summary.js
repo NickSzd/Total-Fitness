@@ -102,7 +102,7 @@ function Summary() {
           <div class="footer__logo">
             <a href="/" id="footer__logo">Total Fitness</a>
           </div>
-          <p class="website__rights">© Total Fitness 2020. All rights reserved</p>
+          <p class="website__rights">© Total Fitness 2023. All rights reserved</p>
           <div class="social__icons">
             <a href="/" class="social__icon--link" target="_blank"
               ><i class="fab fa-facebook"></i
