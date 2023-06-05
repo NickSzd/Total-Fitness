@@ -66,15 +66,19 @@ export default function Register() {
         // Signed in
         const user = userCredential.user;
 
+
         await setDoc(doc(collection(db, "users"),user.uid), {
           userID : user.uid,
           email : email,
           firstName: firstName,
           lastName: lastName,
+        });
+
 
         })
         
       await updateProfile(user, { displayName: firstName });
+
         alert("User Created");
         history("/Start");
         // window.location.href = "userHome";
@@ -88,8 +92,8 @@ export default function Register() {
         const errorCode = error.code;
         const errorMessage = error.message;
 
-        console.log("Error code: "+ errorCode);
-        console.log("Error Message: "+ errorMessage);
+        console.log("Error code: " + errorCode);
+        console.log("Error Message: " + errorMessage);
         // ..
       });
 

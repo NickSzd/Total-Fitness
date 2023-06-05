@@ -59,7 +59,6 @@ function App() {
 
   //------------------------------------------------------------------
 
-
   const [selected, setSelected] = useState(-1);
   // const [user, setUser] = useState(null);
   const [user, loading, error] = useAuthState(auth);
@@ -68,7 +67,6 @@ function App() {
   const openMenu = (event) => {
     setAnchor(event.currentTarget);
   };
-
 
   // //Closes Menu on Click
   // const closeMenu = () => {
