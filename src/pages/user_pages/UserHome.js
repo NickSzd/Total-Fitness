@@ -63,7 +63,7 @@ function UserHome(props) {
   /*
   Configures the drawer so that the user can access user pages
   */
- /*
+  /*
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
       <Typography variant="h6" sx={{ my: 2 }}>
