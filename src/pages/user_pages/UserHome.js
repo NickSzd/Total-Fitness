@@ -24,6 +24,20 @@ import {
   Typography,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
+import { db } from "../../config/firebase";
+import {
+  getDoc,
+  collection,
+  addDoc,
+  setDoc,
+  doc,
+  some,
+  updateDoc,
+  deleteDoc,
+} from "firebase/firestore";
+import { useCollection } from "react-firebase-hooks/firestore";
+import { useContext } from "react";
+import SharedContext from "./components/SharedContext";
 
 //import PieChartComponent from "./components/pieChart";
 //import PieCaloriesComponent from "./components/pieCalories";
@@ -38,6 +52,9 @@ const settings = ["Profile", "Account", "Dashboard", "Logout"]; // items for use
 function UserHome(props) {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [userName, setUserName] = useState("");
+  const [email, setEmail] = useState("");
+  const [mainGoal, setMainGoal] = useState("");
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
@@ -72,21 +89,47 @@ function UserHome(props) {
   const tabs = (index) => {
     setActiveTab(index);
   };
+  console.log("hello1");
+  async function GetUsername(){
+    const ctx = useContext(SharedContext);
+    const userRef = doc(db, "users", ctx.user.uid);
+    //const docRef = doc(db, "users").;
+    const docSnap = await getDoc(userRef);
 
+    if (docSnap.exists()) {
+      // console.log("Am I inside");
+      // console.log("Document data:", docSnap.data().userName);
+      setUserName(docSnap.data().userName);
+      setEmail(docSnap.data().email);
+      setMainGoal(docSnap.data().mainGoal);
+    } else {
+      // docSnap.data() will be undefined in this case
+      console.log("No such document!");
+    }
+  };
+  GetUsername();
+  console.log("hello2");
+  // const ctx = useContext(SharedContext);
+  // const userRef = doc(db, "users", ctx.user.uid);
+  // const [value, loading, error] = useCollection(
+  //   collection(userRef, "users"),
+  //   {
+  //     snapshotListenOptions: { includeMetadataChanges: true },
+  //   }
+  // );
+  // console.log(value);
   return (
     <div>
       <div className="profile-header">
         <AccountCircle sx={{ ...Style.accountBox, fontSize: "250px" }} />
         <div className="user-name">
-          <h3>Username</h3>
-
+          <h3>UserName: {userName}</h3>
           <div className="user-bio">
             <p className="bio">
-              {" "}
-              I want to improve my shirt size, so I want to go to gym.{" "}
+              The main goal I want to achieve is {mainGoal}
             </p>
             <div className="user-mail">
-              <p>xlismysize@ucsc.edu</p>
+              <p>Email: {email}</p>
               <div className="change-profile-btn">
                 <button>
                   <i></i> change profile
