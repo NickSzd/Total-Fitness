@@ -12,11 +12,10 @@ import { Button } from "@mui/material";
 import React from "react";
 import "../../UserProfile.css";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import UserDataTable from "./components/userDataTable";
 
 const auth = getAuth();
 const user = auth.currentUser;
-
-
 
 function openProfileForm() {
   document.getElementById("profileForm").style.display = "block";
@@ -46,7 +45,6 @@ function UserProfile() {
             <div
               className="profileUserName"
               id="profileUserName"
-
               style={{
                 float: "",
                 fontWeight: "Bold",
@@ -107,8 +105,7 @@ function UserProfile() {
                     var blurbOutput =
                       document.getElementById("profileUserBlurb");
 
-                    nameOutput.innerText = user.displayName.style.fontSize =
-                      "x-large";
+                    nameOutput.innerText = user.displayName;
                     emailOutput.innerText = user.email;
                     blurbOutput.innerText = "userBlurb";
                   } else {
@@ -147,7 +144,6 @@ function UserProfile() {
               <Button variant="contained" onClick={openProfileForm}>
                 Edit Profile
               </Button>
-
             </div>
 
             <hr></hr>
@@ -169,12 +165,9 @@ function UserProfile() {
       </div>
       <div className="right-div" style={{ border: "1px solid grey" }}>
         <div className="profileBody">
-          <h1>Your Data</h1>
           <div className="profileData">
             <h1>Profile Data</h1>
-          </div>
-          <div className="profileMetrics">
-            <h1>Profile Metrics</h1>
+            <UserDataTable />
             {/* 
               - activityLevel
               - currweigth
@@ -182,6 +175,9 @@ function UserProfile() {
               - height
               - mainGoal
             */}
+          </div>
+          <div className="profileMetrics">
+            <h1>Profile Metrics</h1>
           </div>
         </div>
       </div>
