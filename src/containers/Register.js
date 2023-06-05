@@ -63,24 +63,27 @@ export default function Register() {
         // Signed in
         const user = userCredential.user;
 
-        await setDoc(doc(collection(db, "users"),user.uid), {
-          userID : user.uid,
-          email : email
+        await setDoc(doc(collection(db, "users"), user.uid), {
+          userID: user.uid,
+          email: email,
           firstName: firstName,
           lastName: lastName,
+        });
 
-        })
-        
-      await updateProfile(user, { displayName: firstName });
-        
-        await setDoc(doc(collection(doc(collection(db, "users"),user.uid),"nutrition")), {
-          userID : user.uid,
+        await updateProfile(user, { displayName: firstName });
 
-        })
-        await setDoc(doc(collection(doc(collection(db, "users"),user.uid),"workout")), {
-          userID : user.uid,
-
-        })
+        await setDoc(
+          doc(collection(doc(collection(db, "users"), user.uid), "nutrition")),
+          {
+            userID: user.uid,
+          }
+        );
+        await setDoc(
+          doc(collection(doc(collection(db, "users"), user.uid), "workout")),
+          {
+            userID: user.uid,
+          }
+        );
         alert("User Created");
         window.location.href = "userHome";
 
@@ -92,8 +95,8 @@ export default function Register() {
         const errorCode = error.code;
         const errorMessage = error.message;
 
-        console.log("Error code: "+ errorCode);
-        console.log("Error Message: "+ errorMessage);
+        console.log("Error code: " + errorCode);
+        console.log("Error Message: " + errorMessage);
         // ..
       });
 

@@ -45,7 +45,7 @@ const materialTheme = materialExtendTheme();
 ///home/nick/Documents/CSE115/total-fitness/src/pages/about.js
 
 function App() {
-  // const [anchor, setAnchor] = useState(null);
+  const [anchor, setAnchor] = useState(null);
   // const menuOptions = [
   //   "home",
   //   "about",
@@ -57,7 +57,6 @@ function App() {
 
   //------------------------------------------------------------------
 
-
   const [selected, setSelected] = useState(-1);
   // const [user, setUser] = useState(null);
   const [user, loading, error] = useAuthState(auth);
@@ -66,7 +65,6 @@ function App() {
   const openMenu = (event) => {
     setAnchor(event.currentTarget);
   };
-
 
   // //Closes Menu on Click
   // const closeMenu = () => {

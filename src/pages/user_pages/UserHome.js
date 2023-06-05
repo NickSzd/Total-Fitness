@@ -96,26 +96,13 @@ function UserHome(props) {
         </div>
       </div>
       <div className="UserNavBar">
-        {/* 
-        userNav will have options to navigate between user pages. 
-        UserHome
-        UserProfile
-        And a logout button
-
-        ToDO 
-          Add Logout button
-          Add User Profile Button
-          Create User Profile Page
-      */}
-        <div className="userNav">
+        {/* This is a hacky fix but it works to keep the bar without the menu items*/}
+        <div className="userNav" position="relative" style={{ color: "#fff" }}>
           <AppBar component="nav" position="relative">
-            <Box sx={{ display: { xs: "none", sm: "block" } }}>
-              {userPages.map((item) => (
-                <Button key={item} sx={{ color: "#fff" }}>
-                  {item}
-                </Button>
-              ))}
-            </Box>
+            <Box
+              sx={{ display: { xs: "none", sm: "block" } }}
+              style={{ height: "40px" }}
+            ></Box>
           </AppBar>
         </div>
         <Box component="nav">
