@@ -22,7 +22,6 @@ import { useNavigate } from "react-router-dom";
 const user_collection = collection(db, "users");
 
 function Copyright(props) {
-  
   return (
     <Typography
       variant="body2"
@@ -66,19 +65,14 @@ export default function Register() {
         // Signed in
         const user = userCredential.user;
 
-
-        await setDoc(doc(collection(db, "users"),user.uid), {
-          userID : user.uid,
-          email : email,
+        await setDoc(doc(collection(db, "users"), user.uid), {
+          userID: user.uid,
+          email: email,
           firstName: firstName,
           lastName: lastName,
         });
 
-
-        })
-        
-      await updateProfile(user, { displayName: firstName });
-
+        await updateProfile(user, { displayName: firstName });
         alert("User Created");
         history("/Start");
         // window.location.href = "userHome";
@@ -98,7 +92,6 @@ export default function Register() {
       });
 
     const data = new FormData(event.currentTarget);
-
   };
   const theme = createTheme();
   return (

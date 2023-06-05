@@ -46,7 +46,7 @@ function UserHome(props) {
   /*
   Configures the drawer so that the user can access user pages
   */
- /*
+  /*
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
       <Typography variant="h6" sx={{ my: 2 }}>
@@ -96,39 +96,6 @@ function UserHome(props) {
           </div>
         </div>
       </div>
-
-      <div className="UserNavBar">
-        {/* This is a hacky fix but it works to keep the bar without the menu items*/}
-        <div className="userNav" position="relative" style={{ color: "#fff" }}>
-          <AppBar component="nav" position="relative">
-            <Box
-              sx={{ display: { xs: "none", sm: "block" } }}
-              style={{ height: "40px" }}
-            ></Box>
-          </AppBar>
-        </div>
-        <Box component="nav">
-          <Drawer
-            container={container}
-            variant="temporary"
-            open={mobileOpen}
-            onClose={handleDrawerToggle}
-            ModalProps={{
-              keepMounted: true, // Better open performance on mobile.
-            }}
-            sx={{
-              display: { xs: "block", sm: "none" },
-              "& .MuiDrawer-paper": {
-                boxSizing: "border-box",
-                width: drawerWidth,
-              },
-            }}
-          >
-            {drawer}
-          </Drawer>
-        </Box>
-      </div>
-
 
       <div className="right-side">
         <div className="nav">

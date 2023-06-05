@@ -36,6 +36,7 @@
     "react-firebase-hooks": "^5.1.1",
     "react-scripts": "5.0.1",
     "react-scroll": "^1.8.9",
+    "react-swipeable-views": "^0.14.0",
     "recharts": "^2.5.0",
     "styled-components": "^5.3.9",
     "web-vitals": "^2.1.4"
