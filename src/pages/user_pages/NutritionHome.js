@@ -31,6 +31,8 @@ import utc from "dayjs/plugin/utc";
 import PieChartNutrition from "./components/pieChartMacros";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 
+import { Container, InputAdornment } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -129,6 +131,43 @@ function NutritionHome() {
     setValue(index);
   };
 
+  async function handleNutritionSubmit(){
+    
+  }
+
+  function SearchBar() {
+    const [searchTerm, setSearchTerm] = useState("");
+  
+    const handleChange = (event) => {
+      setSearchTerm(event.target.value);
+    };
+  
+    return (
+      <form onSubmit={handleNutritionSubmit}>
+        <Container maxWidth="md" sx={{ mb: 20 }}>
+          <TextField
+            id="search"
+            type="search"
+            label="Search"
+            value={searchTerm}
+            onChange={handleChange}
+            sx={{ width: 400}}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <SearchIcon />
+                </InputAdornment>
+              ),
+            }}
+          />
+          <Button type="submit" variant="contained" color="primary" sx={{ml:1, mt:5}}> 
+            Search
+          </Button>
+        </Container>
+      </form>
+      
+    );
+  }
 
   return (
     <>
@@ -213,7 +252,7 @@ function NutritionHome() {
                       </Grid>
                     </TabPanel>
                     <TabPanel value={value} index={1} dir={theme.direction}>
-                    Search Meals
+                    {SearchBar()}
                     </TabPanel>
                   </SwipeableViews>
                 </Box>
