@@ -30,6 +30,7 @@ function NavBar() {
     "fitnessHome",
     "userProfile",
   ];
+  const isLoggedIn = !!user; // Check if user is logged in
 
   //------------------------------------------------------------------
 
@@ -70,6 +71,24 @@ function NavBar() {
 
   const handleHomeButtonClick = () => {
     const homeSection = document.getElementById("home");
+    if (homeSection) {
+      homeSection.scrollIntoView({ behavior: "smooth" });
+    } else {
+      history("/");
+    }
+  };
+
+  const handleFeatureButtonClick = () => {
+    const homeSection = document.getElementById("feature");
+    if (homeSection) {
+      homeSection.scrollIntoView({ behavior: "smooth" });
+    } else {
+      history("/");
+    }
+  };
+
+  const handleContactButtonClick = () => {
+    const homeSection = document.getElementById("contact");
     if (homeSection) {
       homeSection.scrollIntoView({ behavior: "smooth" });
     } else {
@@ -143,7 +162,25 @@ function NavBar() {
               About
             </Button>
 
-            {!loading && !user && (
+            <Button
+              id="featureButton"
+              color="inherit"
+              onClick={handleFeatureButtonClick}
+              sx={{ mr: 2 }}
+            >
+              Feature
+            </Button>
+
+            <Button
+              id="contactButton"
+              color="inherit"
+              onClick={handleContactButtonClick}
+              sx={{ mr: 2 }}
+            >
+              Contact
+            </Button>
+
+            {!loading && !isLoggedIn && (
               <div id="Register">
                 <Button
                   id="RegisterButton"
@@ -157,23 +194,34 @@ function NavBar() {
               </div>
             )}
 
-            {!loading ? (
+            {!loading && !isLoggedIn && (
               <div id="login">
                 <Button id="loginButton" color="inherit" onClick={handleClick}>
                   {user ? "Logout" : "Login"}
                 </Button>
               </div>
-            ) : null}
+            )}
 
-            <IconButton
-              onClick={openMenu}
-              size="large"
-              edge="start"
-              aria-label="menu"
-              sx={{ mr: 2, color: "white" }}
-            >
-              <MenuIcon />
-            </IconButton>
+            {!loading && isLoggedIn && (
+              <div id="login">
+                <Button id="loginButton" color="inherit" onClick={handleClick}>
+                  {user ? "Logout" : "Logout"}
+                </Button>
+              </div>
+            )}
+
+            {isLoggedIn && (
+              <IconButton
+                onClick={openMenu}
+                size="large"
+                edge="start"
+                aria-label="menu"
+                sx={{ mr: 2, color: "white" }}
+              >
+                <MenuIcon />
+              </IconButton>
+            )}
+
             <Menu
               open={Boolean(anchor)}
               anchorEl={anchor}
@@ -189,18 +237,19 @@ function NavBar() {
               }}
               getContentAnchorEl={null}
             >
-              {menuOptions.map((item, index) => (
-                <MenuItem
-                  key={index}
-                  onClick={() => {
-                    closeMenu();
-                    history(item === "home" ? "/" : item);
-                  }}
-                  selected={index + 1 === selected}
-                >
-                  {item}
-                </MenuItem>
-              ))}
+              {isLoggedIn && // Only render menu options if user is logged in
+                menuOptions.map((item, index) => (
+                  <MenuItem
+                    key={index}
+                    onClick={() => {
+                      closeMenu();
+                      history(item === "home" ? "/" : item);
+                    }}
+                    selected={index + 1 === selected}
+                  >
+                    {item}
+                  </MenuItem>
+                ))}
             </Menu>
           </Toolbar>
         </AppBar>

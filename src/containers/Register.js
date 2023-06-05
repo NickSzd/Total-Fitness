@@ -17,10 +17,12 @@ import { collection, doc, setDoc, addDoc } from "firebase/firestore";
 import { auth } from "../config/firebase.js";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import SelectInput from "@mui/material/Select/SelectInput";
+import { useNavigate } from "react-router-dom";
 
 const user_collection = collection(db, "users");
 
 function Copyright(props) {
+  
   return (
     <Typography
       variant="body2"
@@ -48,6 +50,7 @@ passowrd: password123
 // ADD FIREBASE STUFF
 
 export default function Register() {
+  const history = useNavigate();
   //Rregister a user
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -63,29 +66,23 @@ export default function Register() {
         // Signed in
         const user = userCredential.user;
 
-        await setDoc(doc(collection(db, "users"), user.uid), {
-          userID: user.uid,
-          email: email,
+
+        await setDoc(doc(collection(db, "users"),user.uid), {
+          userID : user.uid,
+          email : email,
           firstName: firstName,
           lastName: lastName,
         });
 
-        await updateProfile(user, { displayName: firstName });
 
-        await setDoc(
-          doc(collection(doc(collection(db, "users"), user.uid), "nutrition")),
-          {
-            userID: user.uid,
-          }
-        );
-        await setDoc(
-          doc(collection(doc(collection(db, "users"), user.uid), "workout")),
-          {
-            userID: user.uid,
-          }
-        );
+        })
+        
+      await updateProfile(user, { displayName: firstName });
+
         alert("User Created");
-        window.location.href = "userHome";
+        history("/Start");
+        // window.location.href = "userHome";
+        // history("/userHome")
 
         // return userCredential.updateProfile({dis})
         //ADD REDIRECT TO USER HOME PAGE
@@ -102,13 +99,6 @@ export default function Register() {
 
     const data = new FormData(event.currentTarget);
 
-    // FOR TESTING ONLY REMOVE WHEN IN PROD
-    // console.log({
-    //   firstName,
-    //   lastName,
-    //   email,
-    //   password,
-    // });
   };
   const theme = createTheme();
   return (

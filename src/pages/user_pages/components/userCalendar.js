@@ -6,7 +6,16 @@ import React from "react";
 import moment from "moment";
 import Typography from "@mui/joy/Typography";
 import { useEffect, useState } from "react";
-import { getDocs, collection } from "firebase/firestore";
+import {
+  getDocs,
+  collection,
+  addDoc,
+  setDoc,
+  doc,
+  some,
+  updateDoc,
+  deleteDoc,
+} from "firebase/firestore";
 import { db } from "../../../config/firebase";
 import Modal from "@mui/joy/Modal";
 import ModalClose from "@mui/joy/ModalClose";
@@ -15,55 +24,63 @@ import Sheet from "@mui/joy/Sheet";
 import "../../../calendar.css";
 import CircularProgress from "@mui/joy/CircularProgress";
 import Box from "@mui/material/Box";
-
+import { useCollection } from "react-firebase-hooks/firestore";
+import { useContext } from "react";
+import SharedContext from "./SharedContext";
 function UserCalendar() {
   const [open, setOpen] = useState(false);
   const [events, setEvents] = useState(new Dayz.EventsCollection([]));
   const [workoutList, setworkoutList] = useState({});
   const [details, setDetails] = useState({});
-  const [loading, setLoading] = useState(true);
+  const ctx = useContext(SharedContext);
+  const userRef = doc(db, "users", ctx.user.uid);
+  const [value, loading, error] = useCollection(
+    collection(userRef, "workout"),
+    {
+      snapshotListenOptions: { includeMetadataChanges: true },
+    }
+  );
   const date = moment();
   const highlight = (day) => {
     return day.date() === date.date() ? "today" : false;
   };
 
   useEffect(() => {
-    const getWorkoutSchedule = async () => {
-      setLoading(true);
-      const workoutRef = collection(db, "schedule");
-      try {
-        const data = (await getDocs(workoutRef)).docs.map((doc) => ({
-          ...doc.data(),
-        }));
+    if (loading) {
+      return;
+    }
+    const data = value.docs.map((doc, index) => ({
+      ...doc.data(),
+    }));
+    const schedule = [];
 
-        data.forEach((data) => {
-          data["range"] = moment.range(
-            data.schedule.start.toDate(),
-            data.schedule.end.toDate()
-          );
-          delete data.userId;
-          delete data.schedule;
+    try {
+      data.forEach((data) => {
+        data.schedule.forEach((date) => {
+          schedule.push({
+            content: data.content,
+            range: moment.range(date.toDate(), date.toDate()),
+            exercises: data.exercises,
+          });
         });
+      });
 
-        const newDetails = workoutList;
+      const newDetails = {};
 
-        const newEvents = new Dayz.EventsCollection(data);
+      const newEvents = new Dayz.EventsCollection(schedule);
 
-        newEvents.forEach((event) => {
-          newDetails[`${event.key}`] = {
-            content: event.attributes.content,
-            exercises: event.attributes.exercises,
-          };
-        });
-        setEvents(newEvents);
-        setworkoutList(newDetails);
-        setLoading(false);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    getWorkoutSchedule();
-  }, [workoutList]);
+      newEvents.forEach((event) => {
+        newDetails[`${event.key}`] = {
+          content: event.attributes.content,
+          exercises: event.attributes.exercises,
+        };
+      });
+      setEvents(newEvents);
+      setworkoutList(newDetails);
+    } catch (err) {
+      console.log(err);
+    }
+  }, [loading, value]);
 
   const handleClick = (key) => {
     setDetails(workoutList[`${key}`]);
@@ -100,7 +117,6 @@ function UserCalendar() {
           />
           {!loading ? (
             <Typography
-              component="h2"
               id="modal-title"
               level="h4"
               textColor="inherit"
@@ -113,11 +129,11 @@ function UserCalendar() {
           {details.exercises
             ? Object.entries(details.exercises).map(([key, value], index) => (
                 <React.Fragment key={key}>
-                  <Typography component="h3">
-                    {index + 1}: {key}
+                  <Typography level="h5">
+                    {index + 1}: {value.name}
                   </Typography>
-                  <Typography component="p">Sets: {value.sets} </Typography>
-                  <Typography component="p"> Reps: {value.reps}</Typography>
+                  <Typography level="p">Sets: {value.sets} </Typography>
+                  <Typography level="p"> Reps: {value.reps}</Typography>
                 </React.Fragment>
               ))
             : null}

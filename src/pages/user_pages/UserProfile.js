@@ -16,42 +16,7 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 const auth = getAuth();
 const user = auth.currentUser;
 
-// onAuthStateChanged(auth, (user) => {
-//   if (user) {
-//     // User is signed in, see docs for a list of available properties
-//     // https://firebase.google.com/docs/reference/js/auth.user
-//     const uid = user.uid;
-//     console.log("emailll ", user.email);
-//     console.log(user.email);
-//     const userName = user.displayName;
-//     console.log("display Name: ", user.displayName);
-//     const userEmail = user.email;
-//     const userBlurb = "Light Weight";
 
-//     var nameOutput = document.getElementById("profileUserName");
-//     var emailOutput = document.getElementById("profileUserEmail");
-//     var blurbOutput = document.getElementById("profileUserBlurb");
-
-//     nameOutput.innerText = user.displayName;
-//     emailOutput.innerText = user.email;
-//     blurbOutput.innerText = "userBlurb";
-//   } else {
-//     // User is signed out
-//     console.log(user.email);
-//     const userName = "DEFAULT NAME";
-//     const userEmail = "DEFAULT EMAIL";
-//     const userBlurb = "Light Weight";
-
-//     var nameOutput = document.getElementById("profileUserName");
-//     var emailOutput = document.getElementById("profileUserEmail");
-//     var blurbOutput = document.getElementById("profileUserBlurb");
-//     nameOutput.style.fontFamily = "Arial";
-
-//     nameOutput.innerText = userName;
-//     emailOutput.innerText = userEmail;
-//     blurbOutput.innerText = userBlurb;
-//   }
-// });
 
 function openProfileForm() {
   document.getElementById("profileForm").style.display = "block";
@@ -81,6 +46,7 @@ function UserProfile() {
             <div
               className="profileUserName"
               id="profileUserName"
+
               style={{
                 float: "",
                 fontWeight: "Bold",
@@ -181,6 +147,7 @@ function UserProfile() {
               <Button variant="contained" onClick={openProfileForm}>
                 Edit Profile
               </Button>
+
             </div>
 
             <hr></hr>

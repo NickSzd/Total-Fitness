@@ -22,10 +22,10 @@ import { useContext } from "react";
 import SharedContext from "./SharedContext";
 import CircularProgress from "@mui/joy/CircularProgress";
 import Box from "@mui/material/Box";
+import { useCollection } from "react-firebase-hooks/firestore";
 
 function NutritionTable({ selectedDate, setPieData }) {
   const ctx = useContext(SharedContext);
-  const [loading, setLoading] = useState(true);
   const history = useNavigate();
   dayjs.extend(utc);
   const [nutrition, setNutrition] = useState([{}]);
@@ -35,51 +35,48 @@ function NutritionTable({ selectedDate, setPieData }) {
     carbohydrates: 0,
     protein: 0,
   });
+  const userRef = doc(db, "users", ctx.user.uid);
+  const nutritionRef = collection(userRef, "nutrition");
+  const q = query(
+    nutritionRef,
+    where("day", ">=", selectedDate.startOf("day").toDate()),
+    where("day", "<", selectedDate.endOf("day").add(1, "second").toDate())
+  );
+  const [value, loading, error] = useCollection(q, {
+    snapshotListenOptions: { includeMetadataChanges: true },
+  });
 
   useEffect(() => {
-    const getNutrition = async (uid) => {
-      setLoading(true)
-      const userRef = doc(db, "users", uid);
-      const nutritionRef = collection(userRef, "nutrition");
-      const q = query(
-        nutritionRef,
-        where("day", ">=", selectedDate.startOf("day").toDate()),
-        where("day", "<", selectedDate.endOf("day").add(1, "second").toDate())
-      );
-      try {
-        const nutritionData = (await getDocs(q)).docs.map((doc) => ({
-          ...doc.data(),
-          id: doc.id,
-        }));
-        totals.calories = 0;
-        totals.fat = 0;
-        totals.carbohydrates = 0;
-        totals.protein = 0;
-        const newTotal = totals;
-        nutritionData.forEach((macro) => {
-          newTotal.calories += macro.calories;
-          newTotal.fat += macro.fat;
-          newTotal.carbohydrates += macro.carbohydrates;
-          newTotal.protein += macro.protein;
-        });
-        const newPieData = [
-          { name: "Fat", value: 0, fill: "#8884d8" },
-          { name: "Carbohydrate", value: 0, fill: "#82ca9d" },
-          { name: "Protein", value: 0, fill: "#ffc658" },
-        ];
-        newPieData[0].value = newTotal.fat;
-        newPieData[1].value = newTotal.carbohydrates;
-        newPieData[2].value = newTotal.protein;
-        setTotals(newTotal);
-        setNutrition(nutritionData);
-        setPieData(newPieData);
-        setLoading(false);
-      } catch (err) {
-        console.log(err);
-      }
+    if (loading) {
+      return;
+    }
+
+    const newTotal = {
+      calories: 0,
+      fat: 0,
+      carbohydrates: 0,
+      protein: 0,
     };
-    getNutrition(ctx.user.uid);
-  }, [ctx.user.uid, history, selectedDate, setPieData, totals]);
+
+    const nutrition = value.docs.map((doc) => {
+      newTotal.calories += doc.data().calories;
+      newTotal.fat += doc.data().fat;
+      newTotal.carbohydrates += doc.data().carbohydrates;
+      newTotal.protein += doc.data().protein;
+      return doc.data();
+    });
+    const newPieData = [
+      { name: "Fat", value: 0, fill: "#8884d8" },
+      { name: "Carbohydrate", value: 0, fill: "#82ca9d" },
+      { name: "Protein", value: 0, fill: "#ffc658" },
+    ];
+    newPieData[0].value = newTotal.fat;
+    newPieData[1].value = newTotal.carbohydrates;
+    newPieData[2].value = newTotal.protein;
+    setTotals(newTotal);
+    setNutrition(nutrition);
+    setPieData(newPieData);
+  }, [ctx.user.uid, history, loading, setPieData, value]);
 
   return (
     <>
@@ -120,8 +117,14 @@ function NutritionTable({ selectedDate, setPieData }) {
           </Table>
         </Sheet>
       ) : (
-        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <CircularProgress  size="lg" />
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <CircularProgress size="lg" />
         </Box>
       )}
     </>
