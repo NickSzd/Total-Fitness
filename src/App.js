@@ -11,21 +11,11 @@ import UserProfile from "./pages/user_pages/UserProfile";
 import Login from "./containers/Login";
 import Register from "./containers/Register";
 // import Start from "./pages/user_pages/components/Questionaire/start"
-import RegistrationPart2 from "./containers/RegistrationP2"
+import RegistrationPart2 from "./containers/RegistrationP2";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-// import {
-//   IconButton,
-//   Button,
-//   Typography,
-//   Box,
-//   AppBar,
-//   Toolbar,
-//   Menu,
-//   MenuItem,
-// } from "@mui/material";
-// import MenuIcon from "@mui/icons-material/Menu";
+
 import { useState } from "react";
 import {
   experimental_extendTheme as materialExtendTheme,
