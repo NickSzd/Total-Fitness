@@ -30,7 +30,9 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import PieChartNutrition from "./components/pieChartMacros";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
-
+import { Card, CardContent } from '@mui/material';
+import { Container, InputAdornment } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -129,6 +131,117 @@ function NutritionHome() {
     setValue(index);
   };
 
+  function SearchBar() {
+    const [searchTerm, setSearchTerm] = useState("");
+    const [foods, setFoods] = useState([]);
+
+    const handleChange = (event) => {
+      setSearchTerm(event.target.value);
+    };
+
+    const handleSubmit = (event) => {
+      event.preventDefault();
+      get_nutrition();
+    };
+
+    async function handleFoodClick(food){
+      // console.log(food);
+      var api_meal = food.description;
+
+      var calories = food.foodNutrients.find(({ nutrientName }) => nutrientName === "Energy");
+      var calories_number = calories.value;
+
+      var fat = food.foodNutrients.find(({ nutrientName }) => nutrientName === "Total lipid (fat)");
+      var fat_number = fat.nutrientNumber;
+
+      var carbs = food.foodNutrients.find(({ nutrientName }) => nutrientName === "Carbohydrate, by difference");
+      var carbs_number = carbs.value;
+
+      var protein = food.foodNutrients.find(({ nutrientName }) => nutrientName === "Protein");
+      var protein_number = protein.value;
+
+      const user = auth.currentUser;
+      var protein_doc = protein_number;
+      const timestamp = serverTimestamp();
+      // console.log(user.uid);
+      
+
+      await setDoc(doc(collection(doc(collection(db, "users"),user.uid),"nutrition")), {
+        meal: api_meal,
+        calories: Number(calories_number),
+        fat: Number(fat_number),
+        carbohydrates: Number(carbs_number),
+        protein: Number(protein_doc),
+        day: timestamp
+      });
+      setFoods([]);
+      setSearchTerm("");
+      handleClose();
+    };
+  
+    async function get_nutrition(){
+      const params = {
+        api_key: process.env.REACT_APP_NUTRITION_APP_KEY,
+        query: searchTerm,
+        dataType: ["Branded"],
+        pagesize: 6
+      };
+    
+      const api_url = `https://api.nal.usda.gov/fdc/v1/foods/search?api_key=${(params.api_key)}&query=${(params.query)}&dataType=${(params.dataType)}&pageSize=${(params.pagesize)}`;
+    
+      try {
+        const response = await fetch(api_url);
+        const data = await response.json();
+        if (data.foods && data.foods.length > 0 && data.foods[0].foodNutrients) {
+          console.log(data.foods);
+          setFoods(data.foods)
+          // Do whatever you want with the retrieved data
+        } else {
+          console.log(searchTerm);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    return (
+      <form onSubmit={handleSubmit}>
+        <Container maxWidth="md" sx={{ mb: 20 }}>
+          <TextField
+            id="search"
+            type="search"
+            label="Search"
+            value={searchTerm}
+            onChange={handleChange}
+            sx={{ width: 400}}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <SearchIcon />
+                </InputAdornment>
+              ),
+            }}
+          />
+          <Button type="submit" variant="contained" color="primary" sx={{ml:1, mt:5}}> 
+            Search
+          </Button>
+          {foods.length > 0 && (
+            <div>
+              {foods.map((food, index) => (
+                <Card key={index} onClick={() => handleFoodClick(food)}>
+                  <CardContent>
+                    <Typography variant="h6" component="div">
+                      {food.description}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
+        </Container>
+      </form>
+    );
+  }
 
   return (
     <>
@@ -213,7 +326,7 @@ function NutritionHome() {
                       </Grid>
                     </TabPanel>
                     <TabPanel value={value} index={1} dir={theme.direction}>
-                    Search Meals
+                    {SearchBar()}
                     </TabPanel>
                   </SwipeableViews>
                 </Box>
