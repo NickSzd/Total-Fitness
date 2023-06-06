@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Table from "@mui/joy/Table";
 import Sheet from "@mui/joy/Sheet";
+import Button from "@mui/material/Button";
+import DeleteIcon from '@mui/icons-material/Delete';
 import { db } from "../../../config/firebase";
 import {
   getDocs,
@@ -100,7 +102,11 @@ function NutritionTable({ selectedDate, setPieData }) {
                       <td>{data.calories}</td>
                       <td>{data.fat}</td>
                       <td>{data.carbohydrates}</td>
-                      <td>{data.protein}</td>
+                      <td>{data.protein}
+                      <Button sx={{ml:9}} variant="contained" disableElevation >
+                        <DeleteIcon />
+                      </Button>
+                      </td>
                     </tr>
                   ))
                 : null}
