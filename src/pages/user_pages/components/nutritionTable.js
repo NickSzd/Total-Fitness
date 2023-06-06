@@ -14,6 +14,7 @@ import {
   query,
   getDoc,
   doc,
+  deleteDoc,
 } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { DatePicker } from "@mui/x-date-pickers";
@@ -48,6 +49,14 @@ function NutritionTable({ selectedDate, setPieData }) {
     snapshotListenOptions: { includeMetadataChanges: true },
   });
 
+  async function deletfood(id){
+    //console.log(id);
+    const nutritionDoc = doc(nutritionRef, id);
+    await deleteDoc(nutritionDoc);
+
+  };
+  
+
   useEffect(() => {
     if (loading) {
       return;
@@ -61,11 +70,12 @@ function NutritionTable({ selectedDate, setPieData }) {
     };
 
     const nutrition = value.docs.map((doc) => {
+      // console.log("hello1",doc.id);
       newTotal.calories += doc.data().calories;
       newTotal.fat += doc.data().fat;
       newTotal.carbohydrates += doc.data().carbohydrates;
       newTotal.protein += doc.data().protein;
-      return doc.data();
+      return { id: doc.id, ...doc.data() };
     });
     const newPieData = [
       { name: "Fat", value: 0, fill: "#8884d8" },
@@ -103,7 +113,7 @@ function NutritionTable({ selectedDate, setPieData }) {
                       <td>{data.fat}</td>
                       <td>{data.carbohydrates}</td>
                       <td>{data.protein}
-                      <Button sx={{ml:9}} variant="contained" disableElevation >
+                      <Button sx={{ml:9}} variant="contained" disableElevation onClick={() => {deletfood(data.id)}}>
                         <DeleteIcon />
                       </Button>
                       </td>
