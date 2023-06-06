@@ -40,6 +40,7 @@ function UserDataTable() {
         const userDoc = await getDoc(userCollectionRef);
         if (userDoc.exists()) {
           const userData = userDoc.data();
+          console.log(userData);
           setUserData(userData);
         }
       }
