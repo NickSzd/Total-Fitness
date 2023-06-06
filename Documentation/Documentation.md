@@ -79,7 +79,6 @@ The component returns JSX elements to render the registration form using Materia
 - `Button` is the "Sign Up" button that triggers the `handleSubmit` function on form submission.
 - `Link` provides a link to the login page.
 - `Copyright` displays
-- ### Usage
 
 # Authentication
 
