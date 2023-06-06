@@ -174,6 +174,8 @@ function NutritionHome() {
         protein: Number(protein_doc),
         day: timestamp
       });
+      setFoods([]);
+      setSearchTerm("");
       handleClose();
     };
   
