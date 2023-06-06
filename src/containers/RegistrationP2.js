@@ -103,6 +103,7 @@ function RegistrationPart2(){
   width: 500,
   margin: "23px auto",
   justifyContent: "center",
+  mt: 20
 };
   return (
     <div>
