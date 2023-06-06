@@ -179,7 +179,7 @@ function NutritionHome() {
   
     async function get_nutrition(){
       const params = {
-        api_key: APIKEY,
+        api_key: process.env.REACT_APP_NUTRITION_APP_KEY,
         query: searchTerm,
         dataType: ["Branded"],
         pagesize: 6
