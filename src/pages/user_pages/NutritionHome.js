@@ -12,6 +12,7 @@ import NutritionTable from "./components/nutritionTable";
 import { auth, db, db_n } from "../../config/firebase";
 import ModalDialog from "@mui/joy/ModalDialog";
 import { serverTimestamp } from 'firebase/firestore'
+
 import {
   getFirestore,
   collection,
@@ -67,35 +68,7 @@ function a11yProps(index) {
   };
 }
 
-function clear_box() {
-  document.getElementById("meal").value = "";
-  document.getElementById("calories").value = "";
-  document.getElementById("fat").value = "";
-  document.getElementById("carbs").value = "";
-  document.getElementById("protein").value = "";
-}
 
-async function save() {
-  const user = auth.currentUser;
-  var meal_doc = document.getElementById("meal").value;
-  var calories_doc = document.getElementById("calories").value;
-  var fat_doc = document.getElementById("fat").value;
-  var carbs_doc = document.getElementById("carbs").value;
-  var protein_doc = document.getElementById("protein").value;
-  const timestamp = serverTimestamp();
-  // console.log(user.uid);
-  
-  await setDoc(doc(collection(doc(collection(db, "users"),user.uid),"nutrition")), {
-    meal: meal_doc,
-    calories: Number(calories_doc),
-    fat: Number(fat_doc),
-    carbohydrates: Number(carbs_doc),
-    protein: Number(protein_doc),
-    day: timestamp
-  });
-  clear_box();
-  alert("Added Meal");
-}
 
 const style = {
   position: 'absolute',
@@ -109,11 +82,49 @@ const style = {
   p: 4,
 };
 function NutritionHome() {
+  const [nutritionInput, setNutritionInput] = React.useState({meal: "", calories: 0, carbs: 0, protein: 0, fat: 0});
+
   const [data, setData] = useState([
     { name: "Fat", value: 0, fill: "#8884d8" },
     { name: "Carbohydrate", value: 0, fill: "#82ca9d" },
     { name: "Protein", value: 0, fill: "#ffc658" },
   ]);
+  function clear_box() {
+    setNutritionInput({meal: "", calories: 0, carbs: 0, protein: 0, fat: 0});
+  }
+  const handlemealChange = (e) => {
+    // setName(e.target.value);
+    const {value, name} = e.target;
+    const n = nutritionInput;
+    n[name] = value;
+    setNutritionInput(n);
+    console.log(nutritionInput);
+    
+  };
+  
+  const save = async () =>  {
+    const user = auth.currentUser;
+    console.log("save",nutritionInput);
+    
+
+    // var calories_doc = document.getElementById("calories").value;
+    // var fat_doc = document.getElementById("fat").value;
+    // var carbs_doc = document.getElementById("carbs").value;
+    // var protein_doc = document.getElementById("protein").value;
+    const timestamp = serverTimestamp();
+    // console.log(user.uid);
+    
+    await setDoc(doc(collection(doc(collection(db, "users"),user.uid),"nutrition")), {
+      meal: nutritionInput.meal,
+      calories: Number(nutritionInput.calories),
+      fat: Number(nutritionInput.fat),
+      carbohydrates: Number(nutritionInput.carbs),
+      protein: Number(nutritionInput.protein),
+      day: timestamp
+    });
+    clear_box();
+    alert("Added Meal");
+  }
 
   dayjs.extend(utc);
   const [selectedDate, setSelectedDate] = useState(dayjs());
@@ -282,47 +293,64 @@ function NutritionHome() {
                     <TabPanel value={value} index={0} dir={theme.direction}>
                       <Grid xs={8}>
                         <Box
-                          component="form"
+                          // component="form"
                           sx={{
                             "& .MuiTextField-root": { m: 1, width: "25ch" },
                           }}
                           noValidate
                           autoComplete="off"
                         >
-                          <TextField id="meal" label="Meal" multiline maxRows={4} />
-                          <TextField
-                            id="calories"
-                            label="Calories"
-                            multiline
-                            maxRows={4}
-                            defaultValue={""}
-                          />
-                          <TextField
-                            id="fat"
-                            label="Fat (g)"
-                            multiline
-                            maxRows={4}
-                            defaultValue={""}
-                          />
-                          <TextField
-                            id="carbs"
-                            label="Carbs (g)"
-                            multiline
-                            maxRows={4}
-                            defaultValue={""}
-                          />
-                          <TextField
-                            id="protein"
-                            label="Protein (g)"
-                            multiline
-                            maxRows={4}
-                            defaultValue={""}
-                          />
-                        </Box>
-                        <Button variant="contained" onClick={() => { save(); handleClose();}}>
-                          Add Meal
-                          <AddIcon />
-                        </Button>
+                          <form
+                            onSubmit={(event) => {
+                            event.preventDefault();
+                            save(); 
+                            handleClose();
+                            }}
+                          >
+                            <TextField name="meal" label="Meal" required multiline maxRows={4} onChange={(e) => {handlemealChange(e)}}/>
+                            <TextField
+                              name="calories"
+                              label="Calories"
+                              multiline
+                              maxRows={4}
+                              defaultValue={""}
+                              required
+                              onChange={(e) => {handlemealChange(e)}}
+                            />
+                            <TextField
+                              name="fat"
+                              label="Fat (g)"
+                              multiline
+                              maxRows={4}
+                              defaultValue={""}
+                              required
+                              onChange={(e) => {handlemealChange(e)}}
+                            />
+                            <TextField
+                              name="carbs"
+                              label="Carbs (g)"
+                              multiline
+                              maxRows={4}
+                              defaultValue={""}
+                              required
+                              onChange={(e) => {handlemealChange(e)}}
+                            />
+                            <TextField
+                              name="protein"
+                              label="Protein (g)"
+                              multiline
+                              maxRows={4}
+                              defaultValue={""}
+                              required
+                              onChange={(e) => {handlemealChange(e)}}
+                            />
+                            <Button variant="contained" type="submit">
+                                Add Meal
+                              <AddIcon />
+                            </Button>
+                          </form>
+                          </Box>
+                          
                       </Grid>
                     </TabPanel>
                     <TabPanel value={value} index={1} dir={theme.direction}>
