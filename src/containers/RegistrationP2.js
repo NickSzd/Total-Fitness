@@ -103,7 +103,9 @@ function RegistrationPart2(){
   width: 500,
   margin: "23px auto",
   justifyContent: "center",
-  mt: 20
+  mt: 10, 
+  // transform: scale(5, 5)
+  zoom: 1.5
 };
   return (
     <div>
