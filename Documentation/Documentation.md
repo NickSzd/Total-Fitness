@@ -4,6 +4,8 @@
 
 ## Diagram
 
+![](Total-Fitness-Design-Diagram.png)
+
 ## Creators/Team
 
 - Nicholas Szwed
