@@ -8,7 +8,7 @@
 
 ## Creators/Team
 
-- Nicholas Szwed
+- Nicholas Szwed (Product Owner)
 - Batu Asalih
 - Phudis Rangsisuriyachai
 - Vaibhav Honakere
