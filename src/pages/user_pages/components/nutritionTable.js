@@ -112,10 +112,11 @@ function NutritionTable({ selectedDate, setPieData }) {
                       <td>{data.calories}</td>
                       <td>{data.fat}</td>
                       <td>{data.carbohydrates}</td>
-                      <td>{data.protein}
-                      <Button sx={{ml:9}} variant="contained" disableElevation onClick={() => {deletfood(data.id)}}>
-                        <DeleteIcon />
-                      </Button>
+                      <td>{data.protein}</td>
+                      <td>
+                        <Button sx={{ml:9}} variant="contained" disableElevation onClick={() => {deletfood(data.id)}}>
+                          <DeleteIcon />
+                        </Button>
                       </td>
                     </tr>
                   ))
