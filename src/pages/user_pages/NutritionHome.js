@@ -89,7 +89,8 @@ function NutritionHome() {
     protein: 0,
     fat: 0,
   });
-
+  const [foods, setFoods] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const [data, setData] = useState([
     { name: "Fat", value: 0, fill: "#8884d8" },
     { name: "Carbohydrate", value: 0, fill: "#82ca9d" },
@@ -137,7 +138,11 @@ function NutritionHome() {
   const [selectedDate, setSelectedDate] = useState(dayjs());
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setFoods([]);
+    setSearchTerm("");
+    setOpen(false);
+  };
   const theme = useTheme();
   const [value, setValue] = React.useState(0);
 
@@ -149,10 +154,8 @@ function NutritionHome() {
     setValue(index);
   };
 
-  function SearchBar() {
+  function SearchBar(foods, setFoods, searchTerm, setSearchTerm) {
     const [error, setError] = useState(false);
-    const [searchTerm, setSearchTerm] = useState("");
-    const [foods, setFoods] = useState([]);
 
     const handleChange = (event) => {
       setSearchTerm(event.target.value);
@@ -228,7 +231,6 @@ function NutritionHome() {
           data.foods.length > 0 &&
           data.foods[0].foodNutrients
         ) {
-          console.log(data.foods);
           setFoods(data.foods);
           setError(false);
           // Do whatever you want with the retrieved data
@@ -427,7 +429,7 @@ function NutritionHome() {
                       </Grid>
                     </TabPanel>
                     <TabPanel value={value} index={1} dir={theme.direction}>
-                      {SearchBar()}
+                      {SearchBar(foods, setFoods, searchTerm, setSearchTerm)}
                     </TabPanel>
                   </SwipeableViews>
                 </Box>
