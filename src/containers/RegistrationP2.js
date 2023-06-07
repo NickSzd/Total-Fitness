@@ -46,8 +46,7 @@ function RegistrationPart2(){
 
   async function handleFormSubmit(){
         // event.preventDefault();
-        window.location.href = "userHome";
-        history("/userHome");
+        history("/TotalHome");
         const user = auth.currentUser;
         await updateDoc(doc(collection(db, "users"), user.uid),{
             userName: formData.userName,
@@ -83,8 +82,7 @@ function RegistrationPart2(){
 
     //     })
         
-    // window.location.href = "userHome";
-    // history("/userHome")
+
 
     // return userCredential.updateProfile({dis})
     //ADD REDIRECT TO USER HOME PAGE
