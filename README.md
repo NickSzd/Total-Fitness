@@ -10,6 +10,14 @@
   - Holds you accountable
   - Allow you to modify and show when diet changes should be made etc.
 
+## Creators/Team
+
+- Nicholas Szwed (Product Owner)
+- Batu Asalih
+- Phudis Rangsisuriyachai
+- Vaibhav Honakere
+- Julio Vasquez-Bonilla
+
 ## How to Run this Application
 
 1. Clone the git repository at
