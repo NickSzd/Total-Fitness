@@ -69,10 +69,16 @@ function NutritionTable({ selectedDate, setPieData }) {
 
     const nutrition = value.docs.map((doc) => {
       // console.log("hello1",doc.id);
-      newTotal.calories += parseFloat(doc.data().calories.toFixed(2));
-      newTotal.fat += parseFloat(doc.data().fat.toFixed(2));
-      newTotal.carbohydrates += parseFloat(doc.data().carbohydrates.toFixed(2));
-      newTotal.protein += parseFloat(doc.data().protein.toFixed(2));
+      newTotal.calories = parseFloat(
+        (doc.data().calories + newTotal.calories).toFixed(2)
+      );
+      newTotal.fat = parseFloat((doc.data().fat + newTotal.fat).toFixed(2));
+      newTotal.carbohydrates = parseFloat(
+        (doc.data().carbohydrates + newTotal.carbohydrates).toFixed(2)
+      );
+      newTotal.protein = parseFloat(
+        (doc.data().protein + newTotal.protein).toFixed(2)
+      );
       return { id: doc.id, ...doc.data() };
     });
     const newPieData = [

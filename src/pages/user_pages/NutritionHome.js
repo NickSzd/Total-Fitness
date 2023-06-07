@@ -377,7 +377,11 @@ function NutritionHome() {
                               label="Calories"
                               type="number"
                               InputProps={{
-                                inputProps: { min: 0, max: 100000 },
+                                inputProps: {
+                                  min: 0,
+                                  max: 100000,
+                                  step: "any",
+                                },
                               }}
                               required
                               onChange={(e) => {
@@ -389,7 +393,11 @@ function NutritionHome() {
                               label="Fat (g)"
                               type="number"
                               InputProps={{
-                                inputProps: { min: 0, max: 100000 },
+                                inputProps: {
+                                  min: 0,
+                                  max: 100000,
+                                  step: "any",
+                                },
                               }}
                               required
                               onChange={(e) => {
@@ -401,7 +409,11 @@ function NutritionHome() {
                               label="Carbs (g)"
                               type="number"
                               InputProps={{
-                                inputProps: { min: 0, max: 100000 },
+                                inputProps: {
+                                  min: 0,
+                                  max: 100000,
+                                  step: "any",
+                                },
                               }}
                               required
                               onChange={(e) => {
@@ -413,7 +425,11 @@ function NutritionHome() {
                               label="Protein (g)"
                               type="number"
                               InputProps={{
-                                inputProps: { min: 0, max: 100000 },
+                                inputProps: {
+                                  min: 0,
+                                  max: 100000,
+                                  step: "any",
+                                },
                               }}
                               required
                               onChange={(e) => {
