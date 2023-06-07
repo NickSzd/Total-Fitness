@@ -98,7 +98,7 @@ function App() {
                         <Route index exact element={<Summary />} />
                         <Route path="/About" element={<About />} />
                         <Route
-                          path="/FitnessHome"
+                          path="/Fitness"
                           element={
                             <AuthenticatedRoute>
                               <FitnessHome />
@@ -106,7 +106,7 @@ function App() {
                           }
                         />
                         <Route
-                          path="/NutritionHome"
+                          path="/Nutrition"
                           element={
                             <AuthenticatedRoute>
                               <NutritionHome />
@@ -114,7 +114,7 @@ function App() {
                           }
                         />
                         <Route
-                          path="/UserHome"
+                          path="/TotalHome"
                           element={
                             <AuthenticatedRoute>
                               <UserHome />
@@ -122,7 +122,7 @@ function App() {
                           }
                         />
                         <Route
-                          path="/UserProfile"
+                          path="/Profile"
                           element={
                             <AuthenticatedRoute>
                               <UserProfile />

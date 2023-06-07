@@ -1,10 +1,11 @@
 import React from "react";
 import "../App.css";
+import Workouts from "./user_pages/components/workOutTable";
+// import { Work } from "@mui/icons-material";
+
 function FitnessHome() {
   return (
-    <div>
-      <h1>FitnessHome</h1>
-    </div>
+    <Workouts></Workouts>
   );
 }
 export default FitnessHome;
