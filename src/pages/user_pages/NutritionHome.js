@@ -184,7 +184,7 @@ function NutritionHome() {
       var fat = food.foodNutrients.find(
         ({ nutrientName }) => nutrientName === "Total lipid (fat)"
       );
-      var fat_number = fat.nutrientNumber;
+      var fat_number = fat.value;
 
       var carbs = food.foodNutrients.find(
         ({ nutrientName }) => nutrientName === "Carbohydrate, by difference"
