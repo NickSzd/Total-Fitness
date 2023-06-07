@@ -184,7 +184,7 @@ function NutritionHome() {
       var fat = food.foodNutrients.find(
         ({ nutrientName }) => nutrientName === "Total lipid (fat)"
       );
-      var fat_number = fat.nutrientNumber;
+      var fat_number = fat.value;
 
       var carbs = food.foodNutrients.find(
         ({ nutrientName }) => nutrientName === "Carbohydrate, by difference"
@@ -294,9 +294,7 @@ function NutritionHome() {
                           ? food.foodNutrients.find(
                               ({ nutrientName }) => nutrientName === "Energy"
                             ).value
-                          : foods[0].foodNutrients.find(
-                              ({ nutrientName }) => nutrientName === "Energy"
-                            ).value}
+                          : 0}
                       </Typography>
                     </Box>
                   </CardContent>
