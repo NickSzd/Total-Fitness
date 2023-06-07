@@ -294,9 +294,7 @@ function NutritionHome() {
                           ? food.foodNutrients.find(
                               ({ nutrientName }) => nutrientName === "Energy"
                             ).value
-                          : foods[0].foodNutrients.find(
-                              ({ nutrientName }) => nutrientName === "Energy"
-                            ).value}
+                          : 0}
                       </Typography>
                     </Box>
                   </CardContent>
