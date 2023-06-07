@@ -25,10 +25,10 @@ function NavBar() {
   const [isScrolled, setIsScrolled] = useState(false); // Added state to track scroll
   const scrollRef = useRef(null);
   const menuOptions = [
-    "userHome",
-    "nutritionHome",
-    "fitnessHome",
-    "userProfile",
+    "TotalHome",
+    "Nutrition",
+    "Fitness",
+    "Profile",
   ];
   const isLoggedIn = !!user; // Check if user is logged in
 
