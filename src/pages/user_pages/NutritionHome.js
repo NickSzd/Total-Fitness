@@ -164,7 +164,12 @@ function NutritionHome() {
 
     const handleSubmit = (event) => {
       event.preventDefault();
-      get_nutrition();
+      if (searchTerm){
+        get_nutrition();
+      }
+      else{
+        setError(true);
+      }
     };
 
     async function handleFoodClick(food) {
@@ -249,7 +254,7 @@ function NutritionHome() {
           <TextField
             id="search"
             error={error}
-            helperText={error ? "No such food" : ""}
+            helperText={searchTerm && error ? "No such food"  : error ?  "Empty Query" : ""}
             type="search"
             label="Search"
             value={searchTerm}
