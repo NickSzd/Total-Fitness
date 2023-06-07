@@ -1,18 +1,19 @@
-import PropTypes from 'prop-types';
-import SwipeableViews from 'react-swipeable-views-react-18-fix';
-import { useTheme } from '@mui/material/styles';
-import AppBar from '@mui/material/AppBar';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import * as React from 'react';
-import Typography from '@mui/material/Typography';
-import Modal from '@mui/material/Modal';
+import PropTypes from "prop-types";
+import SwipeableViews from "react-swipeable-views-react-18-fix";
+import { useTheme } from "@mui/material/styles";
+import AppBar from "@mui/material/AppBar";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import * as React from "react";
+import Typography from "@mui/joy/Typography";
+import Modal from "@mui/joy/Modal";
 import { useEffect, useState } from "react";
 import NutritionTable from "./components/nutritionTable";
 import { auth, db, db_n } from "../../config/firebase";
 import ModalDialog from "@mui/joy/ModalDialog";
 import ModalOverflow from "@mui/joy/ModalOverflow";
-import { serverTimestamp } from 'firebase/firestore'
+
+import { serverTimestamp } from "firebase/firestore";
 
 import {
   getFirestore,
@@ -32,7 +33,7 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import PieChartNutrition from "./components/pieChartMacros";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
-import { Card, CardContent } from '@mui/material';
+import { Card, CardContent } from "@mui/material";
 import { Container, InputAdornment } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 
@@ -65,25 +66,29 @@ TabPanel.propTypes = {
 function a11yProps(index) {
   return {
     id: `full-width-tab-${index}`,
-    'aria-controls': `full-width-tabpanel-${index}`,
+    "aria-controls": `full-width-tabpanel-${index}`,
   };
 }
 
-
-
 const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
   width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
+  bgcolor: "background.paper",
+  border: "2px solid #000",
   boxShadow: 24,
   p: 4,
 };
 function NutritionHome() {
-  const [nutritionInput, setNutritionInput] = React.useState({meal: "", calories: 0, carbs: 0, protein: 0, fat: 0});
+  const [nutritionInput, setNutritionInput] = React.useState({
+    meal: "",
+    calories: 0,
+    carbs: 0,
+    protein: 0,
+    fat: 0,
+  });
 
   const [data, setData] = useState([
     { name: "Fat", value: 0, fill: "#8884d8" },
@@ -91,22 +96,20 @@ function NutritionHome() {
     { name: "Protein", value: 0, fill: "#ffc658" },
   ]);
   function clear_box() {
-    setNutritionInput({meal: "", calories: 0, carbs: 0, protein: 0, fat: 0});
+    setNutritionInput({ meal: "", calories: 0, carbs: 0, protein: 0, fat: 0 });
   }
   const handlemealChange = (e) => {
     // setName(e.target.value);
-    const {value, name} = e.target;
+    const { value, name } = e.target;
     const n = nutritionInput;
     n[name] = value;
     setNutritionInput(n);
     console.log(nutritionInput);
-    
   };
-  
-  const save = async () =>  {
+
+  const save = async () => {
     const user = auth.currentUser;
-    console.log("save",nutritionInput);
-    
+    console.log("save", nutritionInput);
 
     // var calories_doc = document.getElementById("calories").value;
     // var fat_doc = document.getElementById("fat").value;
@@ -114,18 +117,21 @@ function NutritionHome() {
     // var protein_doc = document.getElementById("protein").value;
     const timestamp = serverTimestamp();
     // console.log(user.uid);
-    
-    await setDoc(doc(collection(doc(collection(db, "users"),user.uid),"nutrition")), {
-      meal: nutritionInput.meal,
-      calories: Number(nutritionInput.calories),
-      fat: Number(nutritionInput.fat),
-      carbohydrates: Number(nutritionInput.carbs),
-      protein: Number(nutritionInput.protein),
-      day: timestamp
-    });
+
+    await setDoc(
+      doc(collection(doc(collection(db, "users"), user.uid), "nutrition")),
+      {
+        meal: nutritionInput.meal,
+        calories: Number(nutritionInput.calories),
+        fat: Number(nutritionInput.fat),
+        carbohydrates: Number(nutritionInput.carbs),
+        protein: Number(nutritionInput.protein),
+        day: timestamp,
+      }
+    );
     clear_box();
     alert("Added Meal");
-  }
+  };
 
   dayjs.extend(utc);
   const [selectedDate, setSelectedDate] = useState(dayjs());
@@ -151,7 +157,6 @@ function NutritionHome() {
     const handleChange = (event) => {
       setSearchTerm(event.target.value);
       setError(false);
-
     };
 
     const handleSubmit = (event) => {
@@ -159,56 +164,70 @@ function NutritionHome() {
       get_nutrition();
     };
 
-    async function handleFoodClick(food){
+    async function handleFoodClick(food) {
       // console.log(food);
       var api_meal = food.description;
 
-      var calories = food.foodNutrients.find(({ nutrientName }) => nutrientName === "Energy");
+      var calories = food.foodNutrients.find(
+        ({ nutrientName }) => nutrientName === "Energy"
+      );
       var calories_number = calories.value;
 
-      var fat = food.foodNutrients.find(({ nutrientName }) => nutrientName === "Total lipid (fat)");
+      var fat = food.foodNutrients.find(
+        ({ nutrientName }) => nutrientName === "Total lipid (fat)"
+      );
       var fat_number = fat.nutrientNumber;
 
-      var carbs = food.foodNutrients.find(({ nutrientName }) => nutrientName === "Carbohydrate, by difference");
+      var carbs = food.foodNutrients.find(
+        ({ nutrientName }) => nutrientName === "Carbohydrate, by difference"
+      );
       var carbs_number = carbs.value;
 
-      var protein = food.foodNutrients.find(({ nutrientName }) => nutrientName === "Protein");
+      var protein = food.foodNutrients.find(
+        ({ nutrientName }) => nutrientName === "Protein"
+      );
       var protein_number = protein.value;
 
       const user = auth.currentUser;
       var protein_doc = protein_number;
       const timestamp = serverTimestamp();
       // console.log(user.uid);
-      
 
-      await setDoc(doc(collection(doc(collection(db, "users"),user.uid),"nutrition")), {
-        meal: api_meal,
-        calories: Number(calories_number),
-        fat: Number(fat_number),
-        carbohydrates: Number(carbs_number),
-        protein: Number(protein_doc),
-        day: timestamp
-      });
+      await setDoc(
+        doc(collection(doc(collection(db, "users"), user.uid), "nutrition")),
+        {
+          meal: api_meal,
+          calories: Number(calories_number),
+          fat: Number(fat_number),
+          carbohydrates: Number(carbs_number),
+          protein: Number(protein_doc),
+          day: timestamp,
+        }
+      );
       setFoods([]);
       setSearchTerm("");
       setError(false);
       handleClose();
-    };
-  
-    async function get_nutrition(){
+    }
+
+    async function get_nutrition() {
       const params = {
         api_key: process.env.REACT_APP_NUTRITION_APP_KEY,
         query: searchTerm,
         dataType: ["Branded"],
-        pagesize: 20
+        pagesize: 25,
       };
-    
-      const api_url = `https://api.nal.usda.gov/fdc/v1/foods/search?api_key=${(params.api_key)}&query=${(params.query)}&dataType=${(params.dataType)}&pageSize=${(params.pagesize)}`;
-    
+
+      const api_url = `https://api.nal.usda.gov/fdc/v1/foods/search?api_key=${params.api_key}&query=${params.query}&dataType=${params.dataType}&pageSize=${params.pagesize}`;
+
       try {
         const response = await fetch(api_url);
         const data = await response.json();
-        if (data.foods && data.foods.length > 0 && data.foods[0].foodNutrients) {
+        if (
+          data.foods &&
+          data.foods.length > 0 &&
+          data.foods[0].foodNutrients
+        ) {
           console.log(data.foods);
           setFoods(data.foods);
           setError(false);
@@ -227,13 +246,13 @@ function NutritionHome() {
         <Container maxWidth="md" sx={{ mb: 20 }}>
           <TextField
             id="search"
-            error = {error}
-            helperText= {error ? "No such food" :""}
+            error={error}
+            helperText={error ? "No such food" : ""}
             type="search"
             label="Search"
             value={searchTerm}
             onChange={handleChange}
-            sx={{ width: 400}}
+            sx={{ width: 400 }}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -242,7 +261,12 @@ function NutritionHome() {
               ),
             }}
           />
-          <Button type="submit" variant="contained" color="primary" sx={{ml:1, mt:5}}> 
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            sx={{ ml: 1, mt: 5 }}
+          >
             Search
           </Button>
           {foods.length > 0 && (
@@ -250,13 +274,25 @@ function NutritionHome() {
               {foods.map((food, index) => (
                 <Card key={index} onClick={() => handleFoodClick(food)}>
                   <CardContent>
-                    <Typography variant="h6" component="div">
-                      {food.description}
-                        <Typography variant="h6" component="div">
-                          {console.log(food.foodNutrients.find(({ nutrientName }) => nutrientName === "Energy").value)}
-                          KCAL : {food.foodNutrients.find(({ nutrientName }) => nutrientName === "Energy").value}
-                        </Typography>
-                    </Typography>
+                    <Box>
+                      <Typography level="h6">
+                        {food.brandName + ", " + food.description}
+                      </Typography>
+                    </Box>
+                    <Box>
+                      <Typography level="body2">
+                        KCAL :{" "}
+                        {food.foodNutrients.find(
+                          ({ nutrientName }) => nutrientName === "Energy"
+                        )
+                          ? food.foodNutrients.find(
+                              ({ nutrientName }) => nutrientName === "Energy"
+                            ).value
+                          : foods[0].foodNutrients.find(
+                              ({ nutrientName }) => nutrientName === "Energy"
+                            ).value}
+                      </Typography>
+                    </Box>
                   </CardContent>
                 </Card>
               ))}
@@ -271,103 +307,133 @@ function NutritionHome() {
     <>
       <Grid container spacing={0} sx={{ flexGrow: 1 }} alignItems="center">
         <Grid xs={4}>
-          <Button variant="contained" onClick={handleOpen} sx={{ ml: 1 }} > Add Meal</Button>
-            <Modal
-              open={open}
-              onClose={handleClose}
-              aria-labelledby="modal-modal-title"
-              aria-describedby="modal-modal-description"
-              disableScrollLock
-            > 
+          <Button variant="contained" onClick={handleOpen} sx={{ ml: 1 }}>
+            {" "}
+            Add Meal
+          </Button>
+          <Modal
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+            disableScrollLock
+          >
             <ModalOverflow>
-                <ModalDialog
-                  aria-labelledby="basic-modal-dialog-title"
-                  aria-describedby="basic-modal-dialog-description"
-                  sx={{ maxWidth: 1000 }}
-                >
-                  {/* inside the modal */}
-                  <Box sx={{ bgcolor: 'background.paper', width: 500 }}>
-                    <AppBar position="static">
-                      <Tabs
+              <ModalDialog
+                aria-labelledby="basic-modal-dialog-title"
+                aria-describedby="basic-modal-dialog-description"
+                sx={{ maxWidth: 1000 }}
+              >
+                <Box sx={{ bgcolor: "background.paper", width: 500 }}>
+                  <AppBar position="static">
+                    <Tabs
                       value={value}
                       onChange={handleChange}
                       indicatorColor="secondary"
                       textColor="inherit"
                       variant="fullWidth"
                       aria-label="full width tabs example"
-                      >
+                    >
                       <Tab label="My Meals" {...a11yProps(0)} />
                       <Tab label="Search Meal" {...a11yProps(1)} />
-                      </Tabs>
-                    </AppBar>
-                    <SwipeableViews
-                    axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+                    </Tabs>
+                  </AppBar>
+                  <SwipeableViews
+                    axis={theme.direction === "rtl" ? "x-reverse" : "x"}
                     index={value}
                     onChangeIndex={handleChangeIndex}
-                    >
-                      <TabPanel value={value} index={0} dir={theme.direction}>
-                        <Grid xs={8}>
-                          <Box
-                            // component="form"
-                            sx={{
-                              "& .MuiTextField-root": { m: 1, width: "25ch" },
-                            }}
-                            noValidate
-                            autoComplete="off"
-                          >
-                            <form
-                              onSubmit={(event) => {
+                  >
+                    <TabPanel value={value} index={0} dir={theme.direction}>
+                      <Grid xs={8}>
+                        <Box
+                          // component="form"
+                          sx={{
+                            "& .MuiTextField-root": { m: 1, width: "25ch" },
+                          }}
+                          noValidate
+                          autoComplete="off"
+                        >
+                          <form
+                            onSubmit={(event) => {
                               event.preventDefault();
-                              save(); 
+                              save();
                               handleClose();
-
+                            }}
+                          >
+                            <TextField
+                              name="meal"
+                              label="Meal"
+                              required
+                              multiline
+                              maxRows={4}
+                              onChange={(e) => {
+                                handlemealChange(e);
                               }}
-                            >
-                              <TextField name="meal" label="Meal" required multiline maxRows={4} onChange={(e) => {handlemealChange(e)}}/>
-                              <TextField
-                                name="calories"
-                                label="Calories"
-                                type="number" InputProps={{ inputProps: { min: 0, max: 100000 }}}
-                                required
-                                onChange={(e) => {handlemealChange(e)}}
-                              />
-                              <TextField
-                                name="fat"
-                                label="Fat (g)"
-                                type="number" InputProps={{ inputProps: { min: 0, max: 100000 }}}
-                                required
-                                onChange={(e) => {handlemealChange(e)}}
-                              />
-                              <TextField
-                                name="carbs"
-                                label="Carbs (g)"
-                                type="number" InputProps={{ inputProps: { min: 0, max: 100000 }}}
-                                required
-                                onChange={(e) => {handlemealChange(e)}}
-                              />
-                              <TextField
-                                name="protein"
-                                label="Protein (g)"
-                                type="number" InputProps={{ inputProps: { min: 0, max: 100000 }}}
-                                required
-                                onChange={(e) => {handlemealChange(e)}}
-                              />
-                              <Button variant="contained" type="submit">
-                                  Add Meal
-                                <AddIcon />
-                              </Button>
-                            </form>
-                          </Box> 
-                        </Grid>
-                      </TabPanel>
-                      <TabPanel value={value} index={1} dir={theme.direction}>
-                        {SearchBar()}
-                      </TabPanel>
-                    </SwipeableViews>
-                  </Box>
-                </ModalDialog>
-              </ModalOverflow>
-            </Modal>
+                            />
+                            <TextField
+                              name="calories"
+                              label="Calories"
+                              type="number"
+                              InputProps={{
+                                inputProps: { min: 0, max: 100000 },
+                              }}
+                              required
+                              onChange={(e) => {
+                                handlemealChange(e);
+                              }}
+                            />
+                            <TextField
+                              name="fat"
+                              label="Fat (g)"
+                              type="number"
+                              InputProps={{
+                                inputProps: { min: 0, max: 100000 },
+                              }}
+                              required
+                              onChange={(e) => {
+                                handlemealChange(e);
+                              }}
+                            />
+                            <TextField
+                              name="carbs"
+                              label="Carbs (g)"
+                              type="number"
+                              InputProps={{
+                                inputProps: { min: 0, max: 100000 },
+                              }}
+                              required
+                              onChange={(e) => {
+                                handlemealChange(e);
+                              }}
+                            />
+                            <TextField
+                              name="protein"
+                              label="Protein (g)"
+                              type="number"
+                              InputProps={{
+                                inputProps: { min: 0, max: 100000 },
+                              }}
+                              required
+                              onChange={(e) => {
+                                handlemealChange(e);
+                              }}
+                            />
+                            <Button variant="contained" type="submit">
+                              Add Meal
+                              <AddIcon />
+                            </Button>
+                          </form>
+                        </Box>
+                      </Grid>
+                    </TabPanel>
+                    <TabPanel value={value} index={1} dir={theme.direction}>
+                      {SearchBar()}
+                    </TabPanel>
+                  </SwipeableViews>
+                </Box>
+              </ModalDialog>
+            </ModalOverflow>
+          </Modal>
         </Grid>
       </Grid>
       <Grid container alignItems="center">
