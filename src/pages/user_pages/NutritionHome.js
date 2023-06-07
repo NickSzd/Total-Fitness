@@ -287,6 +287,10 @@ function NutritionHome() {
           {foods.length > 0 && (
             <div>
               {foods.map((food, index) => (
+                food.foodNutrients.find(
+                  ({ nutrientName }) => nutrientName === "Energy"
+                )
+                  ? 
                 <Card key={index} onClick={() => handleFoodClick(food)}>
                   <CardContent>
                     <Box>
@@ -307,7 +311,7 @@ function NutritionHome() {
                       </Typography>
                     </Box>
                   </CardContent>
-                </Card>
+                </Card> : null
               ))}
             </div>
           )}
