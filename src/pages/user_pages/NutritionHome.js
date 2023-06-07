@@ -164,10 +164,9 @@ function NutritionHome() {
 
     const handleSubmit = (event) => {
       event.preventDefault();
-      if (searchTerm){
+      if (searchTerm) {
         get_nutrition();
-      }
-      else{
+      } else {
         setError(true);
       }
     };
@@ -176,25 +175,37 @@ function NutritionHome() {
       // console.log(food);
       var api_meal = food.description;
 
-      var calories = food.foodNutrients.find(
+      var calories_number = food.foodNutrients.find(
         ({ nutrientName }) => nutrientName === "Energy"
-      );
-      var calories_number = calories.value;
+      )
+        ? food.foodNutrients.find(
+            ({ nutrientName }) => nutrientName === "Energy"
+          ).value
+        : 0;
 
-      var fat = food.foodNutrients.find(
+      var fat_number = food.foodNutrients.find(
         ({ nutrientName }) => nutrientName === "Total lipid (fat)"
-      );
-      var fat_number = fat.nutrientNumber;
+      )
+        ? food.foodNutrients.find(
+            ({ nutrientName }) => nutrientName === "Total lipid (fat)"
+          ).nutrientNumber
+        : 0;
 
-      var carbs = food.foodNutrients.find(
+      var carbs_number = food.foodNutrients.find(
         ({ nutrientName }) => nutrientName === "Carbohydrate, by difference"
-      );
-      var carbs_number = carbs.value;
+      )
+        ? food.foodNutrients.find(
+            ({ nutrientName }) => nutrientName === "Carbohydrate, by difference"
+          ).value
+        : 0;
 
-      var protein = food.foodNutrients.find(
+      var protein_number = food.foodNutrients.find(
         ({ nutrientName }) => nutrientName === "Protein"
-      );
-      var protein_number = protein.value;
+      )
+        ? food.foodNutrients.find(
+            ({ nutrientName }) => nutrientName === "Protein"
+          ).value
+        : 0;
 
       const user = auth.currentUser;
       var protein_doc = protein_number;
@@ -254,7 +265,9 @@ function NutritionHome() {
           <TextField
             id="search"
             error={error}
-            helperText={searchTerm && error ? "No such food"  : error ?  "Empty Query" : ""}
+            helperText={
+              searchTerm && error ? "No such food" : error ? "Empty Query" : ""
+            }
             type="search"
             label="Search"
             value={searchTerm}
@@ -268,11 +281,7 @@ function NutritionHome() {
               ),
             }}
           />
-          <Button
-            type="submit"
-            color="primary"
-            sx={{ ml: 1, mt: 5 }}
-          >
+          <Button type="submit" color="primary" sx={{ ml: 1, mt: 5 }}>
             Search
           </Button>
           {foods.length > 0 && (
@@ -312,14 +321,19 @@ function NutritionHome() {
       <Grid container spacing={0} sx={{ flexGrow: 1 }} alignItems="center">
         <Grid xs={4}>
           <Typography
-          level="h1"
-          style={{ fontSize: "2rem", lineHeight: "1.5" }}
-          sx={{ ml: 1 }}
+            level="h1"
+            style={{ fontSize: "2rem", lineHeight: "1.5" }}
+            sx={{ ml: 1 }}
           >
-           Macronutrient Summary
+            Macronutrient Summary
           </Typography>
-       
-          <Button variant="soft" color="primary" onClick={handleOpen} sx={{ ml: 1 }}>        
+
+          <Button
+            variant="soft"
+            color="primary"
+            onClick={handleOpen}
+            sx={{ ml: 1 }}
+          >
             Add Meal
           </Button>
           <Modal
