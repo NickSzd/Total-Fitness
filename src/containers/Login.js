@@ -51,7 +51,7 @@ export default function Login() {
         alert("User Logged In");
         const user = userCredential.user;
         localStorage.setItem("user", user.uid);
-        history("/UserHome", { replace: true });
+        history("/TotalHome", { replace: true });
 
         // ...
       })

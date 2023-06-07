@@ -1,70 +1,30 @@
-# Getting Started with Create React App
+# Total Fitness
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+- Would you like an efficient way to get fit
+  - Tracking a diet seems difficult
+  - Maintaining a consistent exercise routine hard, etc.
+- We have come up with an app that take cares of both
+  - Keeps track of a daily nutrition intake
+  - Coordinate a workout plan on a given schedule set from the user
+- Benefits of tracking diet and exercise
+  - Holds you accountable
+  - Allow you to modify and show when diet changes should be made etc.
 
-## Available Scripts
+## Creators/Team
 
-In the project directory, you can run:
+- Nicholas Szwed (Product Owner)
+- Batu Asalih
+- Phudis Rangsisuriyachai
+- Vaibhav Honakere
+- Julio Vasquez-Bonilla
 
-### `npm start`
+## How to Run this Application
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+1. Clone the git repository at
+   1. <https://github.com/NickSzd/Total-Fitness>
+2. Install NPM for your OS
+   1. <https://docs.npmjs.com/downloading-and-installing-node-js-and-npm>
+3. Run the libs.sh script in the main directory. This will install all the required libraries
+   1. You may need sudo privileges for this.
+4. Run the Appl using
+   1. `npm run start:frontend`

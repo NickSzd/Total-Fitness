@@ -1,7 +1,5 @@
 # Total Fitness
 
-## High Level Goal
-
 ## Diagram
 
 ![](Total-Fitness-Design-Diagram.png)
