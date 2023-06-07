@@ -29,6 +29,7 @@ import SharedContext from "./pages/user_pages/components/SharedContext";
 import { AuthenticatedRoute } from "./AuthenticatedRoute";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "./config/firebase";
+import NotFound from "./pages/user_pages/NotFound";
 //import React, { createContext, useRef } from "react";
 
 const materialTheme = materialExtendTheme();
@@ -133,6 +134,7 @@ function App() {
                       <Route path="/Login" element={<Login />} />
                       <Route path="/Register" element={<Register />} />
                       <Route path="/Start" element={<RegistrationPart2 />} />
+                      <Route path="*" element={<NotFound />}/> 
                     </Routes>
                   </SharedContext.Provider>
                 </div>
