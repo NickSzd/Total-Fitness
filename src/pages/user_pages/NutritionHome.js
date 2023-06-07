@@ -25,7 +25,7 @@ import {
 import { getDatabase, ref, set } from "firebase/database";
 // import { getDocs, collection, where, query } from "firebase/firestore";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
+import Button from "@mui/joy/Button";
 import TextField from "@mui/material/TextField";
 import AddIcon from "@mui/icons-material/Add";
 import { Grid } from "@mui/joy";
@@ -265,7 +265,6 @@ function NutritionHome() {
           />
           <Button
             type="submit"
-            variant="contained"
             color="primary"
             sx={{ ml: 1, mt: 5 }}
           >
@@ -309,8 +308,15 @@ function NutritionHome() {
     <>
       <Grid container spacing={0} sx={{ flexGrow: 1 }} alignItems="center">
         <Grid xs={4}>
-          <Button variant="contained" onClick={handleOpen} sx={{ ml: 1 }}>
-            {" "}
+          <Typography
+          level="h1"
+          style={{ fontSize: "2rem", lineHeight: "1.5" }}
+          sx={{ ml: 1 }}
+          >
+           Macronutrient Summary
+          </Typography>
+       
+          <Button variant="soft" color="primary" onClick={handleOpen} sx={{ ml: 1 }}>        
             Add Meal
           </Button>
           <Modal
@@ -436,7 +442,7 @@ function NutritionHome() {
                                 handlemealChange(e);
                               }}
                             />
-                            <Button variant="contained" type="submit">
+                            <Button type="submit">
                               Add Meal
                               <AddIcon />
                             </Button>

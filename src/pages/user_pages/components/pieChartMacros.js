@@ -33,7 +33,6 @@ const Root = styled("div")({
 function PieChartNutrition({ pieData }) {
   return (
     <Root className={classes.chartContainer}>
-      <Typography variant="h4">Macronutrient Summary</Typography>
       <PieChart width={800} height={400}>
         <Pie
           data={pieData}
