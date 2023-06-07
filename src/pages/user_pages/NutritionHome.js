@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import NutritionTable from "./components/nutritionTable";
 import { auth, db, db_n } from "../../config/firebase";
 import ModalDialog from "@mui/joy/ModalDialog";
+import ModalOverflow from "@mui/joy/ModalOverflow";
 import { serverTimestamp } from 'firebase/firestore'
 
 import {
@@ -143,11 +144,14 @@ function NutritionHome() {
   };
 
   function SearchBar() {
+    const [error, setError] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
     const [foods, setFoods] = useState([]);
 
     const handleChange = (event) => {
       setSearchTerm(event.target.value);
+      setError(false);
+
     };
 
     const handleSubmit = (event) => {
@@ -187,6 +191,7 @@ function NutritionHome() {
       });
       setFoods([]);
       setSearchTerm("");
+      setError(false);
       handleClose();
     };
   
@@ -195,7 +200,7 @@ function NutritionHome() {
         api_key: process.env.REACT_APP_NUTRITION_APP_KEY,
         query: searchTerm,
         dataType: ["Branded"],
-        pagesize: 6
+        pagesize: 20
       };
     
       const api_url = `https://api.nal.usda.gov/fdc/v1/foods/search?api_key=${(params.api_key)}&query=${(params.query)}&dataType=${(params.dataType)}&pageSize=${(params.pagesize)}`;
@@ -205,9 +210,11 @@ function NutritionHome() {
         const data = await response.json();
         if (data.foods && data.foods.length > 0 && data.foods[0].foodNutrients) {
           console.log(data.foods);
-          setFoods(data.foods)
+          setFoods(data.foods);
+          setError(false);
           // Do whatever you want with the retrieved data
         } else {
+          setError(true);
           console.log(searchTerm);
         }
       } catch (error) {
@@ -220,6 +227,8 @@ function NutritionHome() {
         <Container maxWidth="md" sx={{ mb: 20 }}>
           <TextField
             id="search"
+            error = {error}
+            helperText= {error ? "No such food" :""}
             type="search"
             label="Search"
             value={searchTerm}
@@ -243,6 +252,10 @@ function NutritionHome() {
                   <CardContent>
                     <Typography variant="h6" component="div">
                       {food.description}
+                        <Typography variant="h6" component="div">
+                          {console.log(food.foodNutrients.find(({ nutrientName }) => nutrientName === "Energy").value)}
+                          KCAL : {food.foodNutrients.find(({ nutrientName }) => nutrientName === "Energy").value}
+                        </Typography>
                     </Typography>
                   </CardContent>
                 </Card>
@@ -264,101 +277,96 @@ function NutritionHome() {
               onClose={handleClose}
               aria-labelledby="modal-modal-title"
               aria-describedby="modal-modal-description"
-            >
-              <ModalDialog
-              aria-labelledby="basic-modal-dialog-title"
-              aria-describedby="basic-modal-dialog-description"
-              sx={{ maxWidth: 1000 }}
-              >
-                {/* inside the modal */}
-                <Box sx={{ bgcolor: 'background.paper', width: 500 }}>
-                  <AppBar position="static">
-                    <Tabs
-                    value={value}
-                    onChange={handleChange}
-                    indicatorColor="secondary"
-                    textColor="inherit"
-                    variant="fullWidth"
-                    aria-label="full width tabs example"
+              disableScrollLock
+            > 
+            <ModalOverflow>
+                <ModalDialog
+                  aria-labelledby="basic-modal-dialog-title"
+                  aria-describedby="basic-modal-dialog-description"
+                  sx={{ maxWidth: 1000 }}
+                >
+                  {/* inside the modal */}
+                  <Box sx={{ bgcolor: 'background.paper', width: 500 }}>
+                    <AppBar position="static">
+                      <Tabs
+                      value={value}
+                      onChange={handleChange}
+                      indicatorColor="secondary"
+                      textColor="inherit"
+                      variant="fullWidth"
+                      aria-label="full width tabs example"
+                      >
+                      <Tab label="My Meals" {...a11yProps(0)} />
+                      <Tab label="Search Meal" {...a11yProps(1)} />
+                      </Tabs>
+                    </AppBar>
+                    <SwipeableViews
+                    axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+                    index={value}
+                    onChangeIndex={handleChangeIndex}
                     >
-                    <Tab label="My Meals" {...a11yProps(0)} />
-                    <Tab label="Search Meal" {...a11yProps(1)} />
-                    </Tabs>
-                  </AppBar>
-                  <SwipeableViews
-                  axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-                  index={value}
-                  onChangeIndex={handleChangeIndex}
-                  >
-                    <TabPanel value={value} index={0} dir={theme.direction}>
-                      <Grid xs={8}>
-                        <Box
-                          // component="form"
-                          sx={{
-                            "& .MuiTextField-root": { m: 1, width: "25ch" },
-                          }}
-                          noValidate
-                          autoComplete="off"
-                        >
-                          <form
-                            onSubmit={(event) => {
-                            event.preventDefault();
-                            save(); 
-                            handleClose();
+                      <TabPanel value={value} index={0} dir={theme.direction}>
+                        <Grid xs={8}>
+                          <Box
+                            // component="form"
+                            sx={{
+                              "& .MuiTextField-root": { m: 1, width: "25ch" },
                             }}
+                            noValidate
+                            autoComplete="off"
                           >
-                            <TextField name="meal" label="Meal" required multiline maxRows={4} onChange={(e) => {handlemealChange(e)}}/>
-                            <TextField
-                              name="calories"
-                              label="Calories"
-                              multiline
-                              maxRows={4}
-                              defaultValue={""}
-                              required
-                              onChange={(e) => {handlemealChange(e)}}
-                            />
-                            <TextField
-                              name="fat"
-                              label="Fat (g)"
-                              multiline
-                              maxRows={4}
-                              defaultValue={""}
-                              required
-                              onChange={(e) => {handlemealChange(e)}}
-                            />
-                            <TextField
-                              name="carbs"
-                              label="Carbs (g)"
-                              multiline
-                              maxRows={4}
-                              defaultValue={""}
-                              required
-                              onChange={(e) => {handlemealChange(e)}}
-                            />
-                            <TextField
-                              name="protein"
-                              label="Protein (g)"
-                              multiline
-                              maxRows={4}
-                              defaultValue={""}
-                              required
-                              onChange={(e) => {handlemealChange(e)}}
-                            />
-                            <Button variant="contained" type="submit">
-                                Add Meal
-                              <AddIcon />
-                            </Button>
-                          </form>
-                          </Box>
-                          
-                      </Grid>
-                    </TabPanel>
-                    <TabPanel value={value} index={1} dir={theme.direction}>
-                    {SearchBar()}
-                    </TabPanel>
-                  </SwipeableViews>
-                </Box>
-              </ModalDialog>
+                            <form
+                              onSubmit={(event) => {
+                              event.preventDefault();
+                              save(); 
+                              handleClose();
+
+                              }}
+                            >
+                              <TextField name="meal" label="Meal" required multiline maxRows={4} onChange={(e) => {handlemealChange(e)}}/>
+                              <TextField
+                                name="calories"
+                                label="Calories"
+                                type="number" InputProps={{ inputProps: { min: 0, max: 100000 }}}
+                                required
+                                onChange={(e) => {handlemealChange(e)}}
+                              />
+                              <TextField
+                                name="fat"
+                                label="Fat (g)"
+                                type="number" InputProps={{ inputProps: { min: 0, max: 100000 }}}
+                                required
+                                onChange={(e) => {handlemealChange(e)}}
+                              />
+                              <TextField
+                                name="carbs"
+                                label="Carbs (g)"
+                                type="number" InputProps={{ inputProps: { min: 0, max: 100000 }}}
+                                required
+                                onChange={(e) => {handlemealChange(e)}}
+                              />
+                              <TextField
+                                name="protein"
+                                label="Protein (g)"
+                                type="number" InputProps={{ inputProps: { min: 0, max: 100000 }}}
+                                required
+                                onChange={(e) => {handlemealChange(e)}}
+                              />
+                              <Button variant="contained" type="submit">
+                                  Add Meal
+                                <AddIcon />
+                              </Button>
+                            </form>
+                          </Box> 
+                        </Grid>
+                      </TabPanel>
+                      <TabPanel value={value} index={1} dir={theme.direction}>
+                        {SearchBar()}
+                      </TabPanel>
+                    </SwipeableViews>
+                  </Box>
+                </ModalDialog>
+              </ModalOverflow>
             </Modal>
         </Grid>
       </Grid>
