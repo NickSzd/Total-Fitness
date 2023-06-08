@@ -176,25 +176,37 @@ function NutritionHome() {
       // console.log(food);
       var api_meal = food.description;
 
-      var calories = food.foodNutrients.find(
+      var calories_number = food.foodNutrients.find(
         ({ nutrientName }) => nutrientName === "Energy"
-      );
-      var calories_number = calories.value;
+      )
+        ? food.foodNutrients.find(
+            ({ nutrientName }) => nutrientName === "Energy"
+          ).value
+        : 0;
 
-      var fat = food.foodNutrients.find(
+      var fat_number = food.foodNutrients.find(
         ({ nutrientName }) => nutrientName === "Total lipid (fat)"
-      );
-      var fat_number = fat.value;
+      )
+        ? food.foodNutrients.find(
+            ({ nutrientName }) => nutrientName === "Total lipid (fat)"
+          ).value
+        : 0;
 
-      var carbs = food.foodNutrients.find(
+      var carbs_number = food.foodNutrients.find(
         ({ nutrientName }) => nutrientName === "Carbohydrate, by difference"
-      );
-      var carbs_number = carbs.value;
+      )
+        ? food.foodNutrients.find(
+            ({ nutrientName }) => nutrientName === "Carbohydrate, by difference"
+          ).value
+        : 0;
 
-      var protein = food.foodNutrients.find(
+      var protein_number = food.foodNutrients.find(
         ({ nutrientName }) => nutrientName === "Protein"
-      );
-      var protein_number = protein.value;
+      )
+        ? food.foodNutrients.find(
+            ({ nutrientName }) => nutrientName === "Protein"
+          ).value
+        : 0;
 
       const user = auth.currentUser;
       var protein_doc = protein_number;
