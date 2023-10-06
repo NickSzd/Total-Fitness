@@ -26,5 +26,5 @@
    1. <https://docs.npmjs.com/downloading-and-installing-node-js-and-npm>
 3. Run the libs.sh script in the main directory. This will install all the required libraries
    1. You may need sudo privileges for this.
-4. Run the Appl using
+4. Run the App using
    1. `npm run start:frontend`
