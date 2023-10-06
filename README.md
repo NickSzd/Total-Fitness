@@ -2,10 +2,10 @@
 
 - Would you like an efficient way to get fit
   - Tracking a diet seems difficult
-  - Maintaining a consistent exercise routine hard, etc.
-- We have come up with an app that take cares of both
-  - Keeps track of a daily nutrition intake
-  - Coordinate a workout plan on a given schedule set from the user
+  - Maintaining a consistent exercise routine, etc.
+- We have come up with an app that takes care of both
+  - Keeps track of daily nutrition intake
+  - Coordinate a workout plan on a given schedule set by the user
 - Benefits of tracking diet and exercise
   - Holds you accountable
   - Allow you to modify and show when diet changes should be made etc.
